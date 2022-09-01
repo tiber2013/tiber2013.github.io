@@ -8,7 +8,7 @@
     <link href="/2022/09/01/first-article/"/>
     <url>/2022/09/01/first-article/</url>
     
-    <content type="html"><![CDATA[<p>test article.</p>]]></content>
+    <content type="html"><![CDATA[<p>this is a test article.</p>]]></content>
     
     
     <categories>
@@ -31,7 +31,7 @@
   
   
   <entry>
-    <title>Hello World</title>
+    <title>Hello Hexo</title>
     <link href="/2022/09/01/hello-world/"/>
     <url>/2022/09/01/hello-world/</url>
     

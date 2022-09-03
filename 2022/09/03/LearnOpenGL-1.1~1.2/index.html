@@ -16,23 +16,22 @@
   <meta name="author" content="Quancheng Zhou(Tiber2013)">
   <meta name="keywords" content="">
   
-    <meta name="description" content="this is a test article.">
+    <meta name="description" content="This is the first article of my notes while I’m learning the LearnOpenGL-CN tutorial. The original English version is here. I write these articles just for reviewing the tutorial. In these notes, I wi">
 <meta property="og:type" content="article">
-<meta property="og:title" content="First Article">
-<meta property="og:url" content="https://tiber2013.github.io/2022/09/01/first-article/index.html">
+<meta property="og:title" content="LearnOpenGL-note-1">
+<meta property="og:url" content="https://tiber2013.github.io/2022/09/03/LearnOpenGL-1.1~1.2/index.html">
 <meta property="og:site_name" content="Tiber2013 Personal Blog">
-<meta property="og:description" content="this is a test article.">
+<meta property="og:description" content="This is the first article of my notes while I’m learning the LearnOpenGL-CN tutorial. The original English version is here. I write these articles just for reviewing the tutorial. In these notes, I wi">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-09-01T01:20:26.578Z">
-<meta property="article:modified_time" content="2022-09-03T01:25:53.908Z">
+<meta property="article:published_time" content="2022-09-03T01:23:34.215Z">
+<meta property="article:modified_time" content="2022-09-03T03:26:47.075Z">
 <meta property="article:author" content="Quancheng Zhou(Tiber2013)">
 <meta property="article:tag" content="Computer Graphics">
-<meta property="article:tag" content="Computer Vision">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>First Article - Tiber2013 Personal Blog</title>
+  <title>LearnOpenGL-note-1 - Tiber2013 Personal Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -197,7 +196,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="First Article"></span>
+            <span id="subtitle" data-typed-text="LearnOpenGL-note-1"></span>
           
         </div>
 
@@ -208,8 +207,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-09-01 09:20" pubdate>
-          September 1, 2022 am
+        <time datetime="2022-09-03 09:23" pubdate>
+          September 3, 2022 am
         </time>
       </span>
     
@@ -220,7 +219,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          19 words
+          2.9k words
         
       </span>
     
@@ -231,7 +230,7 @@
         
         
         
-          1 mins
+          25 mins
         
       </span>
     
@@ -269,12 +268,34 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">First Article</h1>
+            <h1 style="display: none">LearnOpenGL-note-1</h1>
             
             
               <div class="markdown-body">
                 
-                <p>this is a test article.</p>
+                <p>This is the first article of my notes while I’m learning the <a target="_blank" rel="noopener" href="https://learnopengl-cn.github.io/">LearnOpenGL-CN</a> tutorial. The original English version is <a target="_blank" rel="noopener" href="https://learnopengl.com/Getting-started/OpenGL">here</a>. I write these articles just for reviewing the tutorial. In these notes, I will only focus on the key points of every section, so some other points will be neglected.</p>
+<h1 id="1-创建窗口-Creating-a-window"><a href="#1-创建窗口-Creating-a-window" class="headerlink" title="1. 创建窗口 Creating a window"></a>1. 创建窗口 <a target="_blank" rel="noopener" href="https://learnopengl.com/Getting-started/Creating-a-window">Creating a window</a></h1><p>This section shows how to set up the env of OpenGL.</p>
+<h2 id="Key-Points"><a href="#Key-Points" class="headerlink" title="Key Points:"></a>Key Points:</h2><ol>
+<li>GLFW is a library for creating OpenGL context and a window.</li>
+<li>GLAD also a library to retrieve the location of the functions. (Not fully understand: “Since there are many different versions of OpenGL drivers, the location of most of its functions is not known at compile-time and needs to be queried at run-time.” )</li>
+</ol>
+<h1 id="2-Hello-Window"><a href="#2-Hello-Window" class="headerlink" title="2. Hello, Window."></a>2. <a target="_blank" rel="noopener" href="https://learnopengl.com/Getting-started/Hello-Window">Hello, Window.</a></h1><p>This section shows how to build a window.</p>
+<h2 id="Key-Points："><a href="#Key-Points：" class="headerlink" title="Key Points："></a>Key Points：</h2><h3 id="1-create-a-window"><a href="#1-create-a-window" class="headerlink" title="1. create a window:"></a>1. <strong>create a window</strong>:</h3><h4 id="1-1-Init-functions"><a href="#1-1-Init-functions" class="headerlink" title="1.1 Init functions"></a>1.1 <strong>Init functions</strong></h4><p>Function <code>glfwInit</code> is used for initialization of GLFW library. <code>glfwWindowHint</code> is used for configuration of the library, which specifies the OpenGL version we use.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-built_in">glfwInit</span>(); <span class="hljs-comment">// init GLFW library</span><br>    <span class="hljs-built_in">glfwWindowHint</span>(GLFW_CONTEXT_VERSION_MAJOR, <span class="hljs-number">3</span>);<br>    <span class="hljs-built_in">glfwWindowHint</span>(GLFW_CONTEXT_VERSION_MINOR, <span class="hljs-number">3</span>);<br>    <span class="hljs-built_in">glfwWindowHint</span>(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);<br>    <span class="hljs-comment">//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // fow Mac ONLY</span><br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<h3 id="2-Viewport"><a href="#2-Viewport" class="headerlink" title="2. Viewport"></a><strong>2. Viewport</strong></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">glViewport</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">800</span>, <span class="hljs-number">600</span>);<br><br></code></pre></td></tr></table></figure>
+<p>The first two parameters of glViewport set the location of the lower left corner of the window. The third and fourth parameter set the width and height of the rendering window in pixels, which we set equal to GLFW’s window size.</p>
+<p>We use a registered callback function to update the window size.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">// declaration</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">framebuffer_size_callback</span><span class="hljs-params">(GLFWwindow* window, <span class="hljs-type">int</span> width, <span class="hljs-type">int</span> height)</span></span>;  <br><br><span class="hljs-comment">// definition</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">framebuffer_size_callback</span><span class="hljs-params">(GLFWwindow* window, <span class="hljs-type">int</span> width, <span class="hljs-type">int</span> height)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-built_in">glViewport</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, width, height);<br>&#125;  <br><br><span class="hljs-comment">// register the callback function</span><br><span class="hljs-built_in">glfwSetFramebufferSizeCallback</span>(window, framebuffer_size_callback); <br><br></code></pre></td></tr></table></figure>
+
+<h3 id="3-Render-Loop"><a href="#3-Render-Loop" class="headerlink" title="3. Render Loop"></a><strong>3. Render Loop</strong></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">while</span>(!<span class="hljs-built_in">glfwWindowShouldClose</span>(window))<br>&#123;<br>    <span class="hljs-built_in">processInput</span>(window); <span class="hljs-comment">// see section Input</span><br>    <span class="hljs-built_in">glfwSwapBuffers</span>(window);<br>    <span class="hljs-built_in">glfwPollEvents</span>();    <br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>From the origin:<br>“The glfwWindowShouldClose function checks at the start of each loop iteration if GLFW has been instructed to close. If so, the function returns true and the render loop stops running, after which we can close the application.<br>The glfwPollEvents function checks if any events are triggered (like keyboard input or mouse movement events), updates the window state, and calls the corresponding functions (which we can register via callback methods). The glfwSwapBuffers will swap the color buffer (a large 2D buffer that contains color values for each pixel in GLFW’s window) that is used to render to during this render iteration and show it as output to the screen.”</p>
+<p><strong>Double Buffer</strong><br>To avoid display flickering issues casued by the non-instant way of drawing.</p>
+<h3 id="4-termination"><a href="#4-termination" class="headerlink" title="4. termination"></a><strong>4. termination</strong></h3><p>Before ending the rendering loop, we need to clear the resources via the glfwTerminate function.</p>
+<h3 id="5-Input"><a href="#5-Input" class="headerlink" title="5. Input"></a><strong>5. Input</strong></h3><p>This function is called when esc key is pressed to terminate the rendering.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">processInput</span><span class="hljs-params">(GLFWwindow *window)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">if</span>(<span class="hljs-built_in">glfwGetKey</span>(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)<br>        <span class="hljs-built_in">glfwSetWindowShouldClose</span>(window, <span class="hljs-literal">true</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-clearColor"><a href="#6-clearColor" class="headerlink" title="6.clearColor"></a><strong>6.clearColor</strong></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">glClearColor</span>(<span class="hljs-number">0.2f</span>, <span class="hljs-number">0.3f</span>, <span class="hljs-number">0.3f</span>, <span class="hljs-number">1.0f</span>);<br><span class="hljs-built_in">glClear</span>(GL_COLOR_BUFFER_BIT);<br></code></pre></td></tr></table></figure>
+<p>Buffer bit: GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT, GL_STENCIL_BUFFER_BIT</p>
 
                 
               </div>
@@ -293,15 +314,8 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Computer-Vision/" class="category-chain-item">Computer Vision</a>
+  <a href="/categories/Computer-Graphics/" class="category-chain-item">Computer Graphics</a>
   
-  
-    <span>></span>
-    
-  <a href="/categories/Computer-Vision/Computer-Graphics/" class="category-chain-item">Computer Graphics</a>
-  
-  
-
   
 
       </span>
@@ -317,8 +331,6 @@
       
         <a href="/tags/Computer-Graphics/">#Computer Graphics</a>
       
-        <a href="/tags/Computer-Vision/">#Computer Vision</a>
-      
     </div>
   
 </div>
@@ -329,8 +341,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>First Article</div>
-      <div>https://tiber2013.github.io/2022/09/01/first-article/</div>
+      <div>LearnOpenGL-note-1</div>
+      <div>https://tiber2013.github.io/2022/09/03/LearnOpenGL-1.1~1.2/</div>
     </div>
     <div class="license-meta">
       
@@ -342,7 +354,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>September 1, 2022</div>
+          <div>September 3, 2022</div>
         </div>
       
       
@@ -372,18 +384,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/09/03/LearnOpenGL-1.1~1.2/" title="LearnOpenGL-note-1">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">LearnOpenGL-note-1</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/09/01/hello-world/" title="Hello Hexo">
-                        <span class="hidden-mobile">Hello Hexo</span>
+                      <a href="/2022/09/01/first-article/" title="First Article">
+                        <span class="hidden-mobile">First Article</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

@@ -1,0 +1,674 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/favicon-16x16.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Quancheng Zhou(Tiber2013)">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="This is the second article to review my learning of OpenGL. Hello Triangle!I was having a hard time figuring out the VAO, VBO. Becasue the tutorial at this chapter is not detailed enough(for the Chine">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LearnOpenGL-note-2">
+<meta property="og:url" content="https://tiber2013.github.io/2022/09/03/LearnOpenGL-1.3~1.5/index.html">
+<meta property="og:site_name" content="Tiber2013 Personal Blog">
+<meta property="og:description" content="This is the second article to review my learning of OpenGL. Hello Triangle!I was having a hard time figuring out the VAO, VBO. Becasue the tutorial at this chapter is not detailed enough(for the Chine">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://learnopengl-cn.github.io/img/01/04/pipeline.png">
+<meta property="og:image" content="https://learnopengl.com/img/getting-started/vertex_attribute_pointer_interleaved_textures.png">
+<meta property="article:published_time" content="2022-09-03T03:31:07.289Z">
+<meta property="article:modified_time" content="2022-09-03T10:31:58.760Z">
+<meta property="article:author" content="Quancheng Zhou(Tiber2013)">
+<meta property="article:tag" content="Computer Graphics">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://learnopengl-cn.github.io/img/01/04/pipeline.png">
+  
+  
+  
+  <title>LearnOpenGL-note-2 - Tiber2013 Personal Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"tiber2013.github.io","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Tiber2013&#39;s Personal Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="LearnOpenGL-note-2"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-03 11:31" pubdate>
+          September 3, 2022 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.9k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          41 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">LearnOpenGL-note-2</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>This is the second article to review my learning of OpenGL.</p>
+<h1 id="Hello-Triangle"><a href="#Hello-Triangle" class="headerlink" title="Hello Triangle!"></a><strong>Hello Triangle!</strong></h1><p>I was having a hard time figuring out the VAO, VBO. Becasue the tutorial at this chapter is not detailed enough(for the Chinese version translation reason). I have collected lots of material from the Internet to help me understand the functions of these terms.</p>
+<p>Before getting into this chapter, the background knowledge of graphics pipeline is required. I’m not going to repeat the process here.</p>
+<p>The picture below is from the tutorial.</p>
+<p><img src="https://learnopengl-cn.github.io/img/01/04/pipeline.png" srcset="/img/loading.gif" lazyload alt="pipeline"></p>
+<p><a target="_blank" rel="noopener" href="https://positiveczp.github.io/%E7%BB%86%E8%AF%B4%E5%9B%BE%E5%BD%A2%E5%AD%A6%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF.pdf">Here is a great explanation of the pipeline in detail(Chinese).</a></p>
+<blockquote>
+<p><strong>Note: A fragment in OpenGL is all the data required for OpenGL to render a single pixel.</strong></p>
+</blockquote>
+<h2 id="Vertex-Input"><a href="#Vertex-Input" class="headerlink" title="Vertex Input"></a>Vertex Input</h2><p>Definition</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-type">float</span> vertices[] = &#123;<br>    <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>, <span class="hljs-number">0.0f</span>,<br>     <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>, <span class="hljs-number">0.0f</span>,<br>     <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.5f</span>, <span class="hljs-number">0.0f</span><br>&#125;;  <br><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>OpenGL only processes 3D coordinates when they’re in a specific range between -1.0 and 1.0 on all 3 axes (x, y and z). All coordinates within this so called Normalized Device Coordinates range will end up visible on your screen (and all coordinates outside this region won’t).</p>
+</blockquote>
+<blockquote>
+<p><strong>NDC</strong> </p>
+</blockquote>
+<h3 id="VBO"><a href="#VBO" class="headerlink" title="VBO"></a>VBO</h3><p>The function of VBO is a place in GPU to store vertices attributes, including positions, colors and textures. </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> VBO[<span class="hljs-number">2</span>];<br><span class="hljs-built_in">glGenBuffers</span>(<span class="hljs-number">2</span>, &amp;VBO);  <br><br></code></pre></td></tr></table></figure>
+<p>The Chinese Version tutorial is not detailed here, while the original English version really helps me understand the function of <code>glGenBuffers()</code>. The 1st param is the number of objects of vertices.</p>
+<p><code> GL_ARRAY_BUFFER</code> is for vertex buffer, and <code>glBindBuffer(GL_ARRAY_BUFFER, VBO);</code> binds the vbo to it.  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">glBufferData</span>(GL_ARRAY_BUFFER, <span class="hljs-built_in">sizeof</span>(vertices), vertices, GL_STATIC_DRAW);<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>glBufferData</code> is a function specifically targeted to copy user-defined data into the currently bound buffer.</p>
+</blockquote>
+<h2 id="Shader"><a href="#Shader" class="headerlink" title="Shader"></a>Shader</h2><h3 id="vertex-shader"><a href="#vertex-shader" class="headerlink" title="vertex shader"></a>vertex shader</h3><figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs glsl"><span class="hljs-meta">#version 330 core</span><br><span class="hljs-keyword">layout</span> (<span class="hljs-keyword">location</span> = <span class="hljs-number">0</span>) <span class="hljs-keyword">in</span> <span class="hljs-type">vec3</span> aPos;<br><br><span class="hljs-type">void</span> main()<br>&#123;<br>    <span class="hljs-built_in">gl_Position</span> = <span class="hljs-type">vec4</span>(aPos.x, aPos.y, aPos.z, <span class="hljs-number">1.0</span>);<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p><code>layout</code> specifies the location of an attribute, for example vertices positions here.<br>Keyword <code>in</code> means input attribute.</p>
+<h3 id="compile-shader"><a href="#compile-shader" class="headerlink" title="compile shader"></a>compile shader</h3><p>The apis for compile shaders are the same.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> fragmentShader;<br>fragmentShader = <span class="hljs-built_in">glCreateShader</span>(GL_FRAGMENT_SHADER);<br><span class="hljs-built_in">glShaderSource</span>(fragmentShader, <span class="hljs-number">1</span>, &amp;fragmentShaderSource, <span class="hljs-literal">NULL</span>);<br><span class="hljs-built_in">glCompileShader</span>(fragmentShader);<br></code></pre></td></tr></table></figure>
+<h3 id="shader-program"><a href="#shader-program" class="headerlink" title="shader program"></a>shader program</h3><blockquote>
+<p>A shader program object is the final linked version of multiple shaders combined.</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> shaderProgram;<br>shaderProgram = <span class="hljs-built_in">glCreateProgram</span>();<br><span class="hljs-built_in">glAttachShader</span>(shaderProgram, vertexShader);<br><span class="hljs-built_in">glAttachShader</span>(shaderProgram, fragmentShader);<br><span class="hljs-built_in">glLinkProgram</span>(shaderProgram);<br></code></pre></td></tr></table></figure>
+<p>Finally, we need to activate the shader program bia <code>glUseProgram</code>.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">glUseProgram</span>(shaderProgram);<br></code></pre></td></tr></table></figure>
+
+<h3 id="Link-Vertex-attributes"><a href="#Link-Vertex-attributes" class="headerlink" title="Link Vertex attributes"></a>Link Vertex attributes</h3><p>We use VAO to interpret the data stored in VBOs.<br>Note how to use the api <code>glVertexAttribPointer</code>.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">glVertexAttribPointer</span>(<span class="hljs-number">0</span>, <span class="hljs-number">3</span>, GL_FLOAT, GL_FALSE, <span class="hljs-number">3</span> * <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">float</span>), (<span class="hljs-type">void</span>*)<span class="hljs-number">0</span>);<br></code></pre></td></tr></table></figure>
+<p>The stride is the space between consecutive vertex attributes.<br>The last param is the offset of the 1st component of the attribute within a single vertex attribute data.</p>
+<p><code>glEnableVertexAttribArray(0);</code> enables the attribute data positioned at index 0.</p>
+<ol>
+<li><p>Definition of vertices</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">float</span> vertices[] = &#123;<br>    <span class="hljs-comment">// 位置              // 颜色</span><br>     <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>, <span class="hljs-number">0.0f</span>,  <span class="hljs-number">1.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>,   <span class="hljs-comment">// 右下</span><br>    <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>, <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span>, <span class="hljs-number">0.0f</span>,   <span class="hljs-comment">// 左下</span><br>     <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.5f</span>, <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span>    <span class="hljs-comment">// 顶部</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>vertex shader</p>
+<figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs glsl"><span class="hljs-meta">#version 330 core</span><br><span class="hljs-keyword">layout</span> (<span class="hljs-keyword">location</span> = <span class="hljs-number">0</span>) <span class="hljs-keyword">in</span> <span class="hljs-type">vec3</span> aPos;   <span class="hljs-comment">// 位置变量的属性位置值为 0 </span><br><span class="hljs-keyword">layout</span> (<span class="hljs-keyword">location</span> = <span class="hljs-number">1</span>) <span class="hljs-keyword">in</span> <span class="hljs-type">vec3</span> aColor; <span class="hljs-comment">// 颜色变量的属性位置值为 1</span><br><br><span class="hljs-keyword">out</span> <span class="hljs-type">vec3</span> ourColor; <span class="hljs-comment">// 向片段着色器输出一个颜色</span><br><br><span class="hljs-type">void</span> main()<br>&#123;<br>    <span class="hljs-built_in">gl_Position</span> = <span class="hljs-type">vec4</span>(aPos, <span class="hljs-number">1.0</span>);<br>    ourColor = aColor; <span class="hljs-comment">// 将ourColor设置为我们从顶点数据那里得到的输入颜色</span><br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// set up vertex data (and buffer(s)) and configure vertex attributes</span><br>    <span class="hljs-comment">// ------------------------------------------------------------------</span><br>    <span class="hljs-type">float</span> vertices[] = &#123;<br>        <span class="hljs-comment">// positions         // colors</span><br>         <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>, <span class="hljs-number">0.0f</span>,  <span class="hljs-number">1.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>,  <span class="hljs-comment">// bottom right</span><br>        <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>, <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span>, <span class="hljs-number">0.0f</span>,  <span class="hljs-comment">// bottom left</span><br>         <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.5f</span>, <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span>   <span class="hljs-comment">// top </span><br><br>    &#125;;<br><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> VBO, VAO;<br>    <span class="hljs-built_in">glGenVertexArrays</span>(<span class="hljs-number">1</span>, &amp;VAO);<br>    <span class="hljs-built_in">glGenBuffers</span>(<span class="hljs-number">1</span>, &amp;VBO);<br>    <span class="hljs-comment">// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).</span><br>    <span class="hljs-built_in">glBindVertexArray</span>(VAO);<br><br>    <span class="hljs-built_in">glBindBuffer</span>(GL_ARRAY_BUFFER, VBO);<br>    <span class="hljs-built_in">glBufferData</span>(GL_ARRAY_BUFFER, <span class="hljs-built_in">sizeof</span>(vertices), vertices, GL_STATIC_DRAW);<br><br>    <span class="hljs-comment">// position attribute</span><br>    <span class="hljs-built_in">glVertexAttribPointer</span>(<span class="hljs-number">0</span>, <span class="hljs-number">3</span>, GL_FLOAT, GL_FALSE, <span class="hljs-number">6</span> * <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">float</span>), (<span class="hljs-type">void</span>*)<span class="hljs-number">0</span>);<br>    <span class="hljs-built_in">glEnableVertexAttribArray</span>(<span class="hljs-number">0</span>);<br>    <span class="hljs-comment">// color attribute</span><br>    <span class="hljs-built_in">glVertexAttribPointer</span>(<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, GL_FLOAT, GL_FALSE, <span class="hljs-number">6</span> * <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">float</span>), (<span class="hljs-type">void</span>*)(<span class="hljs-number">3</span> * <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">float</span>)));<br>    <span class="hljs-built_in">glEnableVertexAttribArray</span>(<span class="hljs-number">1</span>);<br></code></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/dcrmg/article/details/53556664">Here explains VBO and VAO in detail</a></p>
+<h1 id="Textures"><a href="#Textures" class="headerlink" title="Textures"></a>Textures</h1><p>First define the texture and bind it.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> texture;<br><span class="hljs-built_in">glGenTextures</span>(<span class="hljs-number">1</span>, &amp;texture);<br><span class="hljs-built_in">glBindTexture</span>(GL_TEXTURE_2D, texture);<br></code></pre></td></tr></table></figure>
+
+<h2 id="Texture-Wrapping"><a href="#Texture-Wrapping" class="headerlink" title="Texture Wrapping"></a>Texture Wrapping</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// set the texture wrapping parameters</span><br><span class="hljs-built_in">glTexParameteri</span>(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	<span class="hljs-comment">// set texture wrapping to GL_REPEAT (default wrapping method)</span><br><span class="hljs-built_in">glTexParameteri</span>(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="Texture-Filtering"><a href="#Texture-Filtering" class="headerlink" title="Texture Filtering"></a>Texture Filtering</h2><p>Note if a MipMap filtering is needed, use <code>GL_LINEAR_MIPMAP_LINEAR</code>.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// set texture filtering parameters</span><br><span class="hljs-built_in">glTexParameteri</span>(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);<br><span class="hljs-built_in">glTexParameteri</span>(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);<br><br></code></pre></td></tr></table></figure>
+<p>Then generate the texture:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">glTexImage2D</span>(GL_TEXTURE_2D, <span class="hljs-number">0</span>, GL_RGB, width, height, <span class="hljs-number">0</span>, GL_RGB, GL_UNSIGNED_BYTE, data);<br><span class="hljs-built_in">glGenerateMipmap</span>(GL_TEXTURE_2D);<br></code></pre></td></tr></table></figure>
+
+<h2 id="Textures-Attributes"><a href="#Textures-Attributes" class="headerlink" title="Textures Attributes"></a>Textures Attributes</h2><p><img src="https://learnopengl.com/img/getting-started/vertex_attribute_pointer_interleaved_textures.png" srcset="/img/loading.gif" lazyload alt="Texture Attributes"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// texture coord attribute</span><br><span class="hljs-built_in">glVertexAttribPointer</span>(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>, GL_FLOAT, GL_FALSE, <span class="hljs-number">8</span> * <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">float</span>),(<span class="hljs-type">void</span>*)(<span class="hljs-number">6</span> * <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">float</span>)));<br><span class="hljs-built_in">glEnableVertexAttribArray</span>(<span class="hljs-number">2</span>);<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Computer-Graphics/" class="category-chain-item">Computer Graphics</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Computer-Graphics/">#Computer Graphics</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>LearnOpenGL-note-2</div>
+      <div>https://tiber2013.github.io/2022/09/03/LearnOpenGL-1.3~1.5/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Quancheng Zhou(Tiber2013)</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>September 3, 2022</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/09/03/LearnOpenGL-1.1~1.2/" title="LearnOpenGL-note-1">
+                        <span class="hidden-mobile">LearnOpenGL-note-1</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

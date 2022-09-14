@@ -4,6 +4,56 @@
   
   
   <entry>
+    <title>LearnOpenGL-note-4--Advanced Lighting</title>
+    <link href="/2022/09/14/LearnOpenGL-Notes-4/"/>
+    <url>/2022/09/14/LearnOpenGL-Notes-4/</url>
+    
+    <content type="html"><![CDATA[<h1 id="Advanced-Lighting"><a href="#Advanced-Lighting" class="headerlink" title="Advanced Lighting"></a>Advanced Lighting</h1><h2 id="Blinn-Phone-Model"><a href="#Blinn-Phone-Model" class="headerlink" title="Blinn-Phone Model"></a>Blinn-Phone Model</h2><p>It calculates the halfway vector to blur the edge of the shadow so that the image looks real.<br><img src="https://learnopengl.com/img/advanced-lighting/advanced_lighting_comparrison.png" alt="img"></p><h2 id="gamma-correction"><a href="#gamma-correction" class="headerlink" title="gamma correction"></a>gamma correction</h2><p>It adjusts the color and brightness variations caused by the screen.</p><h2 id="Shadow-mapping"><a href="#Shadow-mapping" class="headerlink" title="Shadow mapping"></a>Shadow mapping</h2>]]></content>
+    
+    
+    <categories>
+      
+      <category>Computer Graphics</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Computer Graphics</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>LearnOpenGL-note-3-- Lighting</title>
+    <link href="/2022/09/04/Lighting/"/>
+    <url>/2022/09/04/Lighting/</url>
+    
+    <content type="html"><![CDATA[<h1 id="Basic-Lighting"><a href="#Basic-Lighting" class="headerlink" title="Basic Lighting"></a>Basic Lighting</h1><h2 id="Ambient-lighting"><a href="#Ambient-lighting" class="headerlink" title="Ambient lighting"></a>Ambient lighting</h2><p>Ambient is the easiest, it only uses the light color.</p><h2 id="Diffuse-lighting"><a href="#Diffuse-lighting" class="headerlink" title="Diffuse lighting"></a>Diffuse lighting</h2><p>Diffuse lighting demands the angle between light source and the fragment, so that we can calculate the diffuse strength. The frag postion is calculated in vertex shader.</p><h2 id="Specular-lighting"><a href="#Specular-lighting" class="headerlink" title="Specular lighting"></a>Specular lighting</h2><p>Specular lighting is bit more complicated, the intensity or strength of the color is determined by the angle between view direction and reflection direction. Therefore, the view direction is first calculated by view position ie the camera’s position. Then the reflection direction is calculated by the light direction and the norm.</p><figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs glsl"><span class="hljs-meta">#version 330 core</span><br><span class="hljs-keyword">out</span> <span class="hljs-type">vec4</span> FragColor;<br><br><span class="hljs-keyword">in</span> <span class="hljs-type">vec3</span> Normal;  <br><span class="hljs-keyword">in</span> <span class="hljs-type">vec3</span> FragPos;  <br>  <br><span class="hljs-keyword">uniform</span> <span class="hljs-type">vec3</span> lightPos; <br><span class="hljs-keyword">uniform</span> <span class="hljs-type">vec3</span> viewPos; <br><span class="hljs-keyword">uniform</span> <span class="hljs-type">vec3</span> lightColor;<br><span class="hljs-keyword">uniform</span> <span class="hljs-type">vec3</span> objectColor;<br><br><span class="hljs-type">void</span> main()<br>&#123;<br>    <span class="hljs-comment">// ambient</span><br>    <span class="hljs-type">float</span> ambientStrength = <span class="hljs-number">0.1</span>;<br>    <span class="hljs-type">vec3</span> ambient = ambientStrength * lightColor;<br>  <br>    <span class="hljs-comment">// diffuse </span><br>    <span class="hljs-type">vec3</span> norm = <span class="hljs-built_in">normalize</span>(Normal);<br>    <span class="hljs-type">vec3</span> lightDir = <span class="hljs-built_in">normalize</span>(lightPos - FragPos);<br>    <span class="hljs-type">float</span> diff = <span class="hljs-built_in">max</span>(<span class="hljs-built_in">dot</span>(norm, lightDir), <span class="hljs-number">0.0</span>);<br>    <span class="hljs-type">vec3</span> diffuse = diff * lightColor;<br>    <br>    <span class="hljs-comment">// specular</span><br>    <span class="hljs-type">float</span> specularStrength = <span class="hljs-number">0.5</span>;<br>    <span class="hljs-type">vec3</span> viewDir = <span class="hljs-built_in">normalize</span>(viewPos - FragPos);<br>    <span class="hljs-type">vec3</span> reflectDir = <span class="hljs-built_in">reflect</span>(-lightDir, norm);  <br>    <span class="hljs-type">float</span> spec = <span class="hljs-built_in">pow</span>(<span class="hljs-built_in">max</span>(<span class="hljs-built_in">dot</span>(viewDir, reflectDir), <span class="hljs-number">0.0</span>), <span class="hljs-number">32</span>);<br>    <span class="hljs-type">vec3</span> specular = specularStrength * spec * lightColor;  <br>        <br>    <span class="hljs-type">vec3</span> result = (ambient + diffuse + specular) * objectColor;<br>    FragColor = <span class="hljs-type">vec4</span>(result, <span class="hljs-number">1.0</span>);<br>&#125; <br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>Computer Graphics</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Computer Graphics</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>LearnOpenGL-note-2</title>
     <link href="/2022/09/03/LearnOpenGL-1.3~1.5/"/>
     <url>/2022/09/03/LearnOpenGL-1.3~1.5/</url>

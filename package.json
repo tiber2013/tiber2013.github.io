@@ -8,11 +8,19 @@
     "docs:build": "vitepress build",
     "docs:preview": "vitepress preview"
   },
-  "keywords": ["blog", "AI", "computer vision", "deep learning"],
+  "keywords": [
+    "blog",
+    "AI",
+    "computer vision",
+    "deep learning"
+  ],
   "author": "ZQC",
   "license": "MIT",
   "devDependencies": {
     "vitepress": "^1.6.4",
     "vue": "^3.5.29"
+  },
+  "dependencies": {
+    "three": "^0.183.2"
   }
 }

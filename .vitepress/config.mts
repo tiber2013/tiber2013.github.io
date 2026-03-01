@@ -58,6 +58,7 @@ export default defineConfig({
           items: [
             { text: 'Overview', link: '/projects/' },
             { text: 'Real-time Detection', link: '/projects/detection' },
+            { text: '3D Demo', link: '/projects/3d-demo' },
           ]
         },
       ],

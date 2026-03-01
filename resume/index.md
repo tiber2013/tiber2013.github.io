@@ -17,12 +17,13 @@ title: Resume (Chinese)
 
 | | |
 |---|---|
-| **姓名** | 张三 (示例) |
+| **姓名** | Tiber Zhou |
 | **职位** | AI算法工程师 |
-| **研究方向** | 计算机视觉、深度学习 |
-| **邮箱** | your.email@example.com |
+| **研究方向** | 3D计算机视觉、深度学习 |
+| **邮箱** | iplayowdva@outlook.com |
 | **GitHub** | [github.com/tiber2013](https://github.com/tiber2013) |
-| **地点** | 北京/上海 |
+| **意向工作地点** | 北京/江浙沪/大湾区 |
+| **籍贯** | 山东 |
 
 </div>
 
@@ -33,20 +34,19 @@ title: Resume (Chinese)
 <div class="resume-section">
 
 <div class="resume-item">
-<h4>XX大学 - 计算机科学与技术硕士</h4>
-<p><em>2020.09 - 2023.06</em></p>
+<h4>中国科学院大学 - 计算机技术硕士</h4>
+<p><em>2018.09 - 2021.06</em></p>
 <ul>
-<li>研究方向：计算机视觉、目标检测</li>
-<li>导师：XX教授</li>
-<li>GPA：3.8/4.0</li>
+<li>研究方向：计算机视觉、3D点云分割重建及自监督学习</li>
+<li>专业核心课程：计算机算法设计与分析，计算机体系结构，数字图像处理，模式识别与机器学习</li>
 </ul>
 </div>
 
 <div class="resume-item">
-<h4>XX大学 - 软件工程学士</h4>
-<p><em>2016.09 - 2020.06</em></p>
+<h4>南昌大学 - 光电信息科学与工程学士</h4>
+<p><em>2013.09 - 2017.06</em></p>
 <ul>
-<li>专业核心课程：数据结构、算法设计、机器学习、深度学习</li>
+<li>专业核心课程：电子电路技术，数字逻辑电路，C/C++，汇编语言微型计算机原理与接口技术，8051单片机原理，通信原理，信息光学，电磁场与电磁波</li>
 <li>GPA：3.6/4.0</li>
 </ul>
 </div>
@@ -60,21 +60,18 @@ title: Resume (Chinese)
 <div class="resume-section">
 
 <div class="resume-item">
-<h4>XX科技有限公司 - AI算法工程师</h4>
-<p><em>2023.07 - 至今</em></p>
+<h4>山东山大华天软件股份有限公司--深圳华天创智软件有限公司 - AI算法工程师</h4>
+<p><em>2023.06 - 至今</em></p>
 <ul>
-<li>负责目标检测算法的研发与优化，将检测精度提升5%</li>
-<li>设计并实现实时视频分析系统，支持多路视频流并发处理</li>
-<li>参与模型压缩与部署优化，在边缘设备上实现实时推理</li>
+<li>负责3D点云分割重建项目，包括中石化大规模厂区管道3D点云分割重建项目，以及零件扫描点云重建CAD B-rep表达系统的核心算法研究</li>
 </ul>
 </div>
 
 <div class="resume-item">
-<h4>XX研究院 - 算法实习生</h4>
-<p><em>2022.06 - 2022.12</em></p>
+<h4>高途教育科技集团有限公司 - AI算法工程师</h4>
+<p><em>2021.07 - 2023.01</em></p>
 <ul>
-<li>参与图像分割算法研究，复现SAM等前沿算法</li>
-<li>负责数据集构建与标注质量控制</li>
+<li>负责项目可视化图形工具开发，数据可视化展示</li>
 </ul>
 </div>
 
@@ -87,24 +84,14 @@ title: Resume (Chinese)
 <div class="resume-section">
 
 <div class="resume-item">
-<h4>实时目标检测系统</h4>
-<p><em>2023.08 - 2023.12</em></p>
+<h4>中石化3D点云分割重建项目</h4>
+<p><em>2023.07 - 2024.12</em></p>
 <ul>
-<li>基于YOLOv8开发实时目标检测系统</li>
-<li>针对特定场景进行模型微调，mAP达到92%</li>
-<li>实现TensorRT加速，推理速度提升3倍</li>
+<li>基于Mask3D实现3D点云分割重建</li>
+
 </ul>
 </div>
 
-<div class="resume-item">
-<h4>医学图像分割项目</h4>
-<p><em>2023.01 - 2023.06</em></p>
-<ul>
-<li>基于U-Net和Transformer的医学图像分割</li>
-<li>在CT影像上实现病灶自动检测</li>
-<li>论文发表于MICCAI 2023</li>
-</ul>
-</div>
 
 </div>
 
@@ -134,20 +121,7 @@ Git, Docker, Linux, CUDA, WandB
 
 <div class="resume-section">
 
-1. **Zhang, S.**, et al. "A Novel Approach for Medical Image Segmentation." *MICCAI 2023*.
-2. **Zhang, S.**, et al. "Real-time Object Detection with Improved YOLO." *CVPR Workshop 2023*.
-
-</div>
-
----
-
-## 荣誉奖项
-
-<div class="resume-section">
-
-- XX竞赛 一等奖 (2022)
-- 国家奖学金 (2021, 2022)
-- 优秀毕业论文 (2023)
+TODO
 
 </div>
 

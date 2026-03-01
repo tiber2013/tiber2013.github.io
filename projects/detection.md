@@ -62,21 +62,6 @@ High-performance real-time object detection system based on YOLOv8.
 
 ---
 
-## Demo
-
-### Detection Example
-
-![Detection Result](/projects/detection-result.jpg)
-
-### Real-time Demo
-
-<video controls style="width: 100%; border-radius: 12px; margin: 16px 0;">
-  <source src="/projects/detection-demo.mp4" type="video/mp4">
-  Your browser does not support video playback
-</video>
-
----
-
 ## Features
 
 ### 1. High Accuracy Detection

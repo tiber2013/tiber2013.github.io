@@ -13,7 +13,6 @@ Project showcases including demos, open-source code, and paper links.
 <div class="project-grid">
 
 <div class="project-card">
-<img src="/projects/detection-demo.jpg" alt="Real-time Detection" />
 <div class="project-card-content">
 <h3>Real-time Object Detection</h3>
 <p>High-performance real-time object detection system based on YOLOv8.</p>
@@ -27,7 +26,6 @@ Project showcases including demos, open-source code, and paper links.
 </div>
 
 <div class="project-card">
-<img src="/projects/segmentation-demo.jpg" alt="Medical Segmentation" />
 <div class="project-card-content">
 <h3>Medical Image Segmentation</h3>
 <p>Transformer-based medical image segmentation for CT lesion detection.</p>
@@ -41,7 +39,6 @@ Project showcases including demos, open-source code, and paper links.
 </div>
 
 <div class="project-card">
-<img src="/projects/tracking-demo.jpg" alt="Multi-Object Tracking" />
 <div class="project-card-content">
 <h3>Multi-Object Tracking</h3>
 <p>Multi-object tracking system combining detection and ReID.</p>
@@ -65,7 +62,6 @@ Project showcases including demos, open-source code, and paper links.
 Custom training framework based on YOLOv8 for quick fine-tuning and deployment.
 
 - **GitHub**: [github.com/tiber2013/yolov8-custom](https://github.com/tiber2013/yolov8-custom)
-- **Stars**: ⭐ 500+
 - **Features**:
   - One-click training scripts
   - Multiple data format support
@@ -76,7 +72,6 @@ Custom training framework based on YOLOv8 for quick fine-tuning and deployment.
 Vision Transformer model collection with various implementations.
 
 - **GitHub**: [github.com/tiber2013/vit-zoo](https://github.com/tiber2013/vit-zoo)
-- **Stars**: ⭐ 200+
 - **Features**:
   - ViT, DeiT, Swin models
   - Pre-trained weights
@@ -112,26 +107,9 @@ Vision Transformer model collection with various implementations.
 
 ---
 
-## Demo Videos
-
-### Real-time Detection Demo
-
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; margin: 16px 0;">
-<iframe 
-  src="https://www.youtube.com/embed/VIDEO_ID" 
-  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
-  frameborder="0" 
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-  allowfullscreen>
-</iframe>
-</div>
-
----
-
 ## Contact
 
 If you're interested in my projects, feel free to reach out:
 
 - **Email**: your.email@example.com
 - **GitHub**: [github.com/tiber2013](https://github.com/tiber2013)
-- **LinkedIn**: [linkedin.com/in/yourusername](https://linkedin.com/in/yourusername)

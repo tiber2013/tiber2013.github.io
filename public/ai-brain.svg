@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="brainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#a855f7;stop-opacity:0.8" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Brain outline -->
+  <path d="M100 30 C60 30 30 60 30 100 C30 140 60 170 100 170 C140 170 170 140 170 100 C170 60 140 30 100 30" 
+        fill="url(#brainGrad)" opacity="0.3"/>
+  
+  <!-- Neural network nodes -->
+  <circle cx="70" cy="70" r="8" fill="#6366f1"/>
+  <circle cx="100" cy="60" r="8" fill="#8b5cf6"/>
+  <circle cx="130" cy="70" r="8" fill="#a855f7"/>
+  <circle cx="60" cy="100" r="8" fill="#6366f1"/>
+  <circle cx="100" cy="100" r="12" fill="#8b5cf6"/>
+  <circle cx="140" cy="100" r="8" fill="#a855f7"/>
+  <circle cx="70" cy="130" r="8" fill="#6366f1"/>
+  <circle cx="100" cy="140" r="8" fill="#8b5cf6"/>
+  <circle cx="130" cy="130" r="8" fill="#a855f7"/>
+  
+  <!-- Neural connections -->
+  <line x1="70" y1="70" x2="100" y2="100" stroke="#6366f1" stroke-width="2" opacity="0.6"/>
+  <line x1="100" y1="60" x2="100" y2="100" stroke="#8b5cf6" stroke-width="2" opacity="0.6"/>
+  <line x1="130" y1="70" x2="100" y2="100" stroke="#a855f7" stroke-width="2" opacity="0.6"/>
+  <line x1="60" y1="100" x2="100" y2="100" stroke="#6366f1" stroke-width="2" opacity="0.6"/>
+  <line x1="140" y1="100" x2="100" y2="100" stroke="#a855f7" stroke-width="2" opacity="0.6"/>
+  <line x1="70" y1="130" x2="100" y2="100" stroke="#6366f1" stroke-width="2" opacity="0.6"/>
+  <line x1="100" y1="140" x2="100" y2="100" stroke="#8b5cf6" stroke-width="2" opacity="0.6"/>
+  <line x1="130" y1="130" x2="100" y2="100" stroke="#a855f7" stroke-width="2" opacity="0.6"/>
+  
+  <!-- Cross connections -->
+  <line x1="70" y1="70" x2="60" y2="100" stroke="#6366f1" stroke-width="1" opacity="0.4"/>
+  <line x1="130" y1="70" x2="140" y2="100" stroke="#a855f7" stroke-width="1" opacity="0.4"/>
+  <line x1="60" y1="100" x2="70" y2="130" stroke="#6366f1" stroke-width="1" opacity="0.4"/>
+  <line x1="140" y1="100" x2="130" y2="130" stroke="#a855f7" stroke-width="1" opacity="0.4"/>
+</svg>

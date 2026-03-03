@@ -4,7 +4,7 @@ layout: home
 hero:
   name: "Tiber"
   text: "AI Engineer"
-  tagline: Computer Vision · Deep Learning · Paper Reading
+  tagline: Computer Vision · Deep Learning · AI research
   image:
     src: /ai-brain.svg
     alt: AI Brain

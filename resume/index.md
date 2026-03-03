@@ -17,7 +17,7 @@ title: Resume (Chinese)
 
 | | |
 |---|---|
-| **姓名** | Tiber Zhou |
+| **姓名** | Tiber Z |
 | **职位** | AI算法工程师 |
 | **研究方向** | 3D计算机视觉、深度学习 |
 | **邮箱** | iplayowdva@outlook.com |
@@ -59,7 +59,7 @@ title: Resume (Chinese)
 
 <div class="resume-section">
 
-<div class="resume-item">
+<!-- <div class="resume-item">
 <h4>山东山大华天软件股份有限公司--深圳华天创智软件有限公司 - AI算法工程师</h4>
 <p><em>2023.06 - 至今</em></p>
 <ul>
@@ -73,7 +73,8 @@ title: Resume (Chinese)
 <ul>
 <li>负责项目可视化图形工具开发，数据可视化展示</li>
 </ul>
-</div>
+</div> -->
+ToDo
 
 </div>
 

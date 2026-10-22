@@ -1,8 +1,8 @@
 ---
-title: Reading Notes
+title: Paper Notes
 ---
 
-# Reading Notes
+# Paper Notes
 
 Notes on deep learning and computer vision papers/articles, organized by research direction and keywords.
 

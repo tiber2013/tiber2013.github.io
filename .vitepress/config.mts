@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import { readingNotesSidebar } from './readingnotes.mts'
 
 export default defineConfig({
   base: '/',
@@ -7,6 +8,10 @@ export default defineConfig({
   description: 'AI Engineer - Computer Vision & Deep Learning',
   lastUpdated: true,
   cleanUrls: true,
+  srcExclude: ['readingnotes/**/_source/**'],
+  markdown: {
+    math: true,
+  },
   head: [
     ['meta', { name: 'theme-color', content: '#6366f1' }],
     ['meta', { name: 'og:type', content: 'website' }],
@@ -17,14 +22,16 @@ export default defineConfig({
     siteTitle: 'Tiber Blog',
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Notes', link: '/notes/' },
+      { text: 'Paper Notes', link: '/notes/' },
+      { text: 'Reading Notes', link: '/readingnotes/' },
       { text: 'Projects', link: '/projects/' },
       { text: 'Resume', link: '/resume/' },
     ],
     sidebar: {
+      '/readingnotes/': readingNotesSidebar,
       '/notes/': [
         {
-          text: 'Reading Notes',
+          text: 'Paper Notes',
           items: [
             { text: 'Overview', link: '/notes/' },
             { text: 'Tags Index', link: '/notes/tags' },

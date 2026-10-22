@@ -4,3 +4,9 @@ node_modules
 .DS_Store
 *.local
 Thumbs.db
+
+# 原始笔记素材（含完整译文与全量插图，不公开分发）
+readingnotes/**/_source/
+
+# AI 工作区内部数据，不入公开仓库
+.workbuddy-ai/

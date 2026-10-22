@@ -17,6 +17,7 @@
   "author": "ZQC",
   "license": "MIT",
   "devDependencies": {
+    "markdown-it-mathjax3": "^4.3.2",
     "vitepress": "^1.6.4",
     "vue": "^3.5.29"
   },

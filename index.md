@@ -13,6 +13,9 @@ hero:
       text: Notes
       link: /notes/
     - theme: alt
+      text: Reading Notes
+      link: /readingnotes/
+    - theme: alt
       text: Projects
       link: /projects/
     - theme: alt
@@ -22,7 +25,10 @@ hero:
 features:
   - icon: 📚
     title: Reading Notes
-    details: Notes on deep learning and computer vision papers/articles, organized by keywords for easy retrieval.
+    details: Chapter-by-chapter notes on whole books — key points, core figures, and self-check lists. Start with Foundations of Computer Vision.
+  - icon: 🔬
+    title: Paper Notes
+    details: Notes on deep learning and computer vision papers, organized by keywords for easy retrieval.
   - icon: 🚀
     title: Projects
     details: Project showcases including demos, open-source code, and paper links.

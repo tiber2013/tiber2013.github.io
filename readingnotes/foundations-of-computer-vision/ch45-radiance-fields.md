@@ -28,19 +28,19 @@ Part XI 的收官章。第 1 章讲过希腊人「眼睛发射光线」的外发
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 3 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/nerfs/plenoptic_function.webp" alt="图 45.1 全光函数" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/nerfs/plenoptic_function.webp" alt="图 45.1 全光函数" loading="lazy" />
 <figcaption>图 45.1：全光函数 [1]。图中展示了全光函数在四个位置的切片。其中两个位置位于自由空间，另两个位于针孔相机内部。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全章的思想起点——「一个区域里充满的光到底携带了什么信息」；辐射场本质上就是全光函数的一个可学习子集。</p>
 
 <figure class="book-fig">
-<img src="./figures/nerfs/flatland_volume_rendering.webp" alt="图 45.7 体渲染过程（Flatland）" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/nerfs/flatland_volume_rendering.webp" alt="图 45.7 体渲染过程（Flatland）" loading="lazy" />
 <figcaption>图 45.7：平面国辐射场的体渲染。图中是该场景的 2D 辐射场，我们从上方俯瞰它。两台相机（角落里的灰色三角形）观看该场景，相机传感器画成一行 5 个像素、用坐标 x 索引。我们从相机原点穿过每个像素向场景发出射线以查询场景。每条射线在画成圆圈的点上被采样：圆圈的大小表示 α 值，圆圈的颜色/透明度表示该点处辐射场的颜色/密度。本场景中有实体，所以密度在物体内部为无穷大，射线一旦命中物体，所有剩余点都被遮挡（α 对剩余点变为零，如圆圈变小所示）。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图把体渲染的整条射线积分过程画成了一眼能懂的「射线—采样点—α 衰减」链条，是理解式 (45.1) 的钥匙。</p>
 
 <figure class="book-fig">
-<img src="./figures/nerfs/full_nerf_pipeline.webp" alt="图 45.11 完整 NeRF 流水线" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/nerfs/full_nerf_pipeline.webp" alt="图 45.11 完整 NeRF 流水线" loading="lazy" />
 <figcaption>图 45.11：渲染一幅图像的完整 NeRF 流水线。注意相机参数还需要输入 `pixel2ray`；`vrender` 还要接收由 `ray2coords` 计算出的方向 D 与采样点 t。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全章的总装图——`pixel2ray → ray2coords → NeRF(L_θ) → vrender` 全链路可微，所以整张图能直接反传优化。</p>

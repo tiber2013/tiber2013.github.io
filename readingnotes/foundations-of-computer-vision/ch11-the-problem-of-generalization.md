@@ -28,19 +28,19 @@ original: https://visionbook.mit.edu/problem_of_generalization.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 3 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/problem_of_generalization/under_and_overfitting.webp" alt="图 11.1 欠拟合与过拟合" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/problem_of_generalization/under_and_overfitting.webp" alt="图 11.1 欠拟合与过拟合" loading="lazy" />
 <figcaption>图 11.1：欠拟合与过拟合。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：一张图同时给出三种拟合状态（欠拟合/恰好/过拟合）与「噪声被拟合」的直观画面，是建立泛化直觉的起点。</p>
 
 <figure class="book-fig">
-<img src="./figures/problem_of_generalization/under_and_overfitting_vs_polyK.webp" alt="图 11.2 近似误差 vs 泛化误差（随多项式阶数 K 变化）" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/problem_of_generalization/under_and_overfitting_vs_polyK.webp" alt="图 11.2 近似误差 vs 泛化误差（随多项式阶数 K 变化）" loading="lazy" />
 <figcaption>图 11.2：多项式回归阶数 K 对应的近似误差与泛化误差。此处误差定义为被错误预测的验证点比例（L_2 预测误差大于 0.25 记为错误预测）。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这条 U 形曲线是「模型容量—泛化」直觉的核心，也是实践中画验证曲线、用早停（early stopping）选模型的依据。</p>
 
 <figure class="book-fig">
-<img src="./figures/problem_of_generalization/search_space_tools.webp" alt="图 11.4 逼近真理的工具（漫画）" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/problem_of_generalization/search_space_tools.webp" alt="图 11.4 逼近真理的工具（漫画）" loading="lazy" />
 <figcaption>图 11.4：逼近真理的工具漫画。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这幅漫画是全章思想的浓缩——假设空间（硬约束）、先验（软约束）、数据（软约束）三者的交集才是「可学到的真理区域」，建议记住这张图的构图。</p>

@@ -28,25 +28,25 @@ original: https://visionbook.mit.edu/textures.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 4 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/heeger_bergen/julez.webp" alt="图 28.4 Julesz 的纹理基元判别" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/heeger_bergen/julez.webp" alt="图 28.4 Julesz 的纹理基元判别" loading="lazy" />
 <figcaption>图 28.4：使用纹理基元（textons）的纹理判别。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图直观展示了前注意纹理判别——不费吹灰之力就能看出两块纹理之间的边界，这正是任何纹理表示都必须解释的核心现象。</p>
 
 <figure class="book-fig">
-<img src="./figures/heeger_bergen/analysis_heeger_bergen.webp" alt="图 28.5 Heeger-Bergen 纹理分析与合成总览" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/heeger_bergen/analysis_heeger_bergen.webp" alt="图 28.5 Heeger-Bergen 纹理分析与合成总览" loading="lazy" />
 <figcaption>图 28.5：参考纹理图像经纹理分析（编码器）转换为一种表示；纹理合成过程以一张目标输出尺寸的随机噪声图像和参考图像的参数 θ 为输入。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全章的框架图——纹理表示 θ 是连接分析与合成的桥梁；本章及后续所有生成模型，都是对「θ 应该是什么」的不同回答。</p>
 
 <figure class="book-fig">
-<img src="./figures/heeger_bergen/analysis_and_synthesis_heeger_bergen.webp" alt="图 28.7 可操纵金字塔的分析与合成流程" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/heeger_bergen/analysis_and_synthesis_heeger_bergen.webp" alt="图 28.7 可操纵金字塔的分析与合成流程" loading="lazy" />
 <figcaption>图 28.7：(a) 用 6 方向 3 尺度可操纵金字塔做纹理分析（编码器）。输出表示为 18 个子带直方图、低通残差直方图与输入图像直方图的拼接。(b) 纹理合成，图中仅示一步迭代。每次迭代把输出放回输入端，重复 N 次。该图对应图 28.6 中函数 f_θ 的实现。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是 Heeger-Bergen 的核心架构图——分析端提取哪些统计量、合成端如何施加约束，全在这张图里。</p>
 
 <figure class="book-fig">
-<img src="./figures/heeger_bergen/heeger_bergen_one_subband_tmp.webp" alt="图 28.8 单个子带的直方图匹配" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/heeger_bergen/heeger_bergen_one_subband_tmp.webp" alt="图 28.8 单个子带的直方图匹配" loading="lazy" />
 <figcaption>图 28.8：对其中一个子带做直方图匹配。对所有子带独立执行同样的操作。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：一眼看清「直方图匹配」到底做了什么——把高斯分布的子带系数逐点重映射成参考纹理的拉普拉斯形状分布；整个算法的全部机制就在这一张图里。</p>

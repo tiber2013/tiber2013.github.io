@@ -28,7 +28,7 @@ original: https://visionbook.mit.edu/motion_estimation.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 1 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/optical_flow/supervised_estimation_modular.webp" alt="图 49.2 模块化运动估计流水线" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/optical_flow/supervised_estimation_modular.webp" alt="图 49.2 模块化运动估计流水线" loading="lazy" />
 <figcaption>图 49.2：运动估计。(1) 从每幅图像提取特征；(2) 计算 3D 代价体积；(3) 聚合代价体积，为每个像素估计最佳光流。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这一「特征金字塔 → 代价体积 → 学习型聚合 → 由粗到精」的流水线是 PWC-Net、RAFT 等主流光流网络的共同骨架；读后续论文时，识别出这四个模块即可快速定位创新点在哪一步。</p>

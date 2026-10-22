@@ -28,55 +28,55 @@ original: https://visionbook.mit.edu/graphical_models.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 9 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/graphical_models/x1bx2bx3.webp" alt="图 29.1 三个相依变量" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/graphical_models/x1bx2bx3.webp" alt="图 29.1 三个相依变量" loading="lazy" />
 <figcaption>图 29.1：三个相依变量。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全章的「母题」图——一条三节点链加一个因子分解，条件独立、消息传递、复杂度节省全都从它生长出来，务必看熟。</p>
 
 <figure class="book-fig">
-<img src="./figures/graphical_models/x1x2x3y1y2y3.webp" alt="图 含隐变量与观测变量的马尔可夫链" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/graphical_models/x1x2x3y1y2y3.webp" alt="图 含隐变量与观测变量的马尔可夫链" loading="lazy" />
 <figcaption>图：含三个观测变量（阴影）与三个隐变量的马尔可夫链。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：「隐变量链 + 每点观测」是视觉时序/扫描线推断的标准骨架，29.6.4 节的立体视觉示例就是它的直接实例化。</p>
 
 <figure class="book-fig">
-<img src="./figures/graphical_models/mrf.webp" alt="图 29.3 二维马尔可夫随机场" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/graphical_models/mrf.webp" alt="图 29.3 二维马尔可夫随机场" loading="lazy" />
 <figcaption>图 29.3：二维马尔可夫随机场。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：MRF 是视觉中最常用的图模型结构（分割、去噪、立体都靠它），请记住「网格 + 成对势 + 局部证据」三要素。</p>
 
 <figure class="book-fig">
-<img src="./figures/graphical_models/3bpc2.webp" alt="图 29.6 BP 消息总览" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/graphical_models/3bpc2.webp" alt="图 29.6 BP 消息总览" loading="lazy" />
 <figcaption>图 29.6：一个简单 BP 示例中全部消息（部分和）的汇总。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：一张图看清 BP 在全网要算哪些消息——消息就是可复用的部分和，这正是 BP 高效的根源。</p>
 
 <figure class="book-fig">
-<img src="./figures/graphical_models/bpmotivator2.webp" alt="图 29.7 BP 更新规则的推导" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/graphical_models/bpmotivator2.webp" alt="图 29.7 BP 更新规则的推导" loading="lazy" />
 <figcaption>图 29.7：引出 BP 更新规则的例子。(a) 无环图的边际化；(b) x_j 处的部分和如何分配到各节点。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是消息更新规则 (29.7) 的推导现场——把边际化的求和号「推过」与它无关的节点，剩下的部分和就是消息；理解了这一步，BP 就不再是黑盒。</p>
 
 <figure class="book-fig">
-<img src="./figures/graphical_models/bpdiscrete1.webp" alt="图 29.8 BP 消息传递规则的图形化" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/graphical_models/bpdiscrete1.webp" alt="图 29.8 BP 消息传递规则的图形化" loading="lazy" />
 <figcaption>图 29.8：式 (29.7) BP 消息传递规则的图形化表示，其中 odot 表示逐元素相乘（即 Hadamard 积）。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：把式 (29.7) 翻译成了「流入消息逐元素相乘（⊙）→ 乘成对势 → 对发送方状态求和」的流水线，背下这张图就会写 BP 代码。</p>
 
 <figure class="book-fig">
-<img src="./figures/graphical_models/bpi.webp" alt="图 29.9 节点边际 = 流入消息之积" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/graphical_models/bpi.webp" alt="图 29.9 节点边际 = 流入消息之积" loading="lazy" />
 <figcaption>图 29.9：计算节点 i 处的边际概率——把该节点所有流入消息相乘，p_i 也视作另一条消息。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：式 (29.8)——节点边际等于所有流入消息之积。消息算完之后，取任何节点的边际几乎是零成本，这是 BP 工程价值的核心。</p>
 
 <figure class="book-fig">
-<img src="./figures/graphical_models/stereomodel2.webp" alt="图 29.13 立体视差推断的图模型" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/graphical_models/stereomodel2.webp" alt="图 29.13 立体视差推断的图模型" loading="lazy" />
 <figcaption>图 29.13：立体系统中左右相机视图间视差偏移后验概率的图模型。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：立体视差推断的完整图模型——观测证据、Potts 先验、链式结构各就各位，是「把视觉问题写成图模型」的样板。</p>
 
 <figure class="book-fig">
-<img src="./figures/graphical_models/bpcanoes5.webp" alt="图 29.14 BP 求解立体问题端到端结果" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/graphical_models/bpcanoes5.webp" alt="图 29.14 BP 求解立体问题端到端结果" loading="lazy" />
 <figcaption>图 29.14：对图 29.13 的图模型运行 BP 求解立体问题。(a) 右视图与 (b) 左视图，黑线为所分析的行。(c) 每个深度视差在左相机上的局部证据。(d) 各位置最终的向右与 (e) 向左 BP 消息。(f) 最终边际化后验概率，在每个左相机像素位置上准确找到了深度不连续处。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：BP 的端到端战绩——嘈杂的局部证据被沿扫描线的消息聚合后，准确锁定独木舟边界的深度不连续；「证据 + 平滑先验 + 消息传递」的范式在此一览无余。</p>

@@ -27,13 +27,13 @@ original: https://visionbook.mit.edu/data_augmentation.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 2 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/data_augmentation/data_aug_examples.webp" alt="图 36.1 常见数据增强类型" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/data_augmentation/data_aug_examples.webp" alt="图 36.1 常见数据增强类型" loading="lazy" />
 <figcaption>图 36.1：几种常见类型的数据增强。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全章的入口图——「增强 = 一族随机变换」，后面所有理论（不变性、等变性、对抗训练）都是对这句话的形式化。</p>
 
 <figure class="book-fig">
-<img src="./figures/data_augmentation/data_aug_real_example.webp" alt="图 36.2 数据增强如何拓宽训练分布" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/data_augmentation/data_aug_real_example.webp" alt="图 36.2 数据增强如何拓宽训练分布" loading="lazy" />
 <figcaption>图 36.2：数据增强拓宽训练分布，使其更好地覆盖测试情形。(a) 训练数据来自 Caltech256 [1]，测试数据来自 CIFAR100 [2]；散点图展示这些数据在二维特征空间中的分布（CLIP [3] 的前两个主成分）。(b) 训练数据加入镜像增强（随机水平翻转）后。(c) 再加上裁剪（裁剪后缩放回原尺寸）。(d) 再加上颜色抖动（颜色和对比度的随机偏移）。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：四个面板一步步展示「分布外」如何被增强「拉回」分布内——这是全章立论的直观证据。</p>

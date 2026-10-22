@@ -28,49 +28,49 @@ original: https://visionbook.mit.edu/3d_scene_understanding_single_view.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 8 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/single_view_3d/vanishing_points.webp" alt="图 42.5 三维直线的投影与消失点" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/single_view_3d/vanishing_points.webp" alt="图 42.5 三维直线的投影与消失点" loading="lazy" />
 <figcaption>图 42.5：三维直线向相机平面的投影。三维直线与相机中心（位于世界坐标原点）确定一个平面，该平面与相机平面的交线就是图像中出现的二维直线。图像点 v 即消失点。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全部消失点几何的出发点——「直线 + 相机中心 = 平面，交线 = 图像直线」，务必把这张图的几何关系看熟。</p>
 
 <figure class="book-fig">
-<img src="./figures/single_view_3d/vanishing_lines_and_planes.webp" alt="图 42.6 平行线收敛于消失点" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/single_view_3d/vanishing_lines_and_planes.webp" alt="图 42.6 平行线收敛于消失点" loading="lazy" />
 <figcaption>图 42.6：平行三维直线收敛到同一消失点。(a) 红色直线平行于光轴，收敛到图像中心的消失点。(b) 两组包含在同一水平面内的平行直线（平行于光轴）。它们的消失点位于同一条水平图像线上。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：「平行 → 共点」是线性透视的基石，也是本章所有测量的出发点。</p>
 
 <figure class="book-fig">
-<img src="./figures/single_view_3d/palma_horizon.webp" alt="图 42.8 地平线" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/single_view_3d/palma_horizon.webp" alt="图 42.8 地平线" loading="lazy" />
 <figcaption>图 42.8：平面内所有平行直线收敛到一组消失点，所有这些消失点都位于该平面的地平线上。平行平面共享同一条地平线。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：地平线把「一族消失点」组织成「一个平面的身份」，是后续一切测量的基准线。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging_geometry/horizon_line.webp" alt="图 42.9 叉积计算消失点与地平线" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging_geometry/horizon_line.webp" alt="图 42.9 叉积计算消失点与地平线" loading="lazy" />
 <figcaption>图 42.9：用齐次坐标下的平行线计算消失点和地平线。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：整章测量算法的计算骨架就是「叉积求交」：两条平行线交出消失点，两个消失点交出地平线，全部是齐次坐标下的 × 运算。</p>
 
 <figure class="book-fig">
-<img src="./figures/single_view_3d/cross_ratio_description2.webp" alt="图 42.11 交比：射影不变量" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/single_view_3d/cross_ratio_description2.webp" alt="图 42.11 交比：射影不变量" loading="lazy" />
 <figcaption>图 42.11：点集 P 与点集 Q（以及 R）通过交比相联系。点 R_1 在无穷远处，因为连接 R 各点的直线平行于经过 O、P_1、Q_1 的直线。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全章唯一一个「投影前后严格相等」的数值量，单视图测量的一切都建立在它上面。</p>
 
 <figure class="book-fig">
-<img src="./figures/single_view_3d/office_measuring_desk.webp" alt="图 42.14 桌高向书架的投影（含具体坐标）" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/single_view_3d/office_measuring_desk.webp" alt="图 42.14 桌高向书架的投影（含具体坐标）" loading="lazy" />
 <figcaption>图 42.14：桌高向书架的投影。取书架竖直边缘上底部与顶部的图像坐标：t_b = [702\ \ 2,958]^mathsfT、g_b= [987\ \ 618]^mathsfT，以及桌子的 t_d = [679\ \ 1,018]^mathsfT、g_d= [793\ \ 59]^mathsfT。按正文方法计算 a= [4,471\ \ 2,486]^mathsfT 与 b= [2,237\ \ 2,765]^mathsfT。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全章唯一给出全部中间坐标的算例，复习时务必能拿这四个点把整条叉积链复现一遍。</p>
 
 <figure class="book-fig">
-<img src="./figures/single_view_3d/axis_calibration_procedure.webp" alt="图 42.18 用交比标定坐标轴刻度" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/single_view_3d/axis_calibration_procedure.webp" alt="图 42.18 用交比标定坐标轴刻度" loading="lazy" />
 <figcaption>图 42.18：仅用消失点，通过交比不变量把世界坐标投影到图像中。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图把「1 米在图像上不是一个固定像素长度」变成了可操作的算法——刻度沿轴按交比递推摆放。</p>
 
 <figure class="book-fig">
-<img src="./figures/single_view_3d/locating_a_3d_point.webp" alt="图 42.20 定位三维点" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/single_view_3d/locating_a_3d_point.webp" alt="图 42.20 定位三维点" loading="lazy" />
 <figcaption>图 42.20：(a) 没有任何其他信息时，无法恢复点 P 的三维位置。(b) 如果给定把点 P 投影到地面的方法，就可以通过向世界轴投影读出该点的坐标。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是单视图度量的「完全体」——有了标定轴，任何接地物体上的点都能读出三维坐标，而不只是高度。</p>

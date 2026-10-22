@@ -27,7 +27,7 @@ Part XIV「研究、写作与演讲」的开篇。前面 51 章讲的是视觉�
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 1 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/how_to_do_research/abproblem.webp" alt="图 52.2 色彩恒常性的玩具模型 y = a × b" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/how_to_do_research/abproblem.webp" alt="图 52.2 色彩恒常性的玩具模型 y = a × b" loading="lazy" />
 <figcaption>图 52.2：色彩恒常性问题的玩具模型：y = a × b。图中画出 y=1 时 a 和 b 所有可能的解。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：一条双曲线 a=1/b 就把「观测信息不足、解空间无限」讲透了——玩具模型的意义正在于用最小结构暴露问题本质。</p>

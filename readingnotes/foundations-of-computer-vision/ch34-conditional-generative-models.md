@@ -28,37 +28,37 @@ original: https://visionbook.mit.edu/conditional_generative_models.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 6 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/conditional_generative_models/tshirts.webp" alt="图 34.1 不同种类的预测分布" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/conditional_generative_models/tshirts.webp" alt="图 34.1 不同种类的预测分布" loading="lazy" />
 <figcaption>图 34.1：给定一件灰色 T 恤的观测，不同预测模型给出的预测分布。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图把「点预测 / 高斯 / 混合高斯 / 类别分布」四个档次的表达力并排摆开，是理解「为什么需要条件生成模型」的最佳入口。</p>
 
 <figure class="book-fig">
-<img src="./figures/conditional_generative_models/cgen_tshirt_color_inconsistency.webp" alt="图 34.3 颜色跳变伪影" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/conditional_generative_models/cgen_tshirt_color_inconsistency.webp" alt="图 34.3 颜色跳变伪影" loading="lazy" />
 <figcaption>图 34.3：颜色跳变可以从平滑的底层预测分布中产生——在其之上做的是独立选择。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是「独立假设」最典型的视觉故障——模型并不笨，是硬阈值 + 逐像素独立把平滑的 49%/51% 抖动放大成了块状跳变；工程上看到这类伪影就要想到联合建模。</p>
 
 <figure class="book-fig">
-<img src="./figures/conditional_generative_models/cVAE_ball_bouncing_example.webp" alt="图 34.4 台球示例：条件 VAE 的潜在变量" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/conditional_generative_models/cVAE_ball_bouncing_example.webp" alt="图 34.4 台球示例：条件 VAE 的潜在变量" loading="lazy" />
 <figcaption>图 34.4：一个黄色小球在平面上运动的场景。观测 x 是一帧静态画面。从该观测我们知道下一帧 y 中球的颜色和大致位置，但不知道它会向哪个方向运动，因为球的速度未被观测。因此速度是潜在变量，cVAE 目标的一个解就是把球的速度编码进模型的潜在变量 z 中，如图所示。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这个例子是理解 cVAE 设计的钥匙——条件 x 已经解释的信息不要让 z 重复编码，z 专管「给定 x 后仍缺失的自由度」。</p>
 
 <figure class="book-fig">
-<img src="./figures/conditional_generative_models/pix2pix_facades_arch.webp" alt="图 34.7 pix2pix 架构" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/conditional_generative_models/pix2pix_facades_arch.webp" alt="图 34.7 pix2pix 架构" loading="lazy" />
 <figcaption>图 34.7：应用于把立面布局图翻译成立面照片的 pix2pix [4] 模型。模型在 CMP Facades Database [5] 上训练，此处展示的输入与真值图像来自该数据集。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是条件 GAN 落地的标准范式——U-Net 生成器 + PatchGAN 判别器 + L_1 稳定项，工程上做任何「有监督的图像到图像」任务都值得先抄这个结构。</p>
 
 <figure class="book-fig">
-<img src="./figures/conditional_generative_models/patchgan_patch_size_variations.webp" alt="图 34.9 PatchGAN 感受野的影响" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/conditional_generative_models/patchgan_patch_size_variations.webp" alt="图 34.9 PatchGAN 感受野的影响" loading="lazy" />
 <figcaption>图 34.9：改变卷积判别器的感受野（区块大小）会影响判别器强制执行的结构种类。这些结果来自 [4]。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：调 patch 大小是图像到图像任务最实用的旋钮之一——小了出模糊，大了出周期约等于 patch 大小的拼贴伪影；这张图解释了伪影来源，选型时心里有底。</p>
 
 <figure class="book-fig">
-<img src="./figures/conditional_generative_models/cyclegan_schematic.webp" alt="图 34.12 CycleGAN 示意图" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/conditional_generative_models/cyclegan_schematic.webp" alt="图 34.12 CycleGAN 示意图" loading="lazy" />
 <figcaption>图 34.12：CycleGAN 示意图。图改编自 [6]。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：非配对设定下「集合级监督 + 循环一致性」是核心套路；把这张图的四个损失项与架构对应起来，就能复现整个方法。</p>

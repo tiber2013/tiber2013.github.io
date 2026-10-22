@@ -28,25 +28,25 @@ original: https://visionbook.mit.edu/VLMs.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 4 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/vision_and_language/clip_training_fig.webp" alt="图 51.2 CLIP 训练流程" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/vision_and_language/clip_training_fig.webp" alt="图 51.2 CLIP 训练流程" loading="lazy" />
 <figcaption>图 51.2：对一个包含 6 个「语言-图像」训练样本的批次进行 CLIP 训练。绿框是正样本对（要增大其值），即 6 个训练配对；红框是负样本对（要减小其值），即批次内其他所有可能的配对。（参照 Radford 等 2021 年论文的图 1）</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：一张图讲透 CLIP 的全部训练机制——批内配对矩阵、正负样本的划分、对称损失。不懂这张图，就没法理解对比学习在图文模态上的落地方式。</p>
 
 <figure class="book-fig">
-<img src="./figures/vision_and_language/clip_shared_embedding.webp" alt="图 51.4 CLIP 联合嵌入空间" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/vision_and_language/clip_shared_embedding.webp" alt="图 51.4 CLIP 联合嵌入空间" loading="lazy" />
 <figcaption>图 51.4：CLIP 联合嵌入（joint embedding）。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是 CLIP 全部魔力的落点——图文被嵌到同一个超球面上，从此「用文本描述当分类器」「跨模态检索」都变成夹角比较问题。</p>
 
 <figure class="book-fig">
-<img src="./figures/vision_and_language/clip_inference_fig.webp" alt="图 51.5 CLIP 零样本分类" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/vision_and_language/clip_inference_fig.webp" alt="图 51.5 CLIP 零样本分类" loading="lazy" />
 <figcaption>图 51.5：用训练好的 CLIP 构建「条纹红圆」（类别 a）对「波点绿方块」（类别 b）分类器。CLIP 模型参数冻结、不更新；分类器的构造方式是：嵌入描述两个类别的文本，看查询图像的嵌入离哪个更近。（参照 CLIP 论文图 1）</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是「零样本分类」的标准做法——不训练任何分类头，仅靠文本模板就得到新类别分类器，也是后来各种开放词表视觉任务的思想源头。</p>
 
 <figure class="book-fig">
-<img src="./figures/vision_and_language/im2text.webp" alt="图 51.11 图生文架构与交叉注意力" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/vision_and_language/im2text.webp" alt="图 51.11 图生文架构与交叉注意力" loading="lazy" />
 <figcaption>图 51.11：用带交叉注意力的小型 transformer 做图生文。灰色边是交叉注意力边。该架构有许多变体：例如文本编码器的每一层都可以对输出的图像 token 做交叉注意力；或者，图像编码器可以把它所有的输入 token 压缩成一个代表整张照片的输出 token，再由文本解码器对这个 token 做交叉注意力——这种做法可以节省内存与计算时间。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是「图像编码器 + 文本解码器」拼接范式的主流程图，其中交叉注意力层是图像 token 进入文本模型的通道，后来绝大多数 VLM 都沿用这一思路。</p>

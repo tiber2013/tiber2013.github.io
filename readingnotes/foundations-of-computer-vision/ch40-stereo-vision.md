@@ -27,25 +27,25 @@ original: https://visionbook.mit.edu/3d_scene_understanding_stereo.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 4 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/3d_scene_understanding/random_dot_stereogram.webp" alt="图 40.3 随机点立体图" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/3d_scene_understanding/random_dot_stereogram.webp" alt="图 40.3 随机点立体图" loading="lazy" />
 <figcaption>图 40.3：随机点立体图。两幅图像几乎相同，唯一区别是中间的正方形在两图之间左右移动了几个像素。每只眼睛看一幅图时（可用立体镜或自由融合），你会看到一块方形从平坦背景中浮出来。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：随机点立体图是「视差本身就是独立深度线索」的最干净证据——没有任何形状、遮挡、纹理语义，仅凭左右位移就能产生深度感知；立体匹配算法的本质就是在用计算复现这件事。</p>
 
 <figure class="book-fig">
-<img src="./figures/3d_scene_understanding/triangularization_stereo.webp" alt="图 40.5 简单立体配置与三角化几何" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/3d_scene_understanding/triangularization_stereo.webp" alt="图 40.5 简单立体配置与三角化几何" loading="lazy" />
 <figcaption>图 40.5：简单立体。(a) 两个焦距同为 f、横向相距 T 的相机把三维点 P 成像为各自像面上的二维点 [x_L,y_L]^mathsfT 与 [x_R,y_R]^mathsfT。(b) 两个三角形的相似关系导出式 (40.1)。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全书视差—深度关系的基准图：Z=fT/(x_L-x_R) 一行公式概括了平行立体相机的全部几何，后面所有立体算法（包括深度网络回归视差）都建立在它之上。</p>
 
 <figure class="book-fig">
-<img src="./figures/stereo/stereolamp.webp" alt="图 40.7 基于亮度的立体匹配问题与视差空间图像" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/stereo/stereolamp.webp" alt="图 40.7 基于亮度的立体匹配问题与视差空间图像" loading="lazy" />
 <figcaption>图 40.7：基于亮度的立体匹配问题。(a) 立体对 (c) 中一幅图像的一行。(b) 不同视差下的亮度匹配误差（垂直方向为视差、水平方向为像素位置），红色为最佳亮度匹配的视差。(d) 平滑后的匹配误差，红色为最佳匹配，及所得深度图 (e)。(f) 真值匹配与深度 (g)。数据集来自 [4]。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：视差空间图像（DSI）是理解立体匹配不确定性的标准工具——沿视差维看匹配代价曲线，一眼能看出哪些区域纹理缺失、哪些位置被遮挡坑死；它也是后续一切代价体（cost volume）方法的思想源头。</p>
 
 <figure class="book-fig">
-<img src="./figures/3d_scene_understanding/epipolar_geometry.webp" alt="图 40.12 立体相机对几何与术语" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/3d_scene_understanding/epipolar_geometry.webp" alt="图 40.12 立体相机对几何与术语" loading="lazy" />
 <figcaption>图 40.12：一对立体相机的几何与术语。图中给出给定点 P 的对极平面、对极线与极点（e_1、e_2）。移动点 P 时，只有极点保持不变。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：对极几何是立体匹配降维的根据——第一幅图像中一个点的匹配只需沿第二幅图像中的一条对极线搜索；这张图把平面/线/点三者的关系一次讲清，务必记住「所有对极线过极点」。</p>

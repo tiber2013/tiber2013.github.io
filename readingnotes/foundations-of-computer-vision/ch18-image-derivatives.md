@@ -27,53 +27,53 @@ original: https://visionbook.mit.edu/derivatives.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 9 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/derivatives/discretederivative.webp" alt="图 18.3 两种离散导数核及其输出" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/derivatives/discretederivative.webp" alt="图 18.3 两种离散导数核及其输出" loading="lazy" />
 <figcaption>图 18.3：(a) 输入信号 ℓ[n]；(b) 卷积核 d_0[n]，定义为 d_0[0]=1、d_0[1]=-1、其余为 0；(c) ℓ[n] 与 d_0[n] 卷积的输出；(d) 卷积核 d_1[n]，定义为 d_1[-1]=1、d_1[1]=-1、其余为 0；(e) ℓ[n] 与 d_1[n] 卷积的输出。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这两个核和它们的输出是本章的地基——"核是否居中"直接决定输出有没有半采样错位，后面所有导数核的选择都从这个观察出发。</p>
 
 <figure class="book-fig">
-<img src="./figures/derivatives/d0andd1_dft.webp" alt="图 18.4 D₀ 与 D₁ 的 DFT 幅度对比" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/derivatives/d0andd1_dft.webp" alt="图 18.4 D₀ 与 D₁ 的 DFT 幅度对比" loading="lazy" />
 <figcaption>图 18.4：(a) D_0[u] 与 (b) D_1[u] 的幅度，并与 |2π u/N|（细黑线）比较。两个 DFT 均在 20 个采样上计算。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：频域视角一眼看清两种离散导数的取舍——D_0 幅度更接近理想微分但引入相移；D_1 无相移但有效频带更窄（相当于先叠了一层二项平滑）。</p>
 
 <figure class="book-fig">
-<img src="./figures/derivatives/stop_noise.webp" alt="图 18.6 噪声与高斯导数" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/derivatives/stop_noise.webp" alt="图 18.6 噪声与高斯导数" loading="lazy" />
 <figcaption>图 18.6 (a)：被高斯噪声污染的输入图像。</figcaption>
 </figure>
 
 <figure class="book-fig">
-<img src="./figures/spatial_filters/gausian_der_c_2.webp" alt="图 18.8 多尺度高斯导数" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/spatial_filters/gausian_der_c_2.webp" alt="图 18.8 多尺度高斯导数" loading="lazy" />
 <figcaption>图 18.8 (a)：细尺度（σ 较小）的 x 导数，突出斑马条纹等细节。</figcaption>
 </figure>
 
 <figure class="book-fig">
-<img src="./figures/spatial_filters/gauss_derivatives_triangle.webp" alt="图 18.10 直至 6 阶的 2D 高斯导数核" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/spatial_filters/gauss_derivatives_triangle.webp" alt="图 18.10 直至 6 阶的 2D 高斯导数核" loading="lazy" />
 <figcaption>图 18.10：直至 6 阶的高斯导数核。所有核都是可分离的；它们看起来像傅里叶基乘以高斯窗。图 18.11 表明它们与正弦、余弦波不同，更像余弦波与正弦波的乘积。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：把"高斯导数族 = Hermite 多项式 × 高斯"直接可视化；不同阶数响应不同特征（条纹、角点等），但这种表示不随图像旋转而不变。</p>
 
 <figure class="book-fig">
-<img src="./figures/spatial_filters/DFTderivativeoperators.webp" alt="图 18.14 四种导数离散化的 DFT" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/spatial_filters/DFTderivativeoperators.webp" alt="图 18.14 四种导数离散化的 DFT" loading="lazy" />
 <figcaption>图 18.14：四种导数离散化方式 DFT 的幅度：(a) d_0；(b) d_1；(c) Roberts cross 算子；(d) Sobel-Feldman 算子。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：四种常用导数核的频域对比就是选型依据——Sobel 因带通特性对噪声容忍度最好，d_0 输出分辨率最高，Roberts cross 是旋转版的 d_1。</p>
 
 <figure class="book-fig">
-<img src="./figures/spatial_filters/circle.webp" alt="图 18.15 各导数核对圆形的方向响应" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/spatial_filters/circle.webp" alt="图 18.15 各导数核对圆形的方向响应" loading="lazy" />
 <figcaption>图 18.15：圆形沿 n、m 与 45° 方向的导数（只在幅度 >0 处显示角度）。45° 方向的导数输出由沿 n、m 的导数输出线性组合得到。注意不同核之间的差异：Sobel 算子给出最接近旋转不变的梯度幅度，但更模糊。</figcaption>
 </figure>
 <p class="fig-note">💡 实战提示：工程里最常用的是 Sobel（如 OpenCV `cv2.Sobel(ksize=3)`）；Prewitt 算子可看作把 Sobel 的二项平滑 [1,2,1] 换成盒式平滑 [1,1,1] 的变体，抗噪更弱。若两个方向的导数用了偶数长核（如 [1,-1]），输出会相对输入错位半像素；计算梯度幅度/方向或与其他特征对齐时，这种半像素错位会引入可见偏差，应优先使用居中核或显式做对齐。</p>
 
 <figure class="book-fig">
-<img src="./figures/derivatives/hat.webp" alt="图 18.16 高斯拉普拉斯（倒墨西哥帽）" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/derivatives/hat.webp" alt="图 18.16 高斯拉普拉斯（倒墨西哥帽）" loading="lazy" />
 <figcaption>图 18.16：高斯拉普拉斯（σ=1），又称倒置的墨西哥帽小波。(a) 二维图；(b) y=0 处的一维截面。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：中心为正、四周为负的结构决定了它对"与周围不同的斑块"响应最强，这是角点检测与 DoG/SIFT 的直觉源头。</p>
 
 <figure class="book-fig">
-<img src="./figures/derivatives/discretelaplacian1d.webp" alt="图 18.19 一维导数与拉普拉斯" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/derivatives/discretelaplacian1d.webp" alt="图 18.19 一维导数与拉普拉斯" loading="lazy" />
 <figcaption>图 18.19：一维信号的一阶导数与拉普拉斯输出比较。(a) 输入信号；(b) 核 d_1；(c) 导数输出，即 (a) 与 (b) 的卷积；(d) 拉普拉斯的离散近似；(e) 信号 (a) 与拉普拉斯核卷积的输出。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：一维原型讲清两种边缘定位方式——导数的局部极大与拉普拉斯的零交叉都精确落在信号跳变处，这是理解所有边缘检测器的起点。</p>

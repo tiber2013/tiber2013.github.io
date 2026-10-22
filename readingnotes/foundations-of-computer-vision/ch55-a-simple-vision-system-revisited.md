@@ -27,13 +27,13 @@ original: https://visionbook.mit.edu/simplesystem_final.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 2 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/simplesystem_revisited/views_midas.webp" alt="图 55.3 MiDaS 预训练模型的三维重建" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/simplesystem_revisited/views_midas.webp" alt="图 55.3 MiDaS 预训练模型的三维重建" loading="lazy" />
 <figcaption>图 55.3：使用预训练模型的三维重建。图中展示了从多个视点观看由图 55.1 重建出的三维场景。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是本章的核心实验结果——一个只在自然图像上训练的模型，开箱即用地「解」玩具问题：大致能用，但几何并不干净。</p>
 
 <figure class="book-fig">
-<img src="./figures/simplesystem_revisited/comparison_midas_simpleworld.webp" alt="图 55.5 域外泛化对比" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/simplesystem_revisited/comparison_midas_simpleworld.webp" alt="图 55.5 域外泛化对比" loading="lazy" />
 <figcaption>图 55.5：域外泛化（out-of-domain generalization）。对预训练模型而言，这些图像可能仍处于训练域内，因为其训练集包含非常多样的自然图像；简单世界模型只对第一个例子有效，对其余例子完全失效，给出彻底错误的重建。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这一对比是本章的结论所在：手工模型只在假设成立时优美，预训练模型以「永远不完美但很少崩」换取泛化。</p>

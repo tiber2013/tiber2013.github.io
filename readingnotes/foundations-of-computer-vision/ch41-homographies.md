@@ -27,19 +27,19 @@ Part XI「理解几何」中从「表示」走向「应用」的一章。第 38 
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 3 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/homography/example_homography.webp" alt="图 41.2 单应矩阵效果" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/homography/example_homography.webp" alt="图 41.2 单应矩阵效果" loading="lazy" />
 <figcaption>图 41.2：单应矩阵。共线点变换后仍共线，但直线间的夹角不再保持。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：一张网格图同时展示「保线」与「不保角/不保平行」两半性质，是单应矩阵定义的最佳视觉锚点。</p>
 
 <figure class="book-fig">
-<img src="./figures/homography/ransac_algo.webp" alt="图 41.8 RANSAC 算法" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/homography/ransac_algo.webp" alt="图 41.8 RANSAC 算法" loading="lazy" />
 <figcaption>图 41.8：用 RANSAC 稳健估计直线参数。(a) 待稳健拟合直线的数据点。(b) 随机选取两个点（蓝色），足以估计直线模型参数；计算该模型的内点数。(c–e) 重复 k 次。(f) 最后选取内点数最多的模型。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：RANSAC 是视觉工程里出现频率最高的稳健估计器（直线、基础矩阵、单应、PnP 全靠它），这张六格图把「采样-拟合-投票-重拟合」的循环讲得一目了然。</p>
 
 <figure class="book-fig">
-<img src="./figures/homography/panorama.webp" alt="图 41.9 全景拼接结果" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/homography/panorama.webp" alt="图 41.9 全景拼接结果" loading="lazy" />
 <figcaption>图 41.9：由图 41.3 中三张有重叠图像拼成的全景图。</figcaption>
 </figure>
 <p class="fig-note">💡 工程师视角：真实拼接管线还会做：所有单应对参考帧的全局联合优化（bundle adjustment，抑制 pairwise-to-reference 的漂移）、柱面/球面展开、接缝处的多频段曝光融合。单应只对「旋转 + 平面」成立，手持平移拍摄的场景要用对极/基础矩阵或直接全局 BA。</p>

@@ -28,37 +28,37 @@ original: https://visionbook.mit.edu/generative_modeling_and_rep_learning.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 6 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/generative_modeling_and_representation_learning/rep_gen_schematic.webp" alt="图 33.1 表示学习与生成建模的关系" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/generative_modeling_and_representation_learning/rep_gen_schematic.webp" alt="图 33.1 表示学习与生成建模的关系" loading="lazy" />
 <figcaption>图 33.1：表示学习与生成建模之间的关系。这里我们把一侧标为「数据」，另一侧标为「嵌入」；但这两者之间的确切区别究竟是什么？为什么一张 RGB 图像是「数据」而一个 100 维神经激活向量是「嵌入」？这是一个留给读者思考的问题，没有标准答案。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这一张图是本章的总纲——把「数据」和「嵌入」的相对性看透，后面所有模型（VAE、GAN）都只是在这条数轴的两个方向上做功。</p>
 
 <figure class="book-fig">
-<img src="./figures/generative_modeling_and_representation_learning/gmm_vs_vae.webp" alt="图 33.5 从有限高斯混合到无限高斯混合" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/generative_modeling_and_representation_learning/gmm_vs_vae.webp" alt="图 33.5 从有限高斯混合到无限高斯混合" loading="lazy" />
 <figcaption>图 33.5：从有限高斯混合到无限高斯混合。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是理解 VAE 的最重要直觉图——VAE 不是什么新东西，它就是把经典高斯混合的「一个个分量」换成「解码器网络参数化的连续分量」，从而一步跨到无限混合。</p>
 
 <figure class="book-fig">
-<img src="./figures/generative_modeling_and_representation_learning/VAE_encoder.webp" alt="图 33.9 VAE 的编码器" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/generative_modeling_and_representation_learning/VAE_encoder.webp" alt="图 33.9 VAE 的编码器" loading="lazy" />
 <figcaption>图 33.9：VAE 的编码器 f_ψ 把 p(Z | x) 建模为由 f_ψ(x) 参数化的高斯。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图把「编码器」和「重要性采样分布」画上了等号——这是 VAE 与普通自编码器最本质的分界点。</p>
 
 <figure class="book-fig">
-<img src="./figures/generative_modeling_and_representation_learning/VAE_as_autoencoder.webp" alt="图 33.10 VAE 就是自编码器" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/generative_modeling_and_representation_learning/VAE_as_autoencoder.webp" alt="图 33.10 VAE 就是自编码器" loading="lazy" />
 <figcaption>图 33.10：为评估 VAE 赋予数据点 x 的似然，先把 x 编码进 z 空间、再解码回来并计算重建误差。这对应于近似似然函数的一个重要性样本。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：把「编码—采样—解码—算重建误差」四步与自编码器画等号，是记住 VAE 训练流程的最短路径；每步反向传播都对应这里的一个环节。</p>
 
 <figure class="book-fig">
-<img src="./figures/generative_modeling_and_representation_learning/vae_rivers_latent_walk.webp" alt="图 33.14 潜在空间行走展示解耦" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/generative_modeling_and_representation_learning/vae_rivers_latent_walk.webp" alt="图 33.14 潜在空间行走展示解耦" loading="lazy" />
 <figcaption>图 33.14：沿潜在空间两个轴行走生成的图像显示出两个不同属性的变化，说明该模型在一定程度上是解耦的。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全书展示「解耦」最直观的例子——沿一个轴只变草色、沿另一个轴只变河曲，一眼看懂什么叫解耦表示。</p>
 
 <figure class="book-fig">
-<img src="./figures/generative_modeling_and_representation_learning/biggan_latent_walk.webp" alt="图 33.15 BigGAN 的潜在空间行走" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/generative_modeling_and_representation_learning/biggan_latent_walk.webp" alt="图 33.15 BigGAN 的潜在空间行走" loading="lazy" />
 <figcaption>图 33.15：在 BigGAN [4] 的两个正交方向上游走。</figcaption>
 </figure>
 

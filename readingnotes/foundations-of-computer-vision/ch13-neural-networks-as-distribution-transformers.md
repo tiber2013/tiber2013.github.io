@@ -27,19 +27,19 @@ original: https://visionbook.mit.edu/neural_nets_as_distribution_transformers.ht
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 3 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/neural_nets_as_data_transformations/2D_mapping_diagrams.webp" alt="图 13.5 几种网络层的 2D 映射图" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/neural_nets_as_data_transformations/2D_mapping_diagrams.webp" alt="图 13.5 几种网络层的 2D 映射图" loading="lazy" />
 <figcaption>图 13.5：几种网络层的 2D 映射图。线性层映射将根据其权重和偏置发生平移、拉伸与旋转。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：ReLU 把正象限中的点「啪」地贴到坐标轴上——这是理解 ReLU 网络表征稀疏性几何根源的关键图。</p>
 
 <figure class="book-fig">
-<img src="./figures/neural_nets_as_data_transformations/goal_of_classifier.webp" alt="图 13.7 分类器的目标" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/neural_nets_as_data_transformations/goal_of_classifier.webp" alt="图 13.7 分类器的目标" loading="lazy" />
 <figcaption>图 13.7：神经网络分类器的目标是把输入数据分布重排成匹配目标标签分布的样子。（左）红蓝两类的输入数据集；（右）目标输出（one-hot 编码）。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：把「训练」理解为「寻找一串几何变换，把输入分布搬到目标分布」，是本章的核心心智模型。</p>
 
 <figure class="book-fig">
-<img src="./figures/neural_nets_as_data_transformations/nn_training_viz.webp" alt="图 13.8 训练过程中深度网络的逐层重映射" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/neural_nets_as_data_transformations/nn_training_viz.webp" alt="图 13.8 训练过程中深度网络的逐层重映射" loading="lazy" />
 <figcaption>图 13.8：深度网络如何逐层重映射输入数据。目标输出是把所有红点移到 (0,1)、所有蓝点移到 (1,0)（两类的 one-hot 编码）。随着训练推进，网络逐渐实现这种分离。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：一张图看尽训练全程——分布从「纠缠」到「分离」是一个渐进的几何过程，可作为理解训练动态的直觉模板。</p>

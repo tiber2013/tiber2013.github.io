@@ -27,25 +27,25 @@ original: https://visionbook.mit.edu/blurring_2.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 4 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/blur_filters/boxfilter_fourier.webp" alt="图 17.3(b) 盒式滤波器的傅里叶变换" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/blur_filters/boxfilter_fourier.webp" alt="图 17.3(b) 盒式滤波器的傅里叶变换" loading="lazy" />
 <figcaption>图 17.3 (b)：盒式滤波器的傅里叶变换。注意其旁瓣（ripple）与零点位置——高频振荡信号不会被完全抑制。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张 sinc 型频谱一眼说明盒式滤波的两大毛病——旁瓣振铃、最高频处有零点（不衰减），是理解「为什么不用盒式而用高斯」的核心证据。</p>
 
 <figure class="book-fig">
-<img src="./figures/spatial_filters/gausian_zebra_c_2.webp" alt="图 17.4(a) σ=2" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/spatial_filters/gausian_zebra_c_2.webp" alt="图 17.4(a) σ=2" loading="lazy" />
 <figcaption>图 17.4 (a)：σ=2 的高斯滤波。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：σ=2/4/8 三幅连看，直观建立「σ 控制模糊尺度」的手感，这是选高斯核参数时的肌肉记忆。</p>
 
 <figure class="book-fig">
-<img src="./figures/blur_filters/gauss3filter_fourier.webp" alt="图 17.7(b) 二项式滤波器的傅里叶变换" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/blur_filters/gauss3filter_fourier.webp" alt="图 17.7(b) 二项式滤波器的傅里叶变换" loading="lazy" />
 <figcaption>图 17.7 (b)：二项式滤波器的傅里叶变换——单调下降、无涟漪，在最高频处严格为零。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：与图 17.3(b) 的盒式频谱对照看——二项式核频谱在最高频处为零、无旁瓣，是「二项式逼近高斯」的频域证据。</p>
 
 <figure class="book-fig">
-<img src="./figures/blur_filters/boat_b_noise.webp" alt="图 17.8(a) 含棋盘格噪声的图像" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/blur_filters/boat_b_noise.webp" alt="图 17.8(a) 含棋盘格噪声的图像" loading="lazy" />
 <figcaption>图 17.8 (a)：含高频棋盘格噪声的图像。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：(a)(b)(c) 三联图直接对比盒式与二项式对棋盘格高频噪声的抑制效果，是「离散高斯 = 重复二项式卷积」这一结论的视觉证据。</p>

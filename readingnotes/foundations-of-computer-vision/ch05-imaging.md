@@ -26,13 +26,13 @@ original: https://visionbook.mit.edu/imaging.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 2 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging/no_picture_on_a_wall_aina.webp" alt="图 5.3 为什么墙上没有像 / 针孔相机原理" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging/no_picture_on_a_wall_aina.webp" alt="图 5.3 为什么墙上没有像 / 针孔相机原理" loading="lazy" />
 <figcaption>图 5.3：(a) 为什么墙壁上不会出现画面？(b) 针孔相机限制到达墙面的光线，从而产生图像。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这一张图把「相机 = 方向选择器」的本质讲透了，是理解全部成像模型的起点。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging/pinhole_geometry2.webp" alt="图 5.8 针孔相机的几何与坐标系" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging/pinhole_geometry2.webp" alt="图 5.8 针孔相机的几何与坐标系" loading="lazy" />
 <figcaption>图 5.8：(a) 针孔相机几何。三维点 P 投影到距针孔 f 的投影面上的位置 p；虚拟像面是投影面的径向对称面。(b) 相机坐标 (x,y) 与图像坐标 (n,m) 的关系。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图是后续所有多视几何（第 38-44 章）的坐标系基准，务必把三个坐标系的关系看清楚。</p>

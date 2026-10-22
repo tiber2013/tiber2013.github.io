@@ -27,56 +27,56 @@ original: https://visionbook.mit.edu/lenses.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 10 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging/apertures_and_lenses.webp" alt="图 6.1 成像中的亮度/清晰度权衡" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging/apertures_and_lenses.webp" alt="图 6.1 成像中的亮度/清晰度权衡" loading="lazy" />
 <figcaption>图 6.1：成像中亮度与清晰度的权衡。从左到右：小针孔成像清晰，但进光量小，给定曝光时间下像可能很暗；大针孔进光更多、像更亮，但每个传感器元素记录来自许多不同物点的光，像变模糊；透镜可以收集从单点反射到各个方向的光，得到又亮又清晰的像。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图是整章乃至相机设计的核心矛盾——进光量与空间分辨率的权衡；理解它才能理解为什么需要透镜，以及为什么会有景深这回事。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging/lensRealcropped.webp" alt="图 6.4(a) 透镜聚焦面形的推导几何" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging/lensRealcropped.webp" alt="图 6.4(a) 透镜聚焦面形的推导几何" loading="lazy" />
 <figcaption>图 6.4 (a)：距透镜 a 的点发出的光，经适当面形的透镜会聚到距透镜 b 的点。</figcaption>
 </figure>
 
 <figure class="book-fig">
-<img src="./figures/imaging/lensDistortedCropped.webp" alt="图 6.4(b) 角度标注放大图" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging/lensDistortedCropped.webp" alt="图 6.4(b) 角度标注放大图" loading="lazy" />
 <figcaption>图 6.4 (b)：图 6.4 (a) 的角度与距离失真放大版，用于标注 θ_1–θ_4、内部光线偏角 δ 与透镜表面角 θ_S。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是推导透镜制造者公式的唯一几何依据，「θ_S 随 c 线性变化」的聚焦条件就出自这张图；看懂了它，式 (6.1)–(6.3) 都顺理成章。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging/lensrays1.webp" alt="图 6.9(a) 平行光会聚到焦点" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging/lensrays1.webp" alt="图 6.9(a) 平行光会聚到焦点" loading="lazy" />
 <figcaption>图 6.9 (a)：来自无穷远的平行光线会聚到透镜后方距离 f 处。</figcaption>
 </figure>
 
 <figure class="book-fig">
-<img src="./figures/imaging/lensrays2.webp" alt="图 6.9(b) 光源移近，焦点移远" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging/lensrays2.webp" alt="图 6.9(b) 光源移近，焦点移远" loading="lazy" />
 <figcaption>图 6.9 (b)：光源向透镜移近，光线在另一侧的会聚点随之远离。</figcaption>
 </figure>
 
 <figure class="book-fig">
-<img src="./figures/imaging/lensrays3.webp" alt="图 6.9(c) 光源更近，焦点更远" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging/lensrays3.webp" alt="图 6.9(c) 光源更近，焦点更远" loading="lazy" />
 <figcaption>图 6.9 (c)：光源再近一些，会聚点再远一些。</figcaption>
 </figure>
 
 <figure class="book-fig">
-<img src="./figures/imaging/lensrays4.webp" alt="图 6.9(d) 会聚点趋向无穷远" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging/lensrays4.webp" alt="图 6.9(d) 会聚点趋向无穷远" loading="lazy" />
 <figcaption>图 6.9 (d)：光源继续移近，会聚点趋向无穷远。</figcaption>
 </figure>
 
 <figure class="book-fig">
-<img src="./figures/imaging/lensrays5.webp" alt="图 6.9(e) 焦点处的光源出射平行光" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging/lensrays5.webp" alt="图 6.9(e) 焦点处的光源出射平行光" loading="lazy" />
 <figcaption>图 6.9 (e)：从距透镜 f 处发出的光线经透镜后成为平行光，即会聚到无穷远（与 (a) 互为逆过程）。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这五条光路是透镜的「全部语法」——共轭、平行光↔焦点、焦点↔无穷远的互易性都画在这里，手推任何单透镜成像题都用它们。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging/circleOfConfusion.webp" alt="图 6.10 弥散圆与景深" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging/circleOfConfusion.webp" alt="图 6.10 弥散圆与景深" loading="lazy" />
 <figcaption>图 6.10：弥散圆与景深。若物与传感器平面是共轭点关系（相距 a、b，满足透镜制造者公式 (6.3)），物在传感器平面上清晰聚焦。但位于聚焦平面前方 δ_a 的物，一般会会聚在传感器平面后方 δ_b 处 [2]。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：弥散圆是「清晰」与「模糊」之间的定量桥梁——只要模糊圆直径小于容忍值，我们就认为「清晰」，景深的概念完全建立在这张图的几何上。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging/dof.webp" alt="图 6.11 景深计算变量与收小光圈的效果" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging/dof.webp" alt="图 6.11 景深计算变量与收小光圈的效果" loading="lazy" />
 <figcaption>图 6.11：弥散圆与景深。（上）透镜景深计算所用变量。（下）给定可容忍弥散圆时，收窄透镜孔径可以拉长景深范围；代价是到达传感器平面的光变少 [2]。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图把「大光圈景深浅、小光圈景深长」的几何原因一次讲清，是摄影与光学系统设计的日常依据。</p>

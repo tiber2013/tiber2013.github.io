@@ -28,23 +28,23 @@ original: https://visionbook.mit.edu/motion_estimation_intro.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 4 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/optical_flow/algorithm_match.webp" alt="算法 46.1 块匹配运动估计" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/optical_flow/algorithm_match.webp" alt="算法 46.1 块匹配运动估计" loading="lazy" />
 </figure>
 
 <figure class="book-fig">
-<img src="./figures/optical_flow/matching_optical_flow_patch_size_effect.webp" alt="图 46.5 块大小对光流的影响" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/optical_flow/matching_optical_flow_patch_size_effect.webp" alt="图 46.5 块大小对光流的影响" loading="lazy" />
 <figcaption>图 46.5：块大小参数 s 对估计光流的影响。当块只有一个像素（s=0）时方法失败——场景中许多不同位置存在相似的像素；只有块足够大时，图像匹配才对应同一场景元素。大块是必要的，但过大的块会导致过度平滑。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图把匹配类方法的核心矛盾一眼讲透——块大抗混淆但抹平运动边界，块小保细节却匹配失败；后续由粗到细的金字塔策略正是为化解这一矛盾。</p>
 
 <figure class="book-fig">
-<img src="./figures/optical_flow/ted_demo_motion_1.webp" alt="图 46.6 时空信号：从静止正弦波到运动方波" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/optical_flow/ted_demo_motion_1.webp" alt="图 46.6 时空信号：从静止正弦波到运动方波" loading="lazy" />
 <figcaption>图 46.6：为「槽方波运动错觉」搭建的时空信号。第一行是静止正弦波：(a) 静止正弦波的视频；(b) 时空图只有竖直结构；(c) 时空傅里叶变换的全部能量都在零时间频率轴上，因为什么都没动。第二行是运动正弦波：(d) 运动正弦波的视频；(e) 时空图中速度对应局部取向；(f) 傅里叶变换的能量按正弦波的速度发生剪切。第三行是运动方波：(g)–(i) 构成方波所需的额外谐波在 (i) 的时空傅里叶变换中清晰可见。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：记住 (b)(c)(e)(f) 的对应关系——时空图中的斜条纹取向就是运动方向，这是「时空取向编码运动」的直觉起点。</p>
 
 <figure class="book-fig">
-<img src="./figures/optical_flow/ted_demo_motion_2.webp" alt="图 46.7 槽方波错觉的推导" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/optical_flow/ted_demo_motion_2.webp" alt="图 46.7 槽方波错觉的推导" loading="lazy" />
 <figcaption>图 46.7：「槽方波错觉」的推导，接续图 46.6。第一行：方波每次跳 1/4 个波长，而非连续运动；这种错步运动产生了 (c) 中额外的时空频率，而最低时空频率（绿色框）仍表示向左的运动。第二行：若把方波中最低的空间频率正弦分量去掉，得到「槽方波」（fluted square wave），则最低时空频率反向；这从 (e) 时空图、尤其是 (f) 时空低通滤波后的版本可以清楚看到。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图是整个第 46 章的高潮——同一个信号，相关匹配说向左、能量模型说向右，而人的感知跟随能量模型。</p>

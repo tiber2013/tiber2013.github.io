@@ -28,43 +28,43 @@ original: https://visionbook.mit.edu/transformers.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 7 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/transformers/fig-transformers-CNN_limitations.webp" alt="图 26.1 CNN 的局限" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/transformers/fig-transformers-CNN_limitations.webp" alt="图 26.1 CNN 的局限" loading="lazy" />
 <figcaption>图 26.1：考虑一个核大小为 3 的 2 层 CNN，要求比较 x_1 与 x_7。它做不到：没有神经元同时连接到 x_1 和 x_7。斜线标记分别指出与 x_1 和 x_7 相连的神经元。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图是整章的存在理由——「卷积只看感受野」的短视问题，直接引出全局混合层（注意力）的设计动机。</p>
 
 <figure class="book-fig">
-<img src="./figures/transformers/fc_vs_attn.webp" alt="图 26.6 全连接层 vs 注意力层" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/transformers/fc_vs_attn.webp" alt="图 26.6 全连接层 vs 注意力层" loading="lazy" />
 <figcaption>图 26.6：全连接层与注意力层对比。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：「权重本身是数据的函数」这一句话区分了注意力与前几章所有层，是 Transformer 全部表达力的来源。</p>
 
 <figure class="book-fig">
-<img src="./figures/transformers/attn_arch1.webp" alt="图 26.8 注意力层的工作机制" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/transformers/attn_arch1.webp" alt="图 26.8 注意力层的工作机制" loading="lazy" />
 <figcaption>图 26.8：注意力层的工作机制。来自问题的查询与表示 impala 的 token 的键匹配；impala token 的值向量对求和贡献最大，得到 t_out 的码向量。（本例省略 softmax。）</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是「数据库类比」的计算图落地——q·k 打分、softmax 归一、对 v 加权求和，三步必须能在脑子里逐框走完。</p>
 
 <figure class="book-fig">
-<img src="./figures/transformers/attn_arch2.webp" alt="图 26.10 自注意力层展开图" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/transformers/attn_arch2.webp" alt="图 26.10 自注意力层展开图" loading="lazy" />
 <figcaption>图 26.10：自注意力层展开。虚线框出的节点互相对应，表示一个查询与一个键匹配得到标量相似度值（灰框中），该值在 A 计算的加权和中作为权重。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张 QKV 计算图是把式 26.5/26.6 落成代码的蓝图——每个框架的 `F.scaled_dot_product_attention` 内部就是这张图。</p>
 
 <figure class="book-fig">
-<img src="./figures/transformers/ViT_arch.webp" alt="图 26.14 ViT 架构" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/transformers/ViT_arch.webp" alt="图 26.14 ViT 架构" loading="lazy" />
 <figcaption>图 26.14：ViT Transformer 架构。这组层构成一个计算块（灰色阴影），可重复 L 次得到深度为 L 的 ViT。为标明参数所在，所有带可学习参数的边涂成蓝色（注意 MSA 的合并矩阵也是可学习的，但未在图中显式画出）。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是工程上最常用的 Transformer 蓝图——token norm → MSA → 残差 → token norm → tokenwise MLP → 残差，重复 L 次。读代码、改模型都对照这张图。</p>
 
 <figure class="book-fig">
-<img src="./figures/transformers/masked_attn_one_matmul.webp" alt="图 26.18 因果注意力矩阵" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/transformers/masked_attn_one_matmul.webp" alt="图 26.18 因果注意力矩阵" loading="lazy" />
 <figcaption>图 26.18：掩码注意力一次做出多个因果预测。黑色单元被掩码（填零）。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这个下三角矩阵是所有自回归生成（GPT 式训练）的效率核心——训练时一次矩阵乘监督全部前缀，推理时才逐 token 生成。</p>
 
 <figure class="book-fig">
-<img src="./figures/transformers/positional_codes.webp" alt="图 26.20 位置码" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/transformers/positional_codes.webp" alt="图 26.20 位置码" loading="lazy" />
 <figcaption>图 26.20：位置码。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：没有位置码，ViT 连「天空在上、草地在下」都不知道；多尺度正弦波让模型能同时表示粗位置与细位置。</p>

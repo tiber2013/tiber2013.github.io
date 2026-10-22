@@ -28,19 +28,19 @@ original: https://visionbook.mit.edu/simplesystem.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 3 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/simplesystem/projection2.webp" alt="图 2.3 简单投影模型与坐标系" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/simplesystem/projection2.webp" alt="图 2.3 简单投影模型与坐标系" loading="lazy" />
 <figcaption>图 2.3：一个简单投影模型。(a) 世界坐标轴与相机平面。(b) 世界坐标轴平行投影到相机平面的可视化：Z 轴与 Y 轴只差一个符号反转和一个缩放。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图定义了全书反复回扣的玩具问题的坐标系与投影关系，是本章所有推导的基准。</p>
 
 <figure class="book-fig">
-<img src="./figures/simplesystem/edgeLabeling.webp" alt="图 2.5 边缘及其成因" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/simplesystem/edgeLabeling.webp" alt="图 2.5 边缘及其成因" loading="lazy" />
 <figcaption>图 2.5：边缘表示图像强度急剧变化的图像区域；这些变化可能由众多场景因素造成（如遮挡边界、表面朝向变化、表面反照率变化、阴影）。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图给出本章边缘分类的标注实例，是理解后续所有边缘约束的前提。</p>
 
 <figure class="book-fig">
-<img src="./figures/simplesystem/worldCoordinates.webp" alt="图 2.10 3D 重建结果" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/simplesystem/worldCoordinates.webp" alt="图 2.10 3D 重建结果" loading="lazy" />
 <figcaption>图 2.10：对图 2.5 的输入图像，本章视觉问题的求解结果：世界坐标 X、Y、Z 以图像形式展示。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是整章 pipeline 的最终产物——把 3D 结构恢复成逐像素坐标图，一眼即可检验算法成败。</p>

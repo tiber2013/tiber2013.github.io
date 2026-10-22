@@ -27,13 +27,13 @@ original: https://visionbook.mit.edu/recurrent_neural_nets.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 2 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/recurrent_neural_nets/rnn.webp" alt="图 25.2 基础 RNN 结构" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/recurrent_neural_nets/rnn.webp" alt="图 25.2 基础 RNN 结构" loading="lazy" />
 <figcaption>图 25.2：带一个隐藏层的基础 RNN。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全书 recurrent 结构的「母图」——后面所有循环层、BPTT、LSTM 都是在这张图上加细节。</p>
 
 <figure class="book-fig">
-<img src="./figures/recurrent_neural_nets/rnn_unrolled.webp" alt="图 25.3 RNN 展开图" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/recurrent_neural_nets/rnn_unrolled.webp" alt="图 25.3 RNN 展开图" loading="lazy" />
 <figcaption>图 25.3：具有多维输入、隐藏状态和输出的 RNN。左侧为展开计算图，右侧为卷起的计算图。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：把循环「展开成时间轴上的 DAG」是 BPTT 的前提，也是把 RNN 理解为「跨时间共享参数的深网」的关键视角。</p>

@@ -27,37 +27,37 @@ original: https://visionbook.mit.edu/spatial_filter_sets.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 6 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/spatial_filter_sets/gabors.webp" alt="图 22.2 二维 Gabor 函数的三种形态" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/spatial_filter_sets/gabors.webp" alt="图 22.2 二维 Gabor 函数的三种形态" loading="lazy" />
 <figcaption>图 22.2：二维 Gabor 函数。(a) 起局部化作用的高斯窗（σ=1），可视为零频率正弦对应的 Gabor 函数；(b) 余弦相位与 (c) 正弦相位 Gabor 函数，中心频率 u_0=2π、v_0=0。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：余弦/正弦相位对是本章一切后续内容（正交对、局部能量、可转向金字塔）的原子构件，务必建立"高斯包络 + 条纹"的直观图像。</p>
 
 <figure class="book-fig">
-<img src="./figures/spatial_filter_sets/gabor_FT.webp" alt="图 22.3 Gabor 函数的频谱：单瓣定向带通" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/spatial_filter_sets/gabor_FT.webp" alt="图 22.3 Gabor 函数的频谱：单瓣定向带通" loading="lazy" />
 <figcaption>图 22.3：(a) 余弦与 (b) 正弦 Gabor 函数；(c) 余弦与正弦 Gabor 函数傅里叶变换的幅度（二者 FT 仅相位不同）；(d) 复数 Gabor 函数的 FT，呈非对称的单瓣形状。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：单瓣、平移至高中心的频谱形状，解释了 Gabor 为什么"定向 + 选频"；这是把滤波器组铺满频域的依据。</p>
 
 <figure class="book-fig">
-<img src="./figures/spatial_filter_sets/quad2.webp" alt="图 22.6 局部振幅的计算流程" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/spatial_filter_sets/quad2.webp" alt="图 22.6 局部振幅的计算流程" loading="lazy" />
 <figcaption>图 22.6：局部振幅的计算。输入经一对正交 Gabor 滤波器滤波，每个滤波器输出平方后将结果相加。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要："卷积 → 平方 → 求和"三件套是本章最核心的架构 motif，从边缘检测到现代网络中的能量层都能看到它。</p>
 
 <figure class="book-fig">
-<img src="./figures/spatial_filter_sets/steer_architecture.webp" alt="图 22.10 可转向滤波器架构" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/spatial_filter_sets/steer_architecture.webp" alt="图 22.10 可转向滤波器架构" loading="lazy" />
 <figcaption>图 22.10：可转向滤波器结构。该结构计算沿方向 θ 的图像二阶导数。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要："少量基滤波器 + 逐像素增益图"意味着不必为每个角度各做一次卷积——方向调节退化为廉价的线性组合，这是可转向性真正的工程价值。</p>
 
 <figure class="book-fig">
-<img src="./figures/temporal_filters/gabor_spacetime_FT.webp" alt="图 22.15 空时 Gabor 及其频谱示意" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/temporal_filters/gabor_spacetime_FT.webp" alt="图 22.15 空时 Gabor 及其频谱示意" loading="lazy" />
 <figcaption>图 22.15：(a) 空时 Gabor 滤波器：余弦与正弦 x-t Gabor 滤波器；(b) 其传递函数示意；(c) 两个空间维度（x-y-t）空时 Gabor 滤波器传递函数示意。两个平面示例了以相同方式与 Gabor 滤波器相交的空时平面。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图把"为什么单个定向滤波器测不了速度"讲透了，是理解孔径问题与后续所有运动算法的几何起点。</p>
 
 <figure class="book-fig">
-<img src="./figures/temporal_filters/MT_velocity_tuned.webp" alt="图 22.17 速度选择单元架构" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/temporal_filters/MT_velocity_tuned.webp" alt="图 22.17 速度选择单元架构" loading="lazy" />
 <figcaption>图 22.17：构造速度选择单元的结构。第一层中，余弦与正弦滤波器组合成相位不变的频率调谐输出；第二层中，空时 Gabor 滤波器的输出按傅里叶域中不同的平面分组，形成速度选择输出。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是"频率能量 + 跨滤波器组合"的完整样板，与哺乳动物 MT 区的速度选择神经元、以及经典运动能量模型同构，值得逐层拆解。</p>

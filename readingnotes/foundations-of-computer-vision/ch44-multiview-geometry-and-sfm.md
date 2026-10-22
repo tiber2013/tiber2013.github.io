@@ -28,19 +28,19 @@ original: https://visionbook.mit.edu/multiview.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 3 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/sfm/sugar/sugar_keypoint_matching_figure.webp" alt="图 44.8 跨视角关键点匹配" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/sfm/sugar/sugar_keypoint_matching_figure.webp" alt="图 44.8 跨视角关键点匹配" loading="lazy" />
 <figcaption>图 44.8：不同视角下的关键点匹配。每个子图顶行是一个匹配关键点在若干视图中的位置；底行是关键点周围 129×129 像素的裁剪。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：SfM 的第一道生死关就是匹配——这一步的召回率直接决定三维重建的完整度，是整个流水线中最值得投入的模块。</p>
 
 <figure class="book-fig">
-<img src="./figures/sfm/sugar/point_cloud_sugar_view1.webp" alt="图 44.9 糖盒三维重建" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/sfm/sugar/point_cloud_sugar_view1.webp" alt="图 44.9 糖盒三维重建" loading="lazy" />
 <figcaption>图 44.9：糖盒的三维重建。图中展示两个不同视角与恢复的相机位置。(a) 鸟瞰。(b) 侧视。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是稀疏 SfM 流水线的标准输出形态——稀疏点云 + 相机位姿；先建立这个「终点图景」，再倒推每个模块的作用。</p>
 
 <figure class="book-fig">
-<img src="./figures/sfm/palma/3d_palma_view2.webp" alt="图 44.10 广场三维重建" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/sfm/palma/3d_palma_view2.webp" alt="图 44.10 广场三维重建" loading="lazy" />
 <figcaption>图 44.10：广场的三维重建。图中展示两个不同视角与恢复的相机位置。(a) 鸟瞰。(b) 任意视角。</figcaption>
 </figure>
 

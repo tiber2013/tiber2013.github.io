@@ -28,19 +28,19 @@ Part X「构建学习型视觉系统的挑战」的收官章。第 36 章用「�
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 3 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/transfer_learning/pretraining_and_adaptation.webp" alt="图 37.1 迁移学习的两个阶段" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/transfer_learning/pretraining_and_adaptation.webp" alt="图 37.1 迁移学习的两个阶段" loading="lazy" />
 <figcaption>图 37.1：迁移学习由两个阶段组成：先在一个任务上预训练模型，再将该模型适配以执行新任务。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这一张图给出全章骨架——后面所有方法都只是在回答「预训练什么、适配什么」两个问题。</p>
 
 <figure class="book-fig">
-<img src="./figures/transfer_learning/fig-transfer_learning-finetuning_stages.webp" alt="图 37.2 微调的阶段：替换首尾层" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/transfer_learning/fig-transfer_learning-finetuning_stages.webp" alt="图 37.2 微调的阶段：替换首尾层" loading="lazy" />
 <figcaption>图 37.2：微调的阶段。若输出维度变化，砍掉最后一层并替换为可输出正确维度的新层；输入维度变化时对第一层同样处理，中间层则继承预训练参数。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：微调时最常踩的坑就是输出维度不匹配；这张图给出标准解法——砍尾层、换新头，输入变则同理换首层。</p>
 
 <figure class="book-fig">
-<img src="./figures/transfer_learning/KD_diagram.webp" alt="图 37.4 知识蒸馏 vs 从标签监督学习" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/transfer_learning/KD_diagram.webp" alt="图 37.4 知识蒸馏 vs 从标签监督学习" loading="lazy" />
 <figcaption>图 37.4：知识蒸馏与从标签监督学习的对比。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：软目标 vs one-hot 的对比是知识蒸馏的全部精髓：教师把类间相似性编码进概率向量，信息量远超硬标签。</p>

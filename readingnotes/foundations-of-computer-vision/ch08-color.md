@@ -27,37 +27,37 @@ original: https://visionbook.mit.edu/color.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 6 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/color/Spectrum_of_blue_sky.webp" alt="图 8.4 蓝天的光谱功率分布" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/color/Spectrum_of_blue_sky.webp" alt="图 8.4 蓝天的光谱功率分布" loading="lazy" />
 <figcaption>图 8.4：蓝天的光谱功率分布 [3]。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全书第一条真实测量的光谱曲线，直观建立「功率随波长分布」的直觉；此后所有颜色讨论的基本对象都是 SPD。</p>
 
 <figure class="book-fig">
-<img src="./figures/color/rainbow3.webp" alt="图 8.5 光谱区域与颜色外观" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/color/rainbow3.webp" alt="图 8.5 光谱区域与颜色外观" loading="lazy" />
 <figcaption>图 8.5：不同光谱区域的光的大致颜色外观。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：一张图把「波长区间 → 颜色」的映射立起来，是复习光谱学时最常用的速查直觉。</p>
 
 <figure class="book-fig">
-<img src="./figures/color/Cones_SMJ2_E.webp" alt="图 8.9(b) 视锥光谱敏感曲线" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/color/Cones_SMJ2_E.webp" alt="图 8.9(b) 视锥光谱敏感曲线" loading="lazy" />
 <figcaption>图 8.9 (b)：L、M、S 视锥细胞的光谱敏感曲线，测自中央凹附近（该处无视杆细胞、视锥紧密堆积）。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：三色视觉的生理基础——三条敏感曲线就是后续全部「三通道」论述的出发点，色匹配函数的推导也以此为准。</p>
 
 <figure class="book-fig">
-<img src="./figures/color/colorRepro2.webp" alt="图 8.11 颜色复现系统" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/color/colorRepro2.webp" alt="图 8.11 颜色复现系统" loading="lazy" />
 <figcaption>图 8.11：颜色复现系统。光传感器 a、b、c 响应输入光谱 t，给出传感器激活 Ct；这些激活的组合驱动显示元件 d、e、f，产生输出光谱 PMCt。对 P、M、C 的条件约束可确保输入与输出颜色对观察者而言匹配。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：全章骨架图——颜色复现的线性代数全貌（C 感知、M 混合、P 发光）都浓缩在这张系统图里，后面三条匹配条件的推导都围绕它展开。</p>
 
 <figure class="book-fig">
-<img src="./figures/color/ciecie.webp" alt="图 8.13 CIE 色匹配函数" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/color/ciecie.webp" alt="图 8.13 CIE 色匹配函数" loading="lazy" />
 <figcaption>图 8.13：CIE 色匹配函数 [19]。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：色度学的标准「接收机」——测量设备、颜色空间换算、色差计算最终都以它为中间语言；三条全正曲线是 XYZ 空间能表示所有可见色的原因。</p>
 
 <figure class="book-fig">
-<img src="./figures/color/blur_lab_girls.webp" alt="图 8.17 色度通道模糊几乎不可见" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/color/blur_lab_girls.webp" alt="图 8.17 色度通道模糊几乎不可见" loading="lazy" />
 <figcaption>图 8.17：由图 8.16 (b) 与 (c) 的清晰、模糊分量组合成的彩色图像。(a) L 分量模糊、a 与 b 分量清晰。(b) a 分量模糊、L 与 b 分量清晰。(c) b 分量模糊、L 与 a 分量清晰。只要亮度分量清晰，只模糊 a 或 b 分量得到的全彩图像看上去仍然清晰。</figcaption>
 </figure>
 <p class="fig-note">💡 工程师视角：JPEG/视频编码里的 YCbCr 4:2:0（色度通道半分辨率采样）就是这条性质最直接的工程变现。</p>

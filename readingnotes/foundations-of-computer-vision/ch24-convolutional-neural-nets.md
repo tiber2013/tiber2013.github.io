@@ -28,55 +28,55 @@ original: https://visionbook.mit.edu/convolutional_neural_nets.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 9 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/convolutional_neural_nets/conv_matrix_vs_net.webp" alt="图 24.4 卷积层的两种等价视角" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/convolutional_neural_nets/conv_matrix_vs_net.webp" alt="图 24.4 卷积层的两种等价视角" loading="lazy" />
 <figcaption>图 24.4：卷积层的两种等价可视化。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：左看是 Toeplitz 矩阵乘法，右看是权重共享的网络——同一件事的两种语言。后面「等效核」「感受野合并」等全部推导都靠在两种视角间切换。</p>
 
 <figure class="book-fig">
-<img src="./figures/convolutional_neural_nets/multichannel_conv.webp" alt="图 24.5 多通道卷积" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/convolutional_neural_nets/multichannel_conv.webp" alt="图 24.5 多通道卷积" loading="lazy" />
 <figcaption>图 24.5：多通道卷积。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这一张图把式 (24.4) 的四个维度 C_in × C_out × K × K 如何对起来讲清楚了；写错维度是搭网络时最常见的 bug。</p>
 
 <figure class="book-fig">
-<img src="./figures/convolutional_neural_nets/multichannel_conv_diagram.webp" alt="图 24.6 带数字的形状例题" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/convolutional_neural_nets/multichannel_conv_diagram.webp" alt="图 24.6 带数字的形状例题" loading="lazy" />
 <figcaption>图 24.6：施加 3 × 3 滤波器组的卷积层。每个滤波器有多少参数？滤波器组里有多少个滤波器？来源：Jonas Wulff 制作。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全书少有的「带着数字查理解」的例题——答案是每个滤波器 27 个参数（3 通道 × 3×3）、滤波器组有 96 个滤波器。参数量 = C_in × C_out × K × K、与图像大小无关，务必做到脱口而出。</p>
 
 <figure class="book-fig">
-<img src="./figures/convolutional_neural_nets/aliasing_stride_0.webp" alt="图 24.8 步长卷积的混叠伪影" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/convolutional_neural_nets/aliasing_stride_0.webp" alt="图 24.8 步长卷积的混叠伪影" loading="lazy" />
 <figcaption>图 24.8：步长卷积的结果及其傅里叶变换。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：stride=2 就已经出现明显混叠（aliasing），stride=4 时部分边界直接消失。工程上做下采样前先低通滤波（如 blur-pool）就是为了压这个伪影；看 DFT 是诊断它的标准手段。</p>
 
 <figure class="book-fig">
-<img src="./figures/convolutional_neural_nets/oriented_bars_cnn_kernels.webp" alt="图 24.19 学到的核" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/convolutional_neural_nets/oriented_bars_cnn_kernels.webp" alt="图 24.19 学到的核" loading="lazy" />
 <figcaption>图 24.19：学到的核的可视化。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是「特征可视化」的标准动作——把学到的核画出来、做 DFT，一眼看出网络在用什么基函数解决问题；下一小节的对抗分析结论全靠它推出。</p>
 
 <figure class="book-fig">
-<img src="./figures/convolutional_neural_nets/alexnet_feature_maps.webp" alt="图 24.24 AlexNet 特征图" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/convolutional_neural_nets/alexnet_feature_maps.webp" alt="图 24.24 AlexNet 特征图" loading="lazy" />
 <figcaption>图 24.24：AlexNet 中精选的特征图与滤波器。橙色虚线框的 layer 1 滤波器滑过输入图像，产生橙色虚线框的 layer 1 特征图；绿色虚线框的 layer 2 滤波器滑过 layer 1 特征图，产生绿色虚线框的 layer 2 特征图。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：「浅层边缘 → 深层语义」的层次化特征可视化全部浓缩在这一张图里，是理解 CNN 表示的最经典证据。</p>
 
 <figure class="book-fig">
-<img src="./figures/convolutional_neural_nets/RFs.webp" alt="图 24.26 CNN 中的感受野" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/convolutional_neural_nets/RFs.webp" alt="图 24.26 CNN 中的感受野" loading="lazy" />
 <figcaption>图 24.26：CNN 中的感受野。黑色填充的神经元在相应标注神经元的感受野内（左：x_2[3]；右：x_1[5]）。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：感受野是排查「网络为什么看不到大目标/长程依赖」的第一诊断工具；务必会按核尺寸、步长、层数手算任意神经元的感受野。</p>
 
 <figure class="book-fig">
-<img src="./figures/convolutional_neural_nets/CNN_as_filter.webp" alt="图 24.28 CNN 就是非线性滤波器" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/convolutional_neural_nets/CNN_as_filter.webp" alt="图 24.28 CNN 就是非线性滤波器" loading="lazy" />
 <figcaption>图 24.28：CNN 是一个非线性滤波器。边的颜色表示共享的权重，同色边权重相同。颜色说明同一个函数 F 被施加到每组输入节点上。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图是本章的「定理证明」——从此以后，任何 FCN 都可以整体当作一个（可学习的）滑动滤波器来推理：算等效核、与经典滤波器做等价替换，都有了依据。</p>
 
 <figure class="book-fig">
-<img src="./figures/convolutional_neural_nets/unet.webp" alt="图 24.31 U-Net 架构" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/convolutional_neural_nets/unet.webp" alt="图 24.31 U-Net 架构" loading="lazy" />
 <figcaption>图 24.31：U-Net 架构。每个块包含一系列层。跳跃连接拼接激活。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：U-Net 是分割、检测乃至扩散模型等现代图像到图像系统的默认骨架；「瓶颈 + 跨层拼接」的设计模式值得刻进肌肉记忆。</p>

@@ -28,37 +28,37 @@ original: https://visionbook.mit.edu/pyramids_new_notation.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 6 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/pyramids/gaussianPyr_1.webp" alt="图 23.3 高斯金字塔" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/pyramids/gaussianPyr_1.webp" alt="图 23.3 高斯金字塔" loading="lazy" />
 <figcaption>图 23.3：六级高斯金字塔。第一层 g_0 是输入图像。高斯金字塔对每个颜色通道独立构建。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全部多尺度处理的"默认底座"——后面两种金字塔都建立在它之上，务必看清"每层减半、逐级模糊"的结构。</p>
 
 <figure class="book-fig">
-<img src="./figures/pyramids/laplacianPyr_1.webp" alt="图 23.4 拉普拉斯金字塔" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/pyramids/laplacianPyr_1.webp" alt="图 23.4 拉普拉斯金字塔" loading="lazy" />
 <figcaption>图 23.4：拉普拉斯金字塔，最后是微小的低通残差。拉普拉斯金字塔对每个颜色通道独立构建。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：一眼看清"每层 = 该层高斯 − 下一层高斯的放大"，即逐层剥离细节；低通残差是保证可重建的关键，别丢掉。</p>
 
 <figure class="book-fig">
-<img src="./figures/pyramids/laplacianPyr_architecture.webp" alt="图 23.5 拉普拉斯金字塔的编解码结构" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/pyramids/laplacianPyr_architecture.webp" alt="图 23.5 拉普拉斯金字塔的编解码结构" loading="lazy" />
 <figcaption>图 23.5：框图展示了三层拉普拉斯金字塔的高斯金字塔（黑）、拉普拉斯金字塔（红）与拉普拉斯反变换（蓝）。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全书反复出现的"编码器-解码器"原型——分析网络把图像变成 l_0,l_1,... 加低通残差，合成网络再还原，先在这里把数据流看熟。</p>
 
 <figure class="book-fig">
-<img src="./figures/pyramids/steerable_pyr_sp3Filters.webp" alt="图 23.11 可转向金字塔的滤波器组" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/pyramids/steerable_pyr_sp3Filters.webp" alt="图 23.11 可转向金字塔的滤波器组" loading="lazy" />
 <figcaption>图 23.11：可转向金字塔中使用的定向滤波器与低通核。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：多方向带通核 + 配套低通核是整套表示的"硬件"；平方幅度在频域铺满（tiling）是可重建性的设计约束。</p>
 
 <figure class="book-fig">
-<img src="./figures/pyramids/steerable_pyr_architecture.webp" alt="图 23.12 可转向金字塔架构" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/pyramids/steerable_pyr_architecture.webp" alt="图 23.12 可转向金字塔架构" loading="lazy" />
 <figcaption>图 23.12：可转向金字塔架构。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：与图 23.5 对读——同一个"分析/合成"骨架，只是每层从 1 个低通子带换成 n 个定向子带，方向选择性从此而来。</p>
 
 <figure class="book-fig">
-<img src="./figures/pyramids/visualizations_pyr2.webp" alt="图 23.14 各种金字塔表示的投影矩阵对比" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/pyramids/visualizations_pyr2.webp" alt="图 23.14 各种金字塔表示的投影矩阵对比" loading="lazy" />
 <figcaption>图 23.14：本章讨论的线性图像变换表示的可视化比较。所有变换都可视化为矩阵：行数为输入尺寸，列数为输出尺寸。除傅里叶变换外的所有变换都是卷积式的——矩阵中的对角带状结构揭示了这一点。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：一张图把"局部 vs 全局、带通 vs 低通、过完备 vs 完备"全部讲完；矩阵的"高宽比"直观读出各表示的过完备程度，复习时建议以这张图为索引。</p>

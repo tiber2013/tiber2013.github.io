@@ -28,37 +28,37 @@ original: https://visionbook.mit.edu/stat_image_models_revised.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 6 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/statistical_image_models/model_hist_example2.webp" alt="图 27.5 直方图模型的训练与采样流程" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/statistical_image_models/model_hist_example2.webp" alt="图 27.5 直方图模型的训练与采样流程" loading="lazy" />
 <figcaption>图 27.5：用一幅图像估计图像模型参数，然后按训练图像的直方图独立采样各像素，生成一幅新图像。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：「先拟合参数、再采样」是本章所有模型的通用工作流；把这张图的流程看清楚，后面每个模型都只是替换了「学什么、怎么采」。</p>
 
 <figure class="book-fig">
-<img src="./figures/statistical_image_models/FT_power_law_angular2.webp" alt="图 27.10 自然图像的 1/f 功率谱" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/statistical_image_models/FT_power_law_angular2.webp" alt="图 27.10 自然图像的 1/f 功率谱" loading="lazy" />
 <figcaption>图 27.10：(上排) 三幅 512×512 自然图像与一幅随机图像；(中排) 它们的傅里叶变换幅度（彩色图先对三个通道取平均转为灰度）；(底排) FT 径向截面的角度平均，与 1/w、1/w^1.5、1/w^2 曲线比较（w 为径向频率）。三幅自然图像的 FT 大致按 1/w^α 衰减；噪声图像则完全不同（幅度平坦）。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全书引用最多的自然图像统计事实之一——1/f 谱既是「图像低频主导」的定量表达，也是高斯先验、维纳去噪乃至后续生成模型讨论的出发点，面试与考试都应能默画这条对数斜率约 −1.5 的曲线。</p>
 
 <figure class="book-fig">
-<img src="./figures/statistical_image_models/figure_samples_1_over_f.webp" alt="图 27.11 1/f 高斯模型的采样结果" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/statistical_image_models/figure_samples_1_over_f.webp" alt="图 27.11 1/f 高斯模型的采样结果" loading="lazy" />
 <figcaption>图 27.11：(上排) 随机相位、功率谱幅度按 1/(1+w^α)（α=1.5）生成的图像；(底排) 对每个颜色通道独立应用同一生成过程的彩色结果。生成的图像看起来像云。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：「随机相位 + 1/f 幅度」是全书最经典的图像合成实验之一：一眼看出高斯模型抓住了尺度与对比度统计，却完全丢失了相位携带的结构——这正是它去噪效果有限的根因。</p>
 
 <figure class="book-fig">
-<img src="./figures/statistical_image_models/examplesderivativedistributions.webp" alt="图 27.16 稀疏性：不同世界的带通响应分布趋同" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/statistical_image_models/examplesderivativedistributions.webp" alt="图 27.16 稀疏性：不同世界的带通响应分布趋同" loading="lazy" />
 <figcaption>图 27.16：不同视觉世界图像及其带通滤波版本的直方图比较。(上排) 高斯噪声——带通滤波后仍是高斯分布。(中、底排) 两幅非常不同的图像，带通滤波后具有相似的尖峰非高斯直方图。黑线为最佳高斯拟合，对尖峰直方图拟合不佳。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图是「自然图像稀疏性」最经典的视觉证据——不同内容的图像在带通域坍缩到同一个尖峰分布（大量系数精确为零、少量大值），是小波阈值去噪、压缩感知与 L1 正则共同的经验根基。</p>
 
 <figure class="book-fig">
-<img src="./figures/statistical_image_models/wavelet_denoising.webp" alt="图 27.20 小波去噪的似然/先验/后验" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/statistical_image_models/wavelet_denoising.webp" alt="图 27.20 小波去噪的似然/先验/后验" loading="lazy" />
 <figcaption>图 27.20：由若干噪声观测估计子带系数时的似然、先验与后验项。(a) 观测到零子带系数；(b) 观测值 0.26 使似然项平移，但后验仍在零处取峰；(c) 观测系数值 1.22 给出最大后验估计 0.9。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：一图讲透「拉普拉斯先验 + 高斯似然」的 MAP 行为——小观测被吸向零（去噪），大观测被收缩而非保留（保边缘）；这是所有小波收缩去噪的理论原型。</p>
 
 <figure class="book-fig">
-<img src="./figures/statistical_image_models/nlm1.webp" alt="图 27.22 NLM 的权重支撑区域" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/statistical_image_models/nlm1.webp" alt="图 27.22 NLM 的权重支撑区域" loading="lazy" />
 <figcaption>图 27.22：非局部均值去噪算法的支撑区域。图引自 [14]。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是 MRF「邻域定值」直觉最直观的可视化——权重图清楚显示「相似邻域被跨空间地拉到一起平均」，NLM 及其后继（BM3D 的块匹配）是工业去噪的主力思路。</p>

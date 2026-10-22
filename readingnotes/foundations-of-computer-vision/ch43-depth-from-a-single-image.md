@@ -27,19 +27,19 @@ original: https://visionbook.mit.edu/3d_learning.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 3 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/learning_3d/from_depthmap_2_pointcloud.webp" alt="图 43.3 深度图到点云" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/learning_3d/from_depthmap_2_pointcloud.webp" alt="图 43.3 深度图到点云" loading="lazy" />
 <figcaption>图 43.3：把深度图转成点云。这需要标定相机（即知道内参）。草图显示像素 (n,m) 如何用该位置的深度 z[n,m] 映射为三维点 P；彩色线分别平行于相机坐标系各轴方向。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图是「2.5D 输出如何变回 3D」的标准动作，式 (43.1) 在第 40 章（立体）、本章（深度回归）与后续章节反复出现；深度估计质量的最终检验，就是把结果投成点云看。</p>
 
 <figure class="book-fig">
-<img src="./figures/learning_3d/unsupervised_depth.webp" alt="图 43.7 无监督学习系统" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/learning_3d/unsupervised_depth.webp" alt="图 43.7 无监督学习系统" loading="lazy" />
 <figcaption>图 43.7：无监督学习相机运动与深度的系统 [20]。目标是通过最小化重建误差学习函数 f_1、f_2 的参数。函数 f_3 是确定性的。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张框图是自监督深度估计（Monodepth 一族）的模板——深度网络 + 位姿网络 + 可微扭曲，靠光度损失闭环；看懂它就看懂了整个无监督路线。</p>
 
 <figure class="book-fig">
-<img src="./figures/learning_3d/geometry_reconstruction_12.webp" alt="图 43.8 可微扭曲的几何" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/learning_3d/geometry_reconstruction_12.webp" alt="图 43.8 可微扭曲的几何" loading="lazy" />
 <figcaption>图 43.8：运动相机捕获的两幅图像之间的几何。两帧间对应点的坐标由点的三维世界坐标与相对相机运动约束。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：无监督深度的全部监督信号就压在这张图的几何里——深度错一点，扭曲位置就偏，光度误差立刻变大；这条链也是端到端反传能流进深度网络的原因。</p>

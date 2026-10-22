@@ -28,19 +28,19 @@ original: https://visionbook.mit.edu/perceptual_organization.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 3 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/perceptual_organization/ambiguous_segmentation_example.webp" alt="图 31.3 分割的歧义性" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/perceptual_organization/ambiguous_segmentation_example.webp" alt="图 31.3 分割的歧义性" loading="lazy" />
 <figcaption>图 31.3：任何给定图像都有多种分割方式，每种方式突出世界不同的属性。这根仙人掌分枝可以看作 (a) 一个片段（整根「枝」）、(b) 两个片段（「叶」与「花」），或 (c) 四个片段（主「叶」、两个「花蕾」和「花」）。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：「没有唯一正确的分割」是分割任务的第一性认知——选哪种粒度完全取决于下游任务，评估指标也因此必须绑定任务定义。</p>
 
 <figure class="book-fig">
-<img src="./figures/perceptual_organization/scatter_ab_fruits2.webp" alt="图 31.4 颜色散点图中的聚类" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/perceptual_organization/scatter_ab_fruits2.webp" alt="图 31.4 颜色散点图中的聚类" loading="lazy" />
 <figcaption>图 31.4：图像中连贯的颜色区域对应全部像素 ab 值散点图中的簇。一般地，分割可归结为在某个特征空间（本例是 ab 颜色，但可以是任意逐像素特征）中对像素聚类。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图是「分割 = 特征空间聚类」这一降维思想的直观呈现——换成任何逐像素特征（DINO、CLIP、深度），套路完全一样。</p>
 
 <figure class="book-fig">
-<img src="./figures/perceptual_organization/kmeans_dino.webp" alt="图 31.7 DINO 特征 + k-means 的分割流水线" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/perceptual_organization/kmeans_dino.webp" alt="图 31.7 DINO 特征 + k-means 的分割流水线" loading="lazy" />
 <figcaption>图 31.7：在 DINO [11] 特征上做 k-means 的图像分割。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是本章最接近现代实践的图——「自监督特征 + 简单聚类」至今是无监督/弱监督分割与发现的常用基线，理解它比掌握图割/谱聚类更实用。</p>

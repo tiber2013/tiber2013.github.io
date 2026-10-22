@@ -28,55 +28,55 @@ original: https://visionbook.mit.edu/image_processing_fourier.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 9 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/Image_processing_fourier/visualization_DFT_color.webp" alt="图 16.6 DFT 矩阵的可视化" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/Image_processing_fourier/visualization_DFT_color.webp" alt="图 16.6 DFT 矩阵的可视化" loading="lazy" />
 <figcaption>图 16.6：把离散傅里叶变换可视化为一个矩阵。被变换的信号构成右侧列向量的元素。傅里叶矩阵的复值用颜色表示，图例在左下。右侧向量中黑色值表示零。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：DFT 的全部性质（对称性、共轭对称、正交性）都压缩在这张彩色矩阵图里；建立「变换 = 换基」的几何直觉，就从读这张图开始。</p>
 
 <figure class="book-fig">
-<img src="./figures/Image_processing_fourier/dft_a.webp" alt="图 16.7 图像的 DFT 与两种分解" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/Image_processing_fourier/dft_a.webp" alt="图 16.7 图像的 DFT 与两种分解" loading="lazy" />
 <figcaption>图 16.7：一幅图像的 DFT，以及（上）实部与虚部、（下）幅度与相位的可视化。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是「频谱图」的标准读法模板——实部/虚部看起来像噪声，而幅度/相位图才显现出边缘朝向、周期结构等可解释信息。</p>
 
 <figure class="book-fig">
-<img src="./figures/Image_processing_fourier/dft_b.webp" alt="图 16.8 用大幅值系数重建图像" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/Image_processing_fourier/dft_b.webp" alt="图 16.8 用大幅值系数重建图像" loading="lazy" />
 <figcaption>图 16.8：从幅度最大的 N 个傅里叶系数重建图像。右框显示这 N 个傅里叶系数在频域中的位置，对它们求逆即得到左图。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图是「频谱 = 图像内容」的最直观证据，也解释了为什么少量低频系数就能做有损压缩——大幅值系数集中在低频。</p>
 
 <figure class="book-fig">
-<img src="./figures/Image_processing_fourier/DFT_toy_examples.webp" alt="图 16.10 2D 傅里叶变换对典例" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/Image_processing_fourier/DFT_toy_examples.webp" alt="图 16.10 2D 傅里叶变换对典例" loading="lazy" />
 <figcaption>图 16.10：若干二维傅里叶变换对。注意这组变换对中可见的趋势：图像在一个域中的支撑越大，另一个域中的幅度越局部化。一条直线变换为一条与之垂直的直线。图像为 64 × 64 像素，原点在中心。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这组「玩具变换对」是读频谱图的速查表：点/线/边缘/周期图案在频域长什么样、朝哪躺，全在这里。</p>
 
 <figure class="book-fig">
-<img src="./figures/Image_processing_fourier/amp_phase_swap_color.webp" alt="图 16.14 交换幅度与相位" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/Image_processing_fourier/amp_phase_swap_color.webp" alt="图 16.14 交换幅度与相位" loading="lazy" />
 <figcaption>图 16.14：交换两幅图像傅里叶变换的幅度与相位。每个颜色通道以相同方式处理。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是理解「相位承载结构」的决定性实验——用停车标志的相位配别人的幅度，重建图看起来仍是停车标志。</p>
 
 <figure class="book-fig">
-<img src="./figures/Image_processing_fourier/dft_random_phaseandamplitude.webp" alt="图 16.15 相位与幅度的相对重要性" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/Image_processing_fourier/dft_random_phaseandamplitude.webp" alt="图 16.15 相位与幅度的相对重要性" loading="lazy" />
 <figcaption>图 16.15：相位与幅度的相对重要性取决于图像。每行展示一幅图像、它的傅里叶变换（幅度与相位），以及对「保留原幅度 + 随机相位」和「保留原相位 + 通用 1/f 幅度」两种信号做逆傅里叶变换得到的结果。注意对第一幅图像相位似乎是最重要的分量；但往下走，两个分量之间的相对重要性会变化；对最下方展示准周期线纹理的图像，幅度是最重要的分量。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：纠正「相位至上」的过度概括——对强周期/纹理图案（织物、栅格、摩尔纹），幅度谱才是辨识性特征，这是许多频域描述子的依据。</p>
 
 <figure class="book-fig">
-<img src="./figures/Image_processing_fourier/filter-types.webp" alt="图 16.17 低通/带通/高通滤波器" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/Image_processing_fourier/filter-types.webp" alt="图 16.17 低通/带通/高通滤波器" loading="lazy" />
 <figcaption>图 16.17：低通、带通、高通滤波器频率响应草图。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张频率响应草图是后续所有滤波器章节的「坐标系」——看到任何滤波器，先问它的 |H[u,v]| 长什么样、放行哪一段频谱。</p>
 
 <figure class="book-fig">
-<img src="./figures/Image_processing_fourier/mit_columns.webp" alt="图 16.19 MIT 大楼例子的频域滤波" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/Image_processing_fourier/mit_columns.webp" alt="图 16.19 MIT 大楼例子的频域滤波" loading="lazy" />
 <figcaption>图 16.19：傅里叶域中的简单滤波。(a) MIT 穹顶大楼重复的柱子沿傅里叶域中的一条水平线产生谐波（见 (b)）。(d) 中把这些傅里叶分量置零后，大楼的柱子被大幅去除 (c)。也可以做互补操作、只保留这些谐波（见 (f)），结果是只保留柱子 (e)。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是「周期性结构 → 频谱冲激 → 陷波滤波」的完整闭环案例；从此看到任何重复噪声（栅格、扫描纹、纱窗），第一反应应该是去频谱里找冲激。</p>
 
 <figure class="book-fig">
-<img src="./figures/spatial_filters/csf.webp" alt="图 16.20 对比度敏感函数" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/spatial_filters/csf.webp" alt="图 16.20 对比度敏感函数" loading="lazy" />
 <figcaption>图 16.20：Campbell–Robson 图展示的对比度敏感函数。图像展示的正弦波频率从左到右递增、幅度从上到下递增。你能沿着图描出一条曲线，指出正弦波在哪里变得不可见吗？</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：CSF 是「人眼 ≈ 带通滤波器」的直接实验证据，解释了为什么中频段信息（纹理、自然边缘）对感知最关键，也是图像压缩/质量评估常利用的特性。</p>

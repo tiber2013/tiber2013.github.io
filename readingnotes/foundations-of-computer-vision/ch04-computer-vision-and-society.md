@@ -28,7 +28,7 @@ original: https://visionbook.mit.edu/fairness.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 1 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/fairness/soap3.webp" alt="图 4.1 数据集偏差的直观证据" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/fairness/soap3.webp" alt="图 4.1 数据集偏差的直观证据" loading="lazy" />
 <figcaption>图 4.1：家居物品的图像，以及五个目标识别系统给出的识别类别 [18]。这些系统对非西方国家、对低收入家庭（如右侧两张照片）的图像往往表现更差。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图把「数据集偏差 → 识别性能差异」的因果链具象化了——同样是肥皂、洗涤剂这类常见物品，只因来自不同收入水平的家庭，商用系统的识别结果就天差地别；做数据审计时它是必看的警示样本。</p>

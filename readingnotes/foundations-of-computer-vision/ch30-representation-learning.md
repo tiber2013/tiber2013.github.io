@@ -28,43 +28,43 @@ original: https://visionbook.mit.edu/representation_learning.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 7 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/representation_learning/autoencoder_diagram.webp" alt="图 30.2 自编码器结构" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/representation_learning/autoencoder_diagram.webp" alt="图 30.2 自编码器结构" loading="lazy" />
 <figcaption>图 30.2：(左) 自编码器把数据空间中的点映射到表示空间中的点，再映射回来。(右) 在一张鸟类图像上运行自编码器的例子。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全书后续一切「编码器—解码器」结构的原型；看懂左图「数据空间 → 表示空间 → 数据空间」的环路，就理解了自编码器乃至后续 VAE、CycleGAN 的共同骨架。</p>
 
 <figure class="book-fig">
-<img src="./figures/representation_learning/AE_NN_probe.webp" alt="图 30.5(b) 逐层探针准确率" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/representation_learning/AE_NN_probe.webp" alt="图 30.5(b) 逐层探针准确率" loading="lazy" />
 <figcaption>图 30.5 (b)：在自编码器编码器各层嵌入上，1-最近邻颜色分类器（8 类）与形状分类器（圆/三角/方）的准确率。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：它给出全书最重要的实验直觉之一——不存在普遍最好的表示：颜色在原始像素上最分明，形状则越深越清楚。由此应养成「用探针实测选层」的工程习惯，而不是默认越深越好。</p>
 
 <figure class="book-fig">
-<img src="./figures/representation_learning/obj_detectors_emerge1.webp" alt="图 30.7 场景分类网络中涌现的物体检测器" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/representation_learning/obj_detectors_emerge1.webp" alt="图 30.7 场景分类网络中涌现的物体检测器" loading="lazy" />
 <figcaption>图 30.7：场景分类神经网络中两个神经感受野的可视化。图像取自 [15]。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：「只用场景分类监督，隐藏层就涌现出物体检测器」是表示学习领域的标志性发现，说明了借口任务的副产品比任务本身更有价值。</p>
 
 <figure class="book-fig">
-<img src="./figures/representation_learning/obj_detectors_in_colorization1.webp" alt="图 30.9 上色网络中涌现的物体检测器" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/representation_learning/obj_detectors_in_colorization1.webp" alt="图 30.9 上色网络中涌现的物体检测器" loading="lazy" />
 <figcaption>图 30.9：[19] 的着色模型中两个神经感受野的可视化。图像由 Andrew Owens 和 Richard Zhang 生成。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：与图 30.7 对照：上色这种看似低层的任务也涌现出物体检测器，暗示「物体」是世界的内在结构，而非人类感知的怪癖。</p>
 
 <figure class="book-fig">
-<img src="./figures/representation_learning/contrastive_learning_diagram.webp" alt="图 30.12 对比学习框架" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/representation_learning/contrastive_learning_diagram.webp" alt="图 30.12 对比学习框架" loading="lazy" />
 <figcaption>图 30.12：对比学习：拉近正样本对、推远负样本对。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是对比学习的总框架图；后面所有具体损失（Hadsell 对比损失、三元组损失、InfoNCE）都是这张图的实例化。</p>
 
 <figure class="book-fig">
-<img src="./figures/representation_learning/contrastive_learning_colorization.webp" alt="图 30.13 多视图对比学习" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/representation_learning/contrastive_learning_colorization.webp" alt="图 30.13 多视图对比学习" loading="lazy" />
 <figcaption>图 30.13：从数据的多个视图进行对比学习（图中为灰度/彩色两个共现视图）。图受 Tian et al. (2020) 启发。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：它把对比学习从「变换不变性」推广到「多视图共现」（彩色/灰度、图像/声音），是跨模态表示学习的标准建模范式。</p>
 
 <figure class="book-fig">
-<img src="./figures/representation_learning/align_unif_results_shapes_dataset.webp" alt="图 30.14 对比学习嵌入可视化" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/representation_learning/align_unif_results_shapes_dataset.webp" alt="图 30.14 对比学习嵌入可视化" loading="lazy" />
 <figcaption>图 30.14：在彩色形状数据上，用两种不同变换构造正样本对的对比学习。变换的选择决定了嵌入对哪些特征敏感、对哪些特征不变。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：嵌入空间的直接可视化：颜色类与形状类分别均匀铺在单位圆上——「变换的选择决定不变性」这一核心思想一张图讲完。</p>

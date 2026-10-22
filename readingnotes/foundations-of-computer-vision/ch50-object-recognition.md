@@ -27,45 +27,45 @@ original: https://visionbook.mit.edu/object_recognition_v3.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 8 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/object_recognition/scanningWindow2.webp" alt="算法 50.1 多尺度图像金字塔上的窗口扫描" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/object_recognition/scanningWindow2.webp" alt="算法 50.1 多尺度图像金字塔上的窗口扫描" loading="lazy" />
 </figure>
 
 <figure class="book-fig">
-<img src="./figures/object_recognition/selective_search.webp" alt="图 50.13 选择性搜索流水线" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/object_recognition/selective_search.webp" alt="图 50.13 选择性搜索流水线" loading="lazy" />
 <figcaption>图 50.13：第一个分类器选出候选边界框；第二个更强的分类器做出最终检测（如汽车）。非极大值抑制（NMS）去除重叠的检测。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：一张图讲清「廉价提议 + 昂贵判别」的两阶段哲学——这是 R-CNN 系列乃至今天多数工业检测器的组织原则。</p>
 
 <figure class="book-fig">
-<img src="./figures/object_recognition/selective_search_architecture.webp" alt="图 50.14 选择性搜索架构" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/object_recognition/selective_search_architecture.webp" alt="图 50.14 选择性搜索架构" loading="lazy" />
 <figcaption>图 50.14：选择性搜索架构示意。图像先被分解为候选区域，然后每个区域分别用分类器和回归处理。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：f_0（提议）/ f_1（分类 + 回归）的分解是检测器的标准抽象。把本图与图 50.24（实例分割）对照看，能看出整个识别家族都在复用同一组积木。</p>
 
 <figure class="book-fig">
-<img src="./figures/object_recognition/iou.webp" alt="IoU 计算示意" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/object_recognition/iou.webp" alt="IoU 计算示意" loading="lazy" />
 </figure>
 
 <figure class="book-fig">
-<img src="./figures/object_recognition/semantic.webp" alt="图 50.21 语义分割" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/object_recognition/semantic.webp" alt="图 50.21 语义分割" loading="lazy" />
 <figcaption>图 50.21：语义分割。每个像素都标注了语义标签（红=汽车，蓝=建筑，绿=道路，黄=人行道，青=标志牌）。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是「分类思想的空间化」——输出从整图一个标签变成每像素一个标签，是从识别通往场景密集理解的枢纽图。</p>
 
 <figure class="book-fig">
-<img src="./figures/object_recognition/segmentation_architecture.webp" alt="图 50.22 编码器-解码器分割架构" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/object_recognition/segmentation_architecture.webp" alt="图 50.22 编码器-解码器分割架构" loading="lazy" />
 <figcaption>图 50.22：语义分割的编码器-解码器架构示意。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：编码器把空间信息压缩成语义特征、解码器逐级恢复分辨率——这个「先理解后定位」的骨架，是 U-Net、DeepLab 等一大家族的共同祖先。</p>
 
 <figure class="book-fig">
-<img src="./figures/object_recognition/instance_segmentation.webp" alt="图 50.23 实例分割" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/object_recognition/instance_segmentation.webp" alt="图 50.23 实例分割" loading="lazy" />
 <figcaption>图 50.23：实例分割。汽车类别的每个实例被赋予不同颜色。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：掩码同时给出「是什么」与「确切是哪些像素」，还能天然区分重叠实例——这是检测与分割两条线索的汇合点。</p>
 
 <figure class="book-fig">
-<img src="./figures/object_recognition/instance_segmentation_architecture.webp" alt="图 50.24 实例分割架构" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/object_recognition/instance_segmentation_architecture.webp" alt="图 50.24 实例分割架构" loading="lazy" />
 <figcaption>图 50.24：实例分割架构。该架构组合了前面见过的若干组件：图像先被分解为重叠区域，然后对每个区域分别应用类别分割。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：把它与图 50.14 并置，能清楚看到「提议 + 框内精细处理」这一范式如何从检测平移到分割——Mask R-CNN 即此路线的集大成者。</p>

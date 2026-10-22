@@ -28,37 +28,37 @@ Part VI「采样与多尺度表示」的第二章，紧接第 20 章的采样理
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 6 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/upsamplig_downsampling/toy_example_book2.webp" alt="图 21.1 基于混叠的对抗攻击" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/upsamplig_downsampling/toy_example_book2.webp" alt="图 21.1 基于混叠的对抗攻击" loading="lazy" />
 <figcaption>图 21.1：计算水平图像梯度的玩具系统所受的解析混叠攻击。输入图像 ℓ_in 与 ℓ_out=max(0,ℓ_in∘_2[1,-1]) 的输出图像，其中 ∘_2 表示步长为 2 的卷积。由于这个简单系统存在混叠，攻击者可以注入高频模式 z 来改变输出。被攻击图像 ℓ_in+z 及攻击后的输出——它甚至看起来不像一个导数！</figcaption>
 </figure>
 <p class="fig-note">💡 实战提示：现代 CNN 里 strided conv / pooling / resize 都是同一类操作；对鲁棒性或安全性敏感的系统，「先低通再抽取」（如 blurpool）能直接封掉这类攻击面。</p>
 
 <figure class="book-fig">
-<img src="./figures/upsamplig_downsampling/components_aliasing_FT2.webp" alt="图 21.5 四拷贝叠加 = 混叠" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/upsamplig_downsampling/components_aliasing_FT2.webp" alt="图 21.5 四拷贝叠加 = 混叠" loading="lazy" />
 <figcaption>图 21.5：图像乘以 delta 串的 DFT，以及分解为原输入图像 DFT 的四个不同平移拷贝。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：把「抽取 = 四个频谱拷贝叠加」画了出来，绿色框内的重叠区就是混叠的来源，是下一节抗混叠滤波器的直接依据。</p>
 
 <figure class="book-fig">
-<img src="./figures/upsamplig_downsampling/decimation_finalequations_inmatrixform2.webp" alt="图 21.8 矩阵视角的混叠" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/upsamplig_downsampling/decimation_finalequations_inmatrixform2.webp" alt="图 21.8 矩阵视角的混叠" loading="lazy" />
 <figcaption>图 21.8：抽取与混叠的可视化。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：用矩阵块结构把「下采样后的每个频率 = 原信号两个频率之和」可视化，混叠从此不再是抽象概念。</p>
 
 <figure class="book-fig">
-<img src="./figures/upsamplig_downsampling/ringing_artifacts.webp" alt="图 21.15 三种低通滤波器的振铃" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/upsamplig_downsampling/ringing_artifacts.webp" alt="图 21.15 三种低通滤波器的振铃" loading="lazy" />
 <figcaption>图 21.15：三种不同低通抗混叠滤波器的输出。（左）理想低通滤波器；（中）Hamming 窗；（右）二项式滤波器。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：直接回答「工程上到底该用哪个抗混叠滤波器」——理想 sinc 通带最干净却振铃最重，二项式以微小混叠换取无伪结构。</p>
 
 <figure class="book-fig">
-<img src="./figures/upsamplig_downsampling/subsampled_antialiasing_textures.webp" alt="图 21.17 抗混叠 vs 直接抽取" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/upsamplig_downsampling/subsampled_antialiasing_textures.webp" alt="图 21.17 抗混叠 vs 直接抽取" loading="lazy" />
 <figcaption>图 21.17：因子 2 逐级抗混叠下采样。与图 21.2 的结果对比。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：与图 21.2 并读就是本章核心结论——同样的抽取率，「先滤波」与「直接抽」得到的信息量天差地别。</p>
 
 <figure class="book-fig">
-<img src="./figures/upsamplig_downsampling/upsampling_bilinear.webp" alt="图 21.21 上采样全链路" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/upsamplig_downsampling/upsampling_bilinear.webp" alt="图 21.21 上采样全链路" loading="lazy" />
 <figcaption>图 21.21：用双线性插值滤波器按 k=2 上采样。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：一张图看全「扩张 → 卷积插值」链路及其频域后果（频谱拷贝未被完全抑制），是理解第 23 章金字塔与 GAN 上采样伪影的起点。</p>

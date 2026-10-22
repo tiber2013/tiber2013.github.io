@@ -27,37 +27,37 @@ original: https://visionbook.mit.edu/generative_models.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 6 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/generative_models/image_generation_with_z_birds.webp" alt="图 32.3 用随机变量使生成器随机化" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/generative_models/image_generation_with_z_birds.webp" alt="图 32.3 用随机变量使生成器随机化" loading="lazy" />
 <figcaption>图 32.3：以随机变量为条件，使生成器具有随机性。同一标签「bird」下采样不同的 z，得到不同的鸟。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全书生成模型的「总结构图」——噪声 z + 条件 y → 图像，后续所有模型（AR、扩散、GAN）都是这一框架的变体。</p>
 
 <figure class="book-fig">
-<img src="./figures/generative_models/max_likelihood_density.webp" alt="图 32.8 极大似然密度拟合" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/generative_models/max_likelihood_density.webp" alt="图 32.8 极大似然密度拟合" loading="lazy" />
 <figcaption>图 32.8：把极大似然密度模型拟合到数据。灰色区域持有恒定总量（可想象为一堆土）；要把土堆到绿色箭头所指的数据点处，就必须从其他区域挖走土（红色区域）。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：一张图讲透「归一化密度的零和博弈」——抬数据点密度必然压低无数据区域的密度，这正是泛化性的来源。</p>
 
 <figure class="book-fig">
-<img src="./figures/generative_models/autoregressive_prediction_schematic.webp" alt="图 32.10 自回归逐像素生成" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/generative_models/autoregressive_prediction_schematic.webp" alt="图 32.10 自回归逐像素生成" loading="lazy" />
 <figcaption>图 32.10：一个逐像素生成图像的自回归模型 f_θ。黑像素是待合成的剩余像素。可与图 28.10 的 Efros-Leung 模型对比。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是自回归家族的「总结构图」——红框上下文、绿框预测位、滑窗推进，现代 PixelCNN/PixelTransformer 与 LLM 都是这一模式的化身。</p>
 
 <figure class="book-fig">
-<img src="./figures/generative_models/autoregressive_softmax_regression.webp" alt="图 32.11 自回归预测即下一像素分类" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/generative_models/autoregressive_softmax_regression.webp" alt="图 32.11 自回归预测即下一像素分类" loading="lazy" />
 <figcaption>图 32.11：自回归预测作为下一像素分类：网络输出 256 路 softmax 分布，与真实像素值计算交叉熵。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：一旦看穿「自回归生成 = 分类」，训练目标、损失曲线调试、teacher forcing 等全套分类技能直接迁移到生成任务。</p>
 
 <figure class="book-fig">
-<img src="./figures/generative_models/reverse_diffusion_process.webp" alt="图 32.15 反向扩散过程" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/generative_models/reverse_diffusion_process.webp" alt="图 32.15 反向扩散过程" loading="lazy" />
 <figcaption>图 32.15：反向扩散过程。前向过程制造监督信号，用于训练反向过程。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：扩散模型的全部精髓在这张图里——「把数据变噪声很容易，正好免费造出『噪声→数据』的监督对」，这是它与自回归、GAN 最本质的差别。</p>
 
 <figure class="book-fig">
-<img src="./figures/generative_models/gan_schematic_v2.webp" alt="图 32.16 GAN 架构" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/generative_models/gan_schematic_v2.webp" alt="图 32.16 GAN 架构" loading="lazy" />
 <figcaption>图 32.16：训练生成火烈鸟图像的 GAN 架构。本例中合成图像由 BigGAN [7] 生成。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是「用博弈代替似然」的标志性结构图——生成器与判别器的输入输出关系、梯度如何互通，看这一张图就够。</p>

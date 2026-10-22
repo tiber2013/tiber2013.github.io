@@ -28,19 +28,19 @@ Part XII「理解运动」的第二章，讲清楚运动估计的「正问题」
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 3 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/optical_flow/examples_3d_moving_points.webp" alt="图 47.2 3D 运动投影的几何分解" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/optical_flow/examples_3d_moving_points.webp" alt="图 47.2 3D 运动投影的几何分解" loading="lazy" />
 <figcaption>图 47.2：三维运动向相机投影的几何。（左）平行于相机平面运动的点；（右）平行于相机光轴运动的点。像平面上的箭头表示成像后的场景速度。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：一张图概括了 3D 运动的两种基本投影方式——平行像面（大小 ∝ f/Z）与沿光轴（辐射状），是分析任何运动场前的第一块积木。</p>
 
 <figure class="book-fig">
-<img src="./figures/optical_flow/camera_forward_translation_flow.webp" alt="图 47.7 扩张焦点与运动场" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/optical_flow/camera_forward_translation_flow.webp" alt="图 47.7 扩张焦点与运动场" loading="lazy" />
 <figcaption>图 47.7：相机接近平面时的运动场示意。运动场表示图像的扩张速率，是接触时间的函数；本例中扩张焦点位于中心。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：运动场从 FOE 向外辐射这一形态，是「从光流估计相机运动方向/碰撞点」类算法（如机器人避障）的直接依据。</p>
 
 <figure class="book-fig">
-<img src="./figures/optical_flow/camera_motion_field_rotation_three_f.webp" alt="图 47.10 焦距对旋转运动场的影响" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/optical_flow/camera_motion_field_rotation_three_f.webp" alt="图 47.10 焦距对旋转运动场的影响" loading="lazy" />
 <figcaption>图 47.10：绕 Y 轴旋转对应的运动流。（左）f=1/3；（中）f=1；（右）f=3。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：同一个旋转，不同焦距下运动场外观完全不同——估计相机旋转时必须把内参一起解出来，否则容易把旋转误判成平移或单应。</p>

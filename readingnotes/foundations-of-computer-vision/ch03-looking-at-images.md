@@ -28,19 +28,19 @@ original: https://visionbook.mit.edu/visionscience.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 3 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/visionscience/shadow.webp" alt="图 3.6 树影 = 天然的针孔相机阵列" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/visionscience/shadow.webp" alt="图 3.6 树影 = 天然的针孔相机阵列" loading="lazy" />
 <figcaption>图 3.6：晴天里这棵树的影子，在地面上投下几十张太阳的像。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：日常树影背后是「树叶缝隙 = 针孔相机」的成像原理——把看得见却想不到的现象和第 5 章的相机模型直接连起来。</p>
 
 <figure class="book-fig">
-<img src="./figures/visionscience/vertical_or_horizontal.webp" alt="图 3.8 水平还是竖直" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/visionscience/vertical_or_horizontal.webp" alt="图 3.8 水平还是竖直" loading="lazy" />
 <figcaption>图 3.8：线条画。左边那幅看起来对应水平表面，右边那幅看起来像竖直表面。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：消失点的位置与地平线的朝向，是判断平面朝向的几何依据——这条直觉会在后续多视几何章节中被形式化。</p>
 
 <figure class="book-fig">
-<img src="./figures/visionscience/droplets.webp" alt="图 3.12 天然的光场相机" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/visionscience/droplets.webp" alt="图 3.12 天然的光场相机" loading="lazy" />
 <figcaption>图 3.12：一台天然形成的光场相机：这张窗户上雨滴的照片中，每颗雨滴都含着场景的一张小图像。右侧是左侧照片中几颗雨滴的放大图。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：雨滴就是微透镜阵列——光场相机的天然原型。「记录 4D 光场（2D 位置 + 2D 方向）、事后重聚焦」是计算摄影学的经典范例，后续章节会讲光场采集。</p>

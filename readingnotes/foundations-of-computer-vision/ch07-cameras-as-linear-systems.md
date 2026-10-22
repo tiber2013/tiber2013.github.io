@@ -27,24 +27,24 @@ original: https://visionbook.mit.edu/camera_as_linsys.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 4 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging/traditional_pinholes_2.webp" alt="图 7.2 针孔相机的成像矩阵" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging/traditional_pinholes_2.webp" alt="图 7.2 针孔相机的成像矩阵" loading="lazy" />
 <figcaption>图 7.2：(a) 小孔一维针孔相机示意；(b) 其成像矩阵 A、A⁻¹ 与正则化逆 B 的可视化——对小孔成像器，三者都是单位矩阵。(c) 大孔一维针孔相机；(d) 其成像矩阵的可视化。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图是整章的钥匙——它把「相机是什么」变成「矩阵长什么样」：针孔 = 单位矩阵、宽孔 = 平滑矩阵，一眼可比；后面每种新相机都可以这样看图读矩阵。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging/nontraditional_pinholes_2-2.webp" alt="图 7.4 边缘相机与针斑相机" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging/nontraditional_pinholes_2-2.webp" alt="图 7.4 边缘相机与针斑相机" loading="lazy" />
 <figcaption>图 7.4：(a) 边缘相机示意；(b) 其成像矩阵。(c) 针斑相机（遮挡物遮挡场景中的两个值）；(d) 其成像矩阵。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这两个相机的矩阵形状完全不同于单位矩阵——累加型与互补型；记住它们的形状，就理解了「非传统相机」如何把场景编码成出人意料的测量。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging/cornercam.webp" alt="图 7.7(a) 角相机几何" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging/cornercam.webp" alt="图 7.7(a) 角相机几何" loading="lazy" />
 <figcaption>图 7.7 (a)：竖直边缘遮挡场景，被遮挡物体在地面环境照明上造成微弱强度变化，可被相机从地面反射光中观测到。</figcaption>
 </figure>
 
 <figure class="book-fig">
-<img src="./figures/imaging/cornerKey.webp" alt="图 7.7(b) 角相机的重建掩模" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging/cornerKey.webp" alt="图 7.7(b) 角相机的重建掩模" loading="lazy" />
 <figcaption>图 7.7 (b)：估计特定朝向角（本例约 45°）来光所需的空间掩模：与观测到的地面反射图像相乘，再对所有空间像素求和。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图把「绕角成像」的整个反演浓缩成一枚掩模——沿角度对地面亮度求一次微分，就能读出一维场景；它是计算成像「先建模、再反解」范式的最佳范例。</p>

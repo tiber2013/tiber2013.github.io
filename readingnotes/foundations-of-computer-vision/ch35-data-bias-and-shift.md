@@ -27,31 +27,31 @@ original: https://visionbook.mit.edu/bias_and_shift.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 5 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/bias_and_shift/colorizebot_examples.webp" alt="图 35.2 ColorizeBot 的失败案例" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/bias_and_shift/colorizebot_examples.webp" alt="图 35.2 ColorizeBot 的失败案例" loading="lazy" />
 <figcaption>图 35.2：Reddit 的 ColorizeBot [2] 的两个结果。原图分别为（左）Louis-Auguste Bisson 1849 年拍摄的肖邦肖像，（右）1933 年的袋狼 Benjamin。该机器人用 [1] 的模型为原始黑白照片上色。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是「训练集效果好 ≠ 能落地」的标志性案例——同一个模型换一批数据就从惊艳变成滑稽，全部原因都在数据分布上。</p>
 
 <figure class="book-fig">
-<img src="./figures/bias_and_shift/dogs_with_tongues.webp" alt="图 35.3 狗嘴下的粉色团块" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/bias_and_shift/dogs_with_tongues.webp" alt="图 35.3 狗嘴下的粉色团块" loading="lazy" />
 <figcaption>图 35.3：（左）使用 ImageNet 上训练的模型得到的上色结果（示例由 Richard Zhang 制作；输入黑白照片来自 ImageNet [3]）。（右）ImageNet 中的狗图像示例 [3]。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：「狗嘴下面一律涂一团粉色」这一个细节，把「模型学到的是数据集统计规律而非世界规律」讲得入木三分。</p>
 
 <figure class="book-fig">
-<img src="./figures/bias_and_shift/toy_example/training_test_sets.webp" alt="图 35.6 玩具例子：不同数据集上的训练与测试" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/bias_and_shift/toy_example/training_test_sets.webp" alt="图 35.6 玩具例子：不同数据集上的训练与测试" loading="lazy" />
 <figcaption>图 35.6：在不同数据集上训练与测试。本示意中所有数据集都只有 5 个样本。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：四个子图一眼说明「同分布训练测试误差小、跨分布误差大」，且每条虚线拟合只在自己那一块数据区域内成立。</p>
 
 <figure class="book-fig">
-<img src="./figures/bias_and_shift/toy_example/test_as_function_of_data.webp" alt="图 35.7 泛化误差随训练数据量的变化" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/bias_and_shift/toy_example/test_as_function_of_data.webp" alt="图 35.7 泛化误差随训练数据量的变化" loading="lazy" />
 <figcaption>图 35.7：泛化误差随训练样本数的变化。测试集为数据集 A。每条曲线分别表示用数据集 A 与数据集 B 训练时的表现（与图 35.6 相同的分布）。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图给出全书最实用的一条定量结论——有偏数据不是没用，只是「汇率」差：在 A 的测试集上评估时，B 样本的价值约为 A 样本的 1/10。</p>
 
 <figure class="book-fig">
-<img src="./figures/bias_and_shift/datasetsJeopardy.webp" alt="图 35.8 Name That Dataset! 游戏" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/bias_and_shift/datasetsJeopardy.webp" alt="图 35.8 Name That Dataset! 游戏" loading="lazy" />
 <figcaption>图 35.8：来玩「Name That Dataset!」游戏。改自 [4]。玩法：把每组三张图像与右侧列表中的数据集名称关联起来。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：它用一个游戏证明了「每个数据集都有自己的风格指纹」——这正是域间隙存在的直接证据，也是后续所有域自适应方法的动机。</p>

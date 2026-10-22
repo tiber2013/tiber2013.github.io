@@ -27,7 +27,7 @@ Part XIV「研究、写作与演讲」的收尾。论文让工作被读到，报
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 1 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/how_to_give_talks/speaker.webp" alt="图 54.1 好报告的关键" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/how_to_give_talks/speaker.webp" alt="图 54.1 好报告的关键" loading="lazy" />
 <figcaption>图 54.1：好报告的关键：准备与练习。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：本章所有建议最终都收敛到这句话——准备与练习既是报告质量的关键，也是克服紧张的关键。</p>

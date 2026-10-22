@@ -28,41 +28,41 @@ Part III「学习」中承上启下的一章。第 9-10 章建立了学习问题
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 7 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/backpropagation/generic_layer_g_L.webp" alt="图 14.4 通用层与计算范围" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/backpropagation/generic_layer_g_L.webp" alt="图 14.4 通用层与计算范围" loading="lazy" />
 <figcaption>图 14.4：计算图中的一个通用层。大括号标出的是为计算 g_out、L 与 g_in 所需考虑的计算图部分。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图界定了反向传播的「作用域」——每层的 backward 只需要本层的输入、参数和上游传来的 g_out，这是理解「反向传播是逐层局部操作」的钥匙。</p>
 
 <figure class="book-fig">
-<img src="./figures/backpropagation/mod_block_backward.webp" alt="图 14.5 通用层的 backward" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/backpropagation/mod_block_backward.webp" alt="图 14.5 通用层的 backward" loading="lazy" />
 <figcaption>图 14.5：通用层的 backward。图中用颜色标示参数梯度。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全章的核心抽象——任何层（线性、ReLU、损失、乃至自定义层）的 backward 都统一为「一个 Jacobian 左乘上游梯度」的局部模块，框架自动微分正是按这个契约实现的。</p>
 
 <figure class="book-fig">
-<img src="./figures/backpropagation/backprop_for_chains.webp" alt="算法 14.1 反向传播（链式计算图）" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/backpropagation/backprop_for_chains.webp" alt="算法 14.1 反向传播（链式计算图）" loading="lazy" />
 </figure>
 
 <figure class="book-fig">
-<img src="./figures/backpropagation/linear_forward_backward_matrices.webp" alt="图 14.8 线性层前向/反向矩阵乘法" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/backpropagation/linear_forward_backward_matrices.webp" alt="图 14.8 线性层前向/反向矩阵乘法" loading="lazy" />
 <figcaption>图 14.8：线性层的前向与反向矩阵乘法。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：左看前向、右看反向——反向就是把前向的矩阵乘法「逆着数据流」再做一遍， Jacobian L^x=W 直接充当反向的变换矩阵。这个对照是本章最值得记住的画面之一。</p>
 
 <figure class="book-fig">
-<img src="./figures/backpropagation/linear_layer_backprop.webp" alt="图 14.10 线性层前向与反向总览" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/backpropagation/linear_layer_backprop.webp" alt="图 14.10 线性层前向与反向总览" loading="lazy" />
 <figcaption>图 14.10：线性层的前向与反向。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是使用频率最高的「层的反向规则图」：g_in=g_outW 回传激活梯度，∂ J/partialW=x_inotimesg_out 外积出参数梯度，∂ J/partialb=g_out。复习时能默画这张图，线性层的反向就永远不会忘。</p>
 
 <figure class="book-fig">
-<img src="./figures/backpropagation/backward_pass_MLP.webp" alt="图 14.16 MLP 反向传播" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/backpropagation/backward_pass_MLP.webp" alt="图 14.16 MLP 反向传播" loading="lazy" />
 <figcaption>图 14.16：穿过 MLP 的反向传播。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图揭示了线性层前向与反向的优美对应——反向传播就是权重转置后的前向传播；ReLU 在反向则变成由前向激活决定的门控矩阵。理解了它，「反向网络本身是个线性网络」（14.6.5 节）就是顺理成章的结论。</p>
 
 <figure class="book-fig">
-<img src="./figures/backpropagation/backprop_as_neural_net.webp" alt="图 14.17 反向传播即神经网络" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/backpropagation/backprop_as_neural_net.webp" alt="图 14.17 反向传播即神经网络" loading="lazy" />
 <figcaption>图 14.17：穿过三层 MLP 的反向传播计算图。它只是另一个神经网络！实线参与计算数据/激活梯度，虚线参与计算参数梯度。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全章视角最高的一幅图：前向网络 + 反向网络拼成一个大网络，ReLU 的激活值摇身一变成为反向网络线性层的参数——原网络成了参数化反向网络的「超网络」。它解释了为什么任何可微计算的反向都必然只剩线性层。</p>

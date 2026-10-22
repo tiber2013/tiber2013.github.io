@@ -27,25 +27,25 @@ Part XI「理解几何」的开篇。此前各章几乎都把图像当作规则�
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 4 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging_geometry/homogeneousAndHeteregeneous_VS3.webp" alt="图 38.1 齐次坐标与非齐次坐标的对应关系" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging_geometry/homogeneousAndHeteregeneous_VS3.webp" alt="图 38.1 齐次坐标与非齐次坐标的对应关系" loading="lazy" />
 <figcaption>图 38.1：2D 中非齐次坐标与齐次坐标之间的变换规则。虚直线上的所有点对应非齐次坐标中的同一个点。注意 (x,y) 与 (x,y,1) 生活在不同的空间中。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：一张图建立「齐次坐标 = 过原点的直线」这一核心直觉，后面所有 3×3 矩阵（仿射、单应、投影矩阵）都活在这条直觉上。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging_geometry/2d_transforms.webp" alt="图 38.7 2D 变换汇总表" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging_geometry/2d_transforms.webp" alt="图 38.7 2D 变换汇总表" loading="lazy" />
 <figcaption>图 38.7：2D 几何变换及其齐次坐标表述汇总。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全章的「一页速查表」——四种基本变换的矩阵形式、串联规则与不变量都浓缩在这张图里，复习时先回忆它。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging_geometry/points_and_lines_homogeneous.webp" alt="图 38.9 点线互算" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging_geometry/points_and_lines_homogeneous.webp" alt="图 38.9 点线互算" loading="lazy" />
 <figcaption>图 38.9：用齐次坐标求过两点的直线、求两直线的交点。两种操作完全对偶。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：点线对偶是射影几何的基本功，后面单应矩阵估计、对极几何、消失线等推导都会反复用到「叉积即求线/求交」。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging_geometry/warping_sketch.webp" alt="图 38.10 正向 vs 反向映射（示意）" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging_geometry/warping_sketch.webp" alt="图 38.10 正向 vs 反向映射（示意）" loading="lazy" />
 <figcaption>图 38.10：最近邻插值下正向映射与反向映射的对比。正向映射会产生缺失值。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：「先变换源点」还是「先遍历目标点」决定了变形算法有没有空洞——这是所有 warp 实现的根本分叉口，必须一眼认出。</p>

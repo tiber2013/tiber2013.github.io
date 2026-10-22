@@ -27,13 +27,13 @@ Part XIV「研究、写作与演讲」第二章。第 52 章讲如何「做出�
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 2 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/papers/wavelet2.webp" alt="图 53.2 平移对小波表示的影响" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/papers/wavelet2.webp" alt="图 53.2 平移对小波表示的影响" loading="lazy" />
 <figcaption>图 53.2：平移对信号小波表示的影响（图与图注转绘自 [5]）。(a) 输入信号。(b–d) 小波子带分解中的高、中、低频段系数。(e) 同一输入信号向右平移一个采样点。(f–h) 平移后信号在同样三个频段上的分解。注意平移引起的变换系数的剧烈变化。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是「一张图讲清核心思想」的范本——写论文、做报告都该先问：我最关键的那张图是什么？</p>
 
 <figure class="book-fig">
-<img src="./figures/papers/readership.webp" alt="图 53.4 论文的推测阅读量" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/papers/readership.webp" alt="图 53.4 论文的推测阅读量" loading="lazy" />
 <figcaption>图 53.4：计算机科学论文的推测阅读量（相对数量的推测）。许多人会读标题，但少得多的人会读摘要或看图；更少的人会读论文的每一个字。你应该让读者在每个参与层级上都能从论文中有所收获。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：读者按「标题 → 摘要 → 图 → 全文」分层进入你的论文，任何一层断链，工作就等于没发表。</p>

@@ -27,37 +27,37 @@ original: https://visionbook.mit.edu/neural_nets.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 6 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/neural_nets/simple_MLP_network.webp" alt="图 12.10 一个简单 MLP 网络" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/neural_nets/simple_MLP_network.webp" alt="图 12.10 一个简单 MLP 网络" loading="lazy" />
 <figcaption>图 12.10：一个简单的 MLP 网络。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全书第一个「手工设置权重解非线性问题」的完整例子，12.6.1 节的张量/批示例也基于它，务必搞清楚每个神经元在算什么。</p>
 
 <figure class="book-fig">
-<img src="./figures/neural_nets/simple_MLP_network_values.webp" alt="图 12.11 MLP 各神经元的取值" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/neural_nets/simple_MLP_network_values.webp" alt="图 12.11 MLP 各神经元的取值" loading="lazy" />
 <figcaption>图 12.11：图 12.10 所示 MLP 的隐藏单元与输出单元的取值。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：最右侧输出图显示，这个神经网络成功把标记为 1 的数据所在区域赋值为 1——一眼看懂「线性层 + relu」如何折叠出非线性边界。</p>
 
 <figure class="book-fig">
-<img src="./figures/neural_nets/curve_as_bump.webp" alt="图 12.12 函数 = 鼓包之和" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/neural_nets/curve_as_bump.webp" alt="图 12.12 函数 = 鼓包之和" loading="lazy" />
 <figcaption>图 12.12：任何 R → R 函数都可以任意好地用基本鼓包之和逼近。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：把「逼近函数」拆成「一排小鼓包加权求和」是理解通用逼近定理的钥匙，也是「函数 = 基函数之和」这一信号处理思想在神经网络中的第一次亮相。</p>
 
 <figure class="book-fig">
-<img src="./figures/neural_nets/bump_as_relus.webp" alt="图 12.13 用 relu 拼出鼓包" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/neural_nets/bump_as_relus.webp" alt="图 12.13 用 relu 拼出鼓包" loading="lazy" />
 <figcaption>图 12.13：一个鼓包可以表示为平移、缩放的 relu 函数的加权和。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：四个 relu 拼出「升起—平台—回落」的鼓包，这是通用逼近定理证明的核心构件；理解了它，就看懂了「网络 = 可学习的基函数展开」。</p>
 
 <figure class="book-fig">
-<img src="./figures/neural_nets/pointwise_nonlinearities.webp" alt="图 12.16 常见点式非线性" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/neural_nets/pointwise_nonlinearities.webp" alt="图 12.16 常见点式非线性" loading="lazy" />
 <figcaption>图 12.16：常见点式非线性：threshold（阈值）、sigmoid、tanh、relu、leaky-relu。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图是选激活函数的速查表。重点记住 relu：一半定义域梯度非零、可梯度学习；leaky-relu 给负半轴一个小斜率，用来缓解「dying relu」。</p>
 
 <figure class="book-fig">
-<img src="./figures/neural_nets/batchnorm_vs_layernorm_diagram.webp" alt="图 12.17 batchnorm vs layernorm" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/neural_nets/batchnorm_vs_layernorm_diagram.webp" alt="图 12.17 batchnorm vs layernorm" loading="lazy" />
 <figcaption>图 12.17：Batchnorm 与 layernorm 对比。灰色表示计算均值和方差的区域。更多此类可视化参见文献 [11] 的图 2。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：「按列归一化 vs 按行归一化」一句话记住两者区别——batchnorm 跨样本、layernorm 跨通道；后者天然满足 iid，是 Transformer 的标配。</p>

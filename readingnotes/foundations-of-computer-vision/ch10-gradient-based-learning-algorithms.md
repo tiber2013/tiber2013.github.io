@@ -27,23 +27,23 @@ Part III「学习基础」的第二章，紧接第 9 章。第 9 章把学习问
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 4 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/gradient_descent/alg1.webp" alt="算法 10.1 梯度下降（GD）" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/gradient_descent/alg1.webp" alt="算法 10.1 梯度下降（GD）" loading="lazy" />
 </figure>
 
 <figure class="book-fig">
-<img src="./figures/gradient_descent/momentum_out1.webp" alt="图 10.2 三种动量设置的轨迹对比" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/gradient_descent/momentum_out1.webp" alt="图 10.2 三种动量设置的轨迹对比" loading="lazy" />
 <figcaption>图 10.2：(左) 简单损失函数 J = abs(θ)。(右) 三种动量设置 μ 下的优化轨迹。白线表示优化每次迭代时参数的值，从上往下对应迭代推进。颜色表示损失值。红点是损失首次进入最优值 0.01 范围内的位置。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：μ 从 0 到 0.95 的轨迹对比，一眼讲清动量的双刃剑效应，是选择动量超参数时最直观的参照。</p>
 
 <figure class="book-fig">
-<img src="./figures/gradient_descent/grad_descent.webp" alt="图 10.3 梯度下降在各种函数上的行为" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/gradient_descent/grad_descent.webp" alt="图 10.3 梯度下降在各种函数上的行为" loading="lazy" />
 <figcaption>图 10.3：梯度下降在各种函数上的行为。每个子图左侧为函数 J，红点是使用 η=0.01、μ=0.9 的 GD 找到的解；右侧为 GD 各次迭代中 x 值轨迹，画在每次迭代的 J 上。(a) 对凸函数，随 η 趋于零，GD 收敛。(b) 不连续性不构成本质问题，只要梯度在两侧有定义。(c) 近乎平坦的函数下降会非常慢。(d) 分段常数函数有问题，因为梯度完全消失。(e) 对函数 J=sqrt(abs(θ))-0.25，梯度在极小点处趋于无穷，造成不稳定。(f) 当 J 有多个局部极小值时，我们可能找不到全局最小值。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这六种情形覆盖了训练实践中「loss 不降、震荡、卡住」的绝大多数病因，值得对照排查自己的模型属于哪一种。</p>
 
 <figure class="book-fig">
-<img src="./figures/gradient_descent/alg6.webp" alt="算法 10.6 随机梯度下降" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/gradient_descent/alg6.webp" alt="算法 10.6 随机梯度下降" loading="lazy" />
 </figure>
 
 ## 本章小结

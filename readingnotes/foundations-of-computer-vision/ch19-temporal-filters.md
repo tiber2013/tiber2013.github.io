@@ -27,25 +27,25 @@ original: https://visionbook.mit.edu/temporal_filters_v2.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 4 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/temporal_filters/motion_illustration.webp" alt="图 19.1 时空数组与不同方向的截面" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/temporal_filters/motion_illustration.webp" alt="图 19.1 时空数组与不同方向的截面" loading="lazy" />
 <figcaption>图 19.1：(a) 行人行走序列中的 8 帧（按等时间间隔显示；完整序列共 90 帧，对应 3 秒视频）；(b) 128× 128× 90 的时空数组 ℓ[n,m,t]；(c) m=50 处的截面；(d) n=75 处的截面。静止物体呈现为直线。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图建立了「视频 = 时空立方体」的核心直觉——看截面（而非单帧）才能直观看到速度与遮挡结构。</p>
 
 <figure class="book-fig">
-<img src="./figures/temporal_filters/mov_pulse_012.webp" alt="图 19.2 运动脉冲的傅里叶变换（δ 墙）" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/temporal_filters/mov_pulse_012.webp" alt="图 19.2 运动脉冲的傅里叶变换（δ 墙）" loading="lazy" />
 <figcaption>图 19.2：(a) 含一个空间维度、静止矩形脉冲的序列；(b) 矩形脉冲以 v=-0.5 像素/帧向左运动；(c) 以 v=-1 像素/帧向左运动；(d)–(f) 分别为 (a)–(c) 的傅里叶变换。由于我们处理离散化信号，速度单位为像素/帧。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图是「速度 = 频域倾斜方向」的唯一直观证据，运动估计的频域方法都建立在这面 δ 墙上。</p>
 
 <figure class="book-fig">
-<img src="./figures/temporal_filters/seq_filtered_blur.webp" alt="图 19.4 时空高斯与倾斜高斯的滤波效果" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/temporal_filters/seq_filtered_blur.webp" alt="图 19.4 时空高斯与倾斜高斯的滤波效果" loading="lazy" />
 <figcaption>图 19.4：(a) 输入序列的一帧及时空截面（上方）；(b) 与图 19.3 (a) 高斯卷积的输出——运动物体出现运动模糊；(c) 与图 19.3 (b) 倾斜高斯卷积的输出；(d) 与图 19.3 (c) 倾斜高斯卷积的输出——特定速度物体保持清晰，类似追拍。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这一组图把「帧间平均 = 运动模糊」和「按速度倾斜 = 选择性追拍」讲透了，是视频去噪/稳像类算法的直觉来源。</p>
 
 <figure class="book-fig">
-<img src="./figures/temporal_filters/seq_filtered_der.webp" alt="图 19.7 零化滤波器按速度选择性滤除物体" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/temporal_filters/seq_filtered_der.webp" alt="图 19.7 零化滤波器按速度选择性滤除物体" loading="lazy" />
 <figcaption>图 19.7：(a) 输入序列；(b) h 取 v_x=v_y=0 的输出；(c) v_x=1 像素/帧；(d) v_x=-1 像素/帧——不同速度的物体被分别滤除。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：它证明「速度选择」可以用一个简单的线性时空核完成——这是视频分层、背景/前景分离、运动选择性滤波等算法的原型。</p>

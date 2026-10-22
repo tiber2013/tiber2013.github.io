@@ -28,19 +28,19 @@ original: https://visionbook.mit.edu/optical_flow.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 3 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/optical_flow/apperture_problem.webp" alt="图 48.2 孔径问题" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/optical_flow/apperture_problem.webp" alt="图 48.2 孔径问题" loading="lazy" />
 <figcaption>图 48.2：孔径问题：观察一个大于图像画面的一维（1D）结构的运动。条纹的实际运动是向上的，但当视觉被限制在观测窗口内可见的部分时，感知到的运动方向却垂直于条纹。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：孔径问题是理解一切基于梯度光流方法的钥匙——它解释了为什么单个像素、单个小窗口常常测不出完整运动，也直接对应后面 A 矩阵秩亏的代数现象。理发店柱错觉（barber-pole illusion）是它的日常版：旋转的条纹条柱会让人产生向下运动的错觉。</p>
 
 <figure class="book-fig">
-<img src="./figures/optical_flow/square_grandient_based_4.webp" alt="图 48.8 用 R 筛选可靠区域" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/optical_flow/square_grandient_based_4.webp" alt="图 48.8 用 R 筛选可靠区域" loading="lazy" />
 <figcaption>图 48.8：在 R>2 区域内的估计光流（围绕适合跟踪的良好特征 [3]）。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这张图把「光流在哪里可信」可视化出来了——只在角点/纹理充分处可信，一维结构处失效。R 判据与 Harris 角点同源，工程上可直接把角点检测当作光流可估计性的预筛。</p>
 
 <figure class="book-fig">
-<img src="./figures/optical_flow/comparison_gradient_vs_iterative.webp" alt="图 48.10 一阶近似 vs. 多尺度迭代" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/optical_flow/comparison_gradient_vs_iterative.webp" alt="图 48.10 一阶近似 vs. 多尺度迭代" loading="lazy" />
 <figcaption>图 48.10：基于梯度的算法与多尺度迭代精化方法所得光流的对比。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是本章最直观的「近似失效」证据——大位移下单步线性解会系统性低估运动，而金字塔 + 迭代修正能救回来。现代方法（含 RAFT 类网络）本质上仍在延续「由粗到精 + 增量更新」这一思想。</p>

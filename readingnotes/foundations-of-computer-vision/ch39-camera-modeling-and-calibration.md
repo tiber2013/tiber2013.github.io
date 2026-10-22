@@ -27,37 +27,37 @@ original: https://visionbook.mit.edu/imaging_geometry.html
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 6 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging_geometry/camera_centric.webp" alt="图 39.3 透视投影" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging_geometry/camera_centric.webp" alt="图 39.3 透视投影" loading="lazy" />
 <figcaption>图 39.3：透视投影。由相似三角形，x/f=X/Z、y/f=Y/Z。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全书几何部分的最小完整模型——后续所有多视几何、三维重建的方程都从这两个比例式出发。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging_geometry/simple_calibration_1.webp" alt="图 39.7 简单标定场景（棋盘格标定板）" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging_geometry/simple_calibration_1.webp" alt="图 39.7 简单标定场景（棋盘格标定板）" loading="lazy" />
 <figcaption>图 39.7：一个简单的标定场景。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：标定三要素——已知尺寸的标定板、测得的距离、一张照片——全部体现在这一张图里；a=ZL/W 是每个工程师都该会手推的 sanity check。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging_geometry/world_and_camera_coordinates_2.webp" alt="图 39.8 世界坐标系与相机坐标系" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging_geometry/world_and_camera_coordinates_2.webp" alt="图 39.8 世界坐标系与相机坐标系" loading="lazy" />
 <figcaption>图 39.8：世界坐标系与相机坐标系。世界坐标 P_W 中的三维点，可通过对点坐标施加平移 T 与旋转 R，表示为相机坐标 P_c。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：外参的物理意义（相机在哪、朝向哪）全在这张图里；后面所有「世界 → 相机 → 像素」的两段式变换都基于它。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging_geometry/summary_camera_model.webp" alt="图 39.9 完整相机模型总览" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging_geometry/summary_camera_model.webp" alt="图 39.9 完整相机模型总览" loading="lazy" />
 <figcaption>图 39.9：点投影到像平面的全过程。本图综合了图 39.3 与图 39.8：先用外参模型，把点所在的世界坐标系变换到相机坐标系；再用内参模型，把它投影到相机平面。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：一张图记住全章主线——「世界 →(R,T)→ 相机 →(K)→ 像素」，标定就是求出这两段矩阵。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging_geometry/camera_calibration_scenarios.webp" alt="图 39.10 四种递进的相机位姿场景" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging_geometry/camera_calibration_scenarios.webp" alt="图 39.10 四种递进的相机位姿场景" loading="lazy" />
 <figcaption>图 39.10：相机相对于世界坐标系的四个位姿示例，复杂度递增；正文逐一推导每种场景的投影矩阵。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这四个场景（相机在原点 / 抬高 / 俯仰 / 第 2 章式布局）覆盖了工程中最常见的布置，推导过程是把本章所有矩阵练熟的最佳习题。</p>
 
 <figure class="book-fig">
-<img src="./figures/imaging_geometry/reprojection_error.webp" alt="图 39.14 重投影误差" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/imaging_geometry/reprojection_error.webp" alt="图 39.14 重投影误差" loading="lazy" />
 <figcaption>图 39.14：像平面上用红线标出的重投影误差。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：标定优化的目标函数就是它——Σ_i\|p_i-p'_i\|^2；调试标定时第一件事就是看这个误差的量级与分布。</p>

@@ -27,19 +27,19 @@ Part III「学习基础」的开篇。前两部分回答了「视觉要解决什
 <p class="fig-hint">原书标注为最高优先级（三星）的核心插图，共 3 幅。</p>
 
 <figure class="book-fig">
-<img src="./figures/intro_to_learning/learning_as_meta_algorithm.webp" alt="图 9.1 学习是元算法" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/intro_to_learning/learning_as_meta_algorithm.webp" alt="图 9.1 学习是元算法" loading="lazy" />
 <figcaption>图 9.1：学习是一个输出算法的算法。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：「数据 + 学习算法 → 模型」这一框图是 Part III 全部内容的概念骨架，后面每一章都在往这个框里填细节。</p>
 
 <figure class="book-fig">
-<img src="./figures/intro_to_learning/ols_summary.webp" alt="图 9.6 线性回归学习问题总览" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/intro_to_learning/ols_summary.webp" alt="图 9.6 线性回归学习问题总览" loading="lazy" />
 <figcaption>图 9.6：线性回归找一条直线，从训练数据的 x 值预测其 y 值。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：这是全书第一次把「三要素 + 数据 → 学得函数」的完整学习问题画成一张图；后续所有案例（包括神经网络）都复用这个模板。</p>
 
 <figure class="book-fig">
-<img src="./figures/intro_to_learning/softmax_regression_diagram.webp" alt="图 9.10 softmax 回归数据流" loading="lazy" />
+<img src="/readingnotes/foundations-of-computer-vision/figures/intro_to_learning/softmax_regression_diagram.webp" alt="图 9.10 softmax 回归数据流" loading="lazy" />
 <figcaption>图 9.10：用于图像分类的 softmax 回归。odot 符号表示逐元素乘积。交叉熵损失是预测向量 haty 与标签向量 y 之间逐元素一致性的负和：若 s = y odot log haty 是预测与标签一致程度的得分向量，则交叉熵损失为 H(y, haty) = -Σ_k=1^K s_k。</figcaption>
 </figure>
 <p class="fig-note">💡 为什么重要：「图像 → logits → softmax → 概率分布 → 交叉熵」这条管线是第 12-14 章所有分类网络输出层的原型，务必吃透每一环。</p>

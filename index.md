@@ -26,6 +26,9 @@ features:
   - icon: 📚
     title: Reading Notes
     details: Chapter-by-chapter notes on whole books — key points, core figures, and self-check lists. Start with Foundations of Computer Vision.
+  - icon: 🎬
+    title: Course Notes
+    details: Lecture-by-lecture notes on full courses, with whiteboard keyframes and timestamped sections — CS336, CS294-158, ETH Robot Learning.
   - icon: 🔬
     title: Paper Notes
     details: Notes on deep learning and computer vision papers, organized by keywords for easy retrieval.

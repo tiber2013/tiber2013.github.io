@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress'
 import { readingNotesSidebar } from './readingnotes.mts'
+import { courseNotesSidebar } from './coursenotes.mts'
 
 export default defineConfig({
   base: '/',
@@ -8,7 +9,7 @@ export default defineConfig({
   description: 'AI Engineer - Computer Vision & Deep Learning',
   lastUpdated: true,
   cleanUrls: true,
-  srcExclude: ['readingnotes/**/_source/**'],
+  srcExclude: ['readingnotes/**/_source/**', 'private/**'],
   markdown: {
     math: true,
   },
@@ -24,11 +25,13 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'Paper Notes', link: '/notes/' },
       { text: 'Reading Notes', link: '/readingnotes/' },
+      { text: 'Course Notes', link: '/coursenotes/' },
       { text: 'Projects', link: '/projects/' },
       { text: 'Resume', link: '/resume/' },
     ],
     sidebar: {
       '/readingnotes/': readingNotesSidebar,
+      '/coursenotes/': courseNotesSidebar,
       '/notes/': [
         {
           text: 'Paper Notes',

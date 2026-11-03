@@ -11,6 +11,17 @@ description: 整门课程的视频笔记，按讲次整理核心结论、板书�
 
 <div class="book-grid">
 
+<a class="book-card" href="./cs231n-deep-learning-for-cv-sp25/">
+  <h3>Stanford CS231n 计算机视觉</h3>
+  <div class="book-sub">Deep Learning for Computer Vision · Spring 2025 视频 / Spring 2026 课件</div>
+  <p>从图像分类、线性分类器与反向传播，到 CNN、Transformer、检测分割、视频、自监督、生成模型、3D 与视觉语言；对照 2026 课件标注新增内容。</p>
+  <div class="book-tags">
+    <span>18 讲</span>
+    <span>约 21 小时</span>
+    <span>242 张关键帧</span>
+  </div>
+</a>
+
 <a class="book-card" href="./cs336-language-modeling-sp26/">
   <h3>Stanford CS336 语言模型从零构建</h3>
   <div class="book-sub">Language Modeling from Scratch · Spring 2026</div>
@@ -57,7 +68,7 @@ description: 整门课程的视频笔记，按讲次整理核心结论、板书�
 
 </div>
 
-三扇门合计 **47 篇笔记、约 60 小时课程、1058 张关键帧**。
+全部笔记合计 **65 篇、约 81 小时课程、1300 张关键帧**。
 
 ## 一页笔记长什么样
 

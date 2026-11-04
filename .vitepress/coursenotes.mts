@@ -95,6 +95,27 @@ export const courseNotesSidebar = [
     ],
   },
   {
+    text: "Stanford CS231A 计算机视觉：三维感知与重建",
+    collapsed: true,
+    items: [
+      { text: '课程首页', link: '/coursenotes/cs231a-computer-vision-3d-sp25/' },
+      { text: "Notes 1 · 相机模型与标定（第 2–3 讲）", link: '/coursenotes/cs231a-computer-vision-3d-sp25/cn01-camera-models' },
+      { text: "Notes 2 · 单视图计量（第 4 讲）", link: '/coursenotes/cs231a-computer-vision-3d-sp25/cn02-single-view-metrology' },
+      { text: "Notes 3 · 对极几何（第 5 讲）", link: '/coursenotes/cs231a-computer-vision-3d-sp25/cn03-epipolar-geometry' },
+      { text: "Notes 4 · 三角化与运动恢复结构（第 6–7 讲）", link: '/coursenotes/cs231a-computer-vision-3d-sp25/cn04-stereo-systems' },
+      { text: "L07 · Structure from Motion 课件笔记", link: '/coursenotes/cs231a-computer-vision-3d-sp25/l07-structure-from-motion' },
+      { text: "Notes 5 · 主动立体与体积立体（第 8 讲）", link: '/coursenotes/cs231a-computer-vision-3d-sp25/cn05-active-volumetric-stereo' },
+      { text: "Notes 6 · 拟合与匹配（第 9 讲）", link: '/coursenotes/cs231a-computer-vision-3d-sp25/cn06-fitting-matching' },
+      { text: "Notes 7 · 表示与表示学习（第 10 讲）", link: '/coursenotes/cs231a-computer-vision-3d-sp25/cn07-representations-learning' },
+      { text: "Notes 8 · 单目深度与特征跟踪（第 11–12 讲）", link: '/coursenotes/cs231a-computer-vision-3d-sp25/cn08-monocular-depth-tracking' },
+      { text: "Notes 9 · 光流与场景流（第 13 讲）", link: '/coursenotes/cs231a-computer-vision-3d-sp25/cn09-optical-scene-flow' },
+      { text: "Notes 10 · 最优估计（第 14–15 讲）", link: '/coursenotes/cs231a-computer-vision-3d-sp25/cn10-optimal-estimation' },
+      { text: "L16 · 神经辐射场 NeRF", link: '/coursenotes/cs231a-computer-vision-3d-sp25/l16-neural-radiance-fields' },
+      { text: "L17 · 3D Gaussian Splatting", link: '/coursenotes/cs231a-computer-vision-3d-sp25/l17-gaussian-splatting' },
+      { text: "L18 · 客座讲座：基础模型遇上 3D 视觉", link: '/coursenotes/cs231a-computer-vision-3d-sp25/l18-guest-lecture-foundation-models-3d' },
+    ],
+  },
+  {
     text: "专题视频笔记",
     collapsed: true,
     items: [

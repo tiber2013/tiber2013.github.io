@@ -6,7 +6,10 @@
   "scripts": {
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
-    "docs:preview": "vitepress preview"
+    "docs:preview": "vitepress preview",
+    "private:dev": "vitepress dev private",
+    "private:build": "vitepress build private",
+    "private:preview": "vitepress preview private"
   },
   "keywords": [
     "blog",
@@ -17,6 +20,7 @@
   "author": "ZQC",
   "license": "MIT",
   "devDependencies": {
+    "markdown-it-footnote": "^4.0.0",
     "markdown-it-mathjax3": "^4.3.2",
     "vitepress": "^1.6.4",
     "vue": "^3.5.29"

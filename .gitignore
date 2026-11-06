@@ -10,3 +10,6 @@ readingnotes/**/_source/
 
 # AI 工作区内部数据，不入公开仓库
 .workbuddy-ai/
+
+# 私密版（含全文译文，仅 Tailscale 内网部署，不公开）
+private/

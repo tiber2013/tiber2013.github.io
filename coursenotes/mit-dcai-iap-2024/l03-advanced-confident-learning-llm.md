@@ -13,7 +13,7 @@ description: "Advanced Confident Learning, LLM and GenAI Applications · MIT DCA
 
 ## 一、三讲递进与算法回顾：从计数矩阵到联合分布 [00:00 - 06:20]
 
-本讲是三讲的 culmination：L1 在受控二分类里建立数据中心 AI 概念，L2 推广到任意分类的算法，今天给出**为什么有效、成立条件**并看真实应用。算法输入只有含噪标签 $\tilde y$ 与样本外预测概率 $\hat p(\tilde y=i;\boldsymbol x,\boldsymbol\theta)$，且 CL 对输出尺度不变、原始 logits 亦可用。第一步给每类算阈值，作为模型对该类平均自信度的代理：
+本讲是三讲的 culmination：L1 在受控二分类里建立以数据为中心的 AI 概念，L2 推广到任意分类的算法，今天给出**为什么有效、成立条件**并看真实应用。算法输入只有含噪标签 $\tilde y$ 与样本外预测概率 $\hat p(\tilde y=i;\boldsymbol x,\boldsymbol\theta)$，且 CL 对输出尺度不变、原始 logits 亦可用。第一步给每类算阈值，作为模型对该类平均自信度的代理：
 
 $$t_j=\frac{1}{|\boldsymbol X_{\tilde y=j}|}\sum_{\boldsymbol x\in \boldsymbol X_{\tilde y=j}}\hat p(\tilde y=j;\boldsymbol x,\boldsymbol\theta)$$
 

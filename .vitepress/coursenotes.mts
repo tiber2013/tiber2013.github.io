@@ -70,11 +70,11 @@ export const courseNotesSidebar = [
     ],
   },
   {
-    text: "MIT 数据中心 AI 导论（IAP 2024）",
+    text: "MIT《以数据为中心的 AI》导论（IAP 2024）",
     collapsed: true,
     items: [
       { text: '课程首页', link: '/coursenotes/mit-dcai-iap-2024/' },
-      { text: "L01 · 数据中心 AI 与模型中心 AI", link: '/coursenotes/mit-dcai-iap-2024/l01-data-centric-vs-model-centric' },
+      { text: "L01 · 以数据为中心的 AI 与以模型为中心的 AI", link: '/coursenotes/mit-dcai-iap-2024/l01-data-centric-vs-model-centric' },
       { text: "L02 · 标签错误与置信学习", link: '/coursenotes/mit-dcai-iap-2024/l02-label-errors-and-confident-learning' },
       { text: "L03 · 进阶置信学习与生成式 AI 应用", link: '/coursenotes/mit-dcai-iap-2024/l03-advanced-confident-learning-llm' },
       { text: "L04 · 类别不平衡、离群值与分布偏移", link: '/coursenotes/mit-dcai-iap-2024/l04-class-imbalance-outliers-distribution-shift' },

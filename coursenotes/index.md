@@ -47,7 +47,7 @@ description: 整门课程的视频笔记，按讲次整理核心结论、板书�
 </a>
 
 <a class="book-card" href="./mit-dcai-iap-2024/">
-  <h3>MIT 数据中心 AI 导论（IAP 2024）</h3>
+  <h3>MIT《以数据为中心的 AI》导论（IAP 2024）</h3>
   <div class="book-sub">Introduction to Data-Centric AI · IAP 2024 · MIT CSAIL</div>
   <p>把着力点从「调模型」移到「改数据」：PU 学习与置信学习自动找出错标样本，再处理类别不平衡、离群点、分布偏移、数据集采集与多标注者共识，最后落到面向大语言模型的数据策展。配图由每章转写内容与画面语义的相关度决定，数量随内容密度变化。</p>
   <div class="book-tags">

@@ -46,6 +46,17 @@ description: 整门课程的视频笔记，按讲次整理核心结论、板书�
   </div>
 </a>
 
+<a class="book-card" href="./mit-dcai-iap-2024/">
+  <h3>MIT 数据中心 AI 导论（IAP 2024）</h3>
+  <div class="book-sub">Introduction to Data-Centric AI · IAP 2024 · MIT CSAIL</div>
+  <p>把着力点从「调模型」移到「改数据」：PU 学习与置信学习自动找出错标样本，再处理类别不平衡、离群点、分布偏移、数据集采集与多标注者共识，最后落到面向大语言模型的数据策展。配图由每章转写内容与画面语义的相关度决定，数量随内容密度变化。</p>
+  <div class="book-tags">
+    <span>7 讲</span>
+    <span>约 6 小时</span>
+    <span>190 张关键帧</span>
+  </div>
+</a>
+
 <a class="book-card" href="./cs294-158-deep-unsupervised-sp24/">
   <h3>CS294-158 深度无监督学习</h3>
   <div class="book-sub">UC Berkeley · Spring 2024 · Pieter Abbeel</div>
@@ -81,7 +92,7 @@ description: 整门课程的视频笔记，按讲次整理核心结论、板书�
 
 </div>
 
-全部笔记合计 **79 篇、约 81 小时视频课程、1383 张插图**。其中 CS231A 没有录像，那 14 篇是官方 Course Notes 的逐节全译与课件笔记，不计入视频时长。
+全部笔记合计 **86 篇、约 87 小时视频课程、1573 张插图**。其中 CS231A 没有录像，那 14 篇是官方 Course Notes 的逐节全译与课件笔记，不计入视频时长。
 
 ## 一页笔记长什么样
 

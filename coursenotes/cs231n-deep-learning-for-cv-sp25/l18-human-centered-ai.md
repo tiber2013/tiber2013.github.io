@@ -1,157 +1,175 @@
 ---
 title: "第 18 讲 · 以人为中心的 AI：看见、看不见与想看见"
-description: "CS231n Spring 2025 L18 视频笔记；2026 课表未提供该讲 slides，内容以视频为准。"
+description: "Stanford CS231n Spring 2025 L18 中文视频笔记（2026-11 重写版）"
 ---
 
-# 第 18 讲 · 以人为中心的 AI：看见、看不见与想看见
+# CS231n Spring 2025 · Lecture 18 以人为本的 AI：我们看见什么，我们珍视什么
 
-> **Stanford CS231n 计算机视觉 · L18** ｜ 讲者 Fei-Fei Li ｜ 65 分钟 ｜ [原视频](https://www.youtube.com/watch?v=g8UaBfj6Sh8)
+**核心结论**：本讲是全季度的收官 talk，不引入新算法，而以「我们看见什么、我们珍视什么」为线索，把计算机视觉放进更长的研究演化史与「人的维度」里重新审视。全讲分三大块：构建看见人类所见的 AI（受认知科学启发的物体识别、ImageNet 与 2012 年数据／算力／神经网络三力汇合、从关系与场景图到图像描述）、看见人类未见（细粒度识别的超人能力，人类注意力局限、错觉与算法偏见，以及「该看不见时看不见」的隐私）、看见人类想见（把 seeing 与 doing 相连，用 ambient intelligence 与具身 AI 增强而非取代人）。讲者强调 AI 既能帮助也会放大我们（包括放大偏见），故造 AI 不能只有技术视角，须以多学科方式 study、forecast、guide 它对人与社会的影响。落点是把 AI 做成 augmentation 工具：VoxPoser 借 LLM + VLM 让机器人走出封闭世界，BEHAVIOR 以人的需求定义任务，脑机接口辅助瘫痪患者把这条线推进到临床。
 
-> 课件版本：2026 课表未提供 L18 slides ｜ 视频版本：2025 春季。本讲没有可对照的 2026 课件，正文完全依据视频。
+## 1. 开场与本讲框架：看见与珍视 [00:05 - 04:42]
 
-## 核心结论
+这是本季度最后一讲，性质上「有点离题」：不教新算法，而是一次带视角的谈话，既回顾更长期的研究演化，也补上今天 AI 的另一重要维度——human perspective（人的维度）；它与课程其他部分略有重叠，却串得更完整。
 
-这是学期最后一讲，不教新算法，而是给整门课补上两个坐标：更长的研究史与“人”的视角。讲者分三段：让 AI 看见人类看见的东西——从寒武纪的眼睛到 ImageNet 与 2012 年的汇合；看见人类看不见的东西——细粒度识别、注意力局限、偏差与隐私；看见人类希望看见的东西——医疗环境智能与机器人。贯穿全讲的观点是：AI 会放大人的能力，也会放大人的偏差与盲区，所以技术视角之外必须同时有人的视角。
+讲者先复习视觉起点：约 5.4 亿年前「第一缕光」进入动物世界，三叶虫（trilobites）演化出感光细胞探知外界。按动物学家 Andrew Parker《In the Blink of an Eye》的观点，正是视觉的突然出现触发 evolutionary arms race——动物「要么演化、要么死亡」——带来物种爆发式分化，即寒武纪大爆发（Cambrian Explosion）。
 
-## 最后一讲：从算法转向人的视角 [00:05 - 04:47]
+![关于寒武纪大爆发由视觉进化触发的引语幻灯片](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0001_00-01-48.jpg)
 
-讲者开场就说明这是一次“离题”：不讲新算法，而是把课程放回更长的时间尺度，补上另一个维度——人的视角。讲座标题是 **What we see and what we value: AI with a human perspective**。
+视觉至今仍是许多动物、尤其人类的主要感知智能系统，用于生存、工作、娱乐、社交、学习与发展。讲者回望 1960 年代把计算机视觉当成 summer vision project、想用几个本科生一夏构造视觉系统的尝试，认为这契合 AI 史的一贯模式：北极星清晰，却严重低估所需时间——「今天大概仍在经历」。但几十年间变化巨大：从自动驾驶、图像理解到生成式 AI 革命，视觉都扮演重要甚至引领角色，是时候回望「从哪来、往哪去」。报告分三个 chunk：see what humans see / don't see / want to see，第一段正受人类能力启发、想让机器做同样的事。
 
-第一段从视觉的起源讲起。约 5.4 亿年前的寒武纪，三叶虫演化出感光细胞，第一次“看见”外部世界。动物学家 Andrew Parker 在《In the Blink of an Eye》中提出，视觉的突然出现触发了一场演化军备竞赛：动物要么进化，要么死亡；竞赛带来了物种的爆发式增长，也就是寒武纪大爆发。
+![构建AI以看见人类所见、未见与想见的三行标题幻灯片](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0002_00-04-20.jpg)
 
-![引用安德鲁·帕克《眨眼之间》中关于寒武纪大爆发由视觉进化触发的观点幻灯片](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0001_00-01-51.jpg)
+## 2. 构建「看见人类所见」的 AI：从人类视觉到物体识别 [04:42 - 15:04]
 
-技术侧的起点是 1966 年 MIT 的 **Summer Vision Project**。Seymour Papert 在备忘录里写道，希望有效地利用暑期人手，构造出视觉系统的一个重要部分——换句话说，用几个本科生、一个夏天解决视觉。这几乎是 AI 史的固定模式：北极星很清楚，对所需时间的估计却总是过于乐观。几十年后，视觉支撑起自动驾驶、图像理解与生成式 AI，于是值得回头问：我们从哪里来，又要往哪里去。
+### 2.1 人类视觉有多强：物体是核心 [04:42 - 08:12]
 
-![展示1966年麻省理工学院关于“夏季视觉项目”的原始备忘录文件及引言](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0002_00-03-03.jpg)
+半世纪前的经典实验：把从未看过的视频以 $10$ Hz 播放、每帧约 $100$ ms，事先不知目标是什么、在哪帧，人仍能在复杂场景中检测出目标（一个人），凸显以物体为中心的视觉理解。世纪之交神经生理学家用 EEG 帽测到，「有动物／无动物」这类复杂分类在刺激后约 $150$ ms 就已完成，对颅骨里的「湿件」快得惊人；大脑还有专司物体理解的 face areas、place areas、body parts areas，说明演化专门打磨了物体识别。于是几十年前物体识别成为视觉智能的基础构件，原始问题定义为：给定图像，让计算机叫出物体是什么。但这对人毫不费力的任务，数学上识别任一物体有近乎无限可能——lighting、texture、background、occlusion、viewing angle、scaling 等；课件用四张不同光照／纹理、背景／遮挡、视角下的袋熊照片说明视觉系统须认作同一只 wombat。
 
-## 人类视觉的强项：速度与专门化 [04:47 - 08:08]
+![袋熊图像在不同光照、背景和视角下被识别为同一物体的示意图](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0003_00-07-22.jpg)
 
-人类看东西的能力强得理所当然，以至于容易被低估。半个世纪前的 **RSVP**（快速序列视觉呈现）实验以 10 Hz 播放从未看过的视频，每帧只在屏幕上停留 100 毫秒，受试者仍能在复杂场景里找到目标。
+### 2.2 深度学习之前：部件组合与统计机器学习 [08:12 - 11:10]
 
-神经科学给出了速度的数字。20 世纪末，Thorpe 等人用脑电帽记录受试者看到照片后的脑电信号，发现“有动物/无动物”的分类差异在刺激出现后约 150 毫秒就已经出现。以神经元和突触的物理速度衡量，这段时间只够完成少数几级处理，却已经完成了相当复杂的分类。
+第一波尝试受心理学式「自我内省」启发：人看物体先见几何 parts 再组合，于是用预定义 parts／shapes 按特定方式组合识别（1970s–1990s 一批模型），数学优美简洁却没真正奏效。第二波是 AI 史上重要时代、统计机器学习的开端，本质是「编程与统计建模联姻」：人们认识到世界太复杂，要泛化就必须学习参数、难靠手调模型，既需数据（当时不知需多少），也需设计能经不同学习规则学习的统计模型，于是 random fields、Bayes nets、support vector machines 百花齐放。到 21 世纪第一个十年，物体识别已有足够进展，出现类别数很少的国际基准：PASCAL VOC（20 类，Everingham et al. 2006–2012）、Caltech 101、Caltech 256、LabelMe、LotusHill，Average Precision 逐年攀升。
 
-![人类物体识别脑电波实验图表，显示物体分类在150毫秒时发生](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0004_00-05-41.jpg)
+![早期数据集规模较小及PASCAL VOC基准测试的精度随年份变化曲线](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0004_00-10-50.jpg)
 
-更直接的证据是大脑的功能分区：面孔、场景、身体部位都有专门的脑区。演化在物体识别上投入了大量“硬件”，它因此成为视觉智能的基本构件。计算机视觉最早的问题因此被定义为：给一张图，说出里面有什么。对人类这是不费力的事，对机器却很难——光照、纹理、背景、遮挡、视角、尺度带来了近乎无限的可能。
+### 2.3 Biederman number、ImageNet 与 2012 汇合 [11:10 - 15:04]
 
-## 前深度学习时代的三次尝试 [08:08 - 14:58]
+最后一把钥匙又来自认知科学。心理学家 Irving Biederman 猜想人类能识别海量物体并给出数字，讲者戏称「Biederman number」：六、七岁儿童约能识别 30,000 到 100,000 个视觉类别，依据词典名词数加儿童识别物体的视觉研究。对当时只处理极少类别、极少图像的领域这很警醒，正是 ImageNet 的动机：认真对待它，构建约 22,000 类、1500 万张图像的数据集。大数据一到位，CNN（如今 transformers）这类高容量算法才真正显威。脉络是：有了 ImageNet，几年后 CNN 把物体识别这扇门「炸开」，如今算法能看任意照片、识别大小与任意朝向的物体；虽非 $100\%$ 解决、仍有 long-tail 问题，但工业应用上已相当成熟。汇合点是 2012：ImageNet 挑战提供数据、CNN 提供模型、两块 GPU 提供算力，三要素凑齐带来深度学习诞生，此后又催生 ResNet 等架构。课件柱状图给出 ImageNet 1000 类错误率从 shallow models 的 $0.28$、$0.26$，经 $0.16$、$0.12$、$0.07$、$0.036$、$0.03$ 降到 $0.023$，越过 Human 水平虚线。
 
-在深度学习之前，这个难题被攻过三轮。
+![ImageNet分类挑战中2010至2017年各模型与人类水平的分类错误率对比柱状图](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0005_00-14-14.jpg)
 
-第一轮由心理学启发。人看物体时会把它拆成几何部件再组合，于是研究者手工定义部件与组合规则：Biederman 的 **geons**（recognition by components）、Brooks 与 Binford 1979 年的 **generalized cylinder**、Fischler 与 Elschlager 1973 年的 **parts + springs**。这些模型数学上漂亮、简洁，却没有真正工作——自我内省有时会误导我们对自身认知机制的理解。
+## 3. 超越命名：关系、场景图与视觉讲故事 [15:04 - 23:27]
 
-![早期物体识别尝试：手工设计特征和模型（Geons、广义圆柱体、部件+弹簧模型）](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0005_00-08-15.jpg)
+### 3.1 关系必须被编码：scene graph 与 Visual Genome [15:04 - 18:39]
 
-第二轮是统计机器学习的兴起，也就是计算机编程与统计建模的结合。领域逐渐意识到：世界太复杂，手工调参的模型泛化不了，必须从数据里学参数。随机场、贝叶斯网络、**SVM** 都是这一时期的产物。基准数据集也开始出现，但规模很小：Caltech 101 只有 9K 张图，PASCAL VOC 只有 20 个类别、30K 张图。大家已经用同一把尺子比较算法，只是尺子太小。
+视觉智能不能止步于贴标签。两张图都只有 llama 和 person，但第二张关系不同、「故事」完全不同。认知科学家又走在前面：Jeremy Wolfe《Visual memory: What do you know about what you saw?》指出，光有物体不足以 categorize 场景，物体间关系（relationships between objects）必须被编码进理解。
 
-![计算机视觉常用数据集对比：SUN、LabelMe、PASCAL VOC、Caltech101 与 ImageNet 的规模](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0007_00-12-26.jpg)
+![J. Wolfe关于视觉记忆与场景编码的论文截图及核心观点引用](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0006_00-15-36.jpg)
 
-最后一把钥匙又来自认知科学。心理学家 Irving Biederman 推测，六七岁的儿童大约能识别 3 万到 10 万种视觉类别。这个数字对当时只有几十个类别的计算机视觉来说相当刺人。**ImageNet** 认真对待了它：2.2 万个类别、1500 万张图像，规模与 Biederman 的估计同一量级。
+受此启发 CV 开始研究关系理解，代表是上周客座讲座 Ranjay 的博士论文：用 scene graph（场景图）作表征学习物体关系。它由实体节点（物体）、节点连边（关系）定义，有时带 attribute relationships；即便两人「一人喂另一人蛋糕」的简单场景也能形成很稠密的图。ImageNet 之后团队构建 Visual Genome，纳入 object relationships、物体与故事描述。有趣方向是 unusual relationships 的 zero-shot：person riding horse、person wearing hat 常见，horse wearing hat 罕见；person sitting on chair、fire hydrant on lawn 常见，person sitting on fire hydrant 罕见。大数据难反复拿到罕见组合样本，而组合式 scene graph 可先学常见关系再推导罕见关系，当时取得 state-of-the-art 识别率。
 
-数据到位之后，剩下的是算法与算力的汇合。2012 年，卷积神经网络用两块 GPU 把 ImageNet 挑战赛的错误率从 0.26 降到 0.16，深度学习革命由此开始；到 2017 年错误率降到 0.023，早已低于约 0.05 的人类水平。物体识别在工业意义上已经成熟，长尾问题仍然存在。
+### 3.2 用自然语言讲故事：图像描述的三个层级 [18:39 - 20:30]
 
-![ImageNet挑战赛2010-2017年分类错误率下降柱状图，标注人类水平约0.05](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0008_00-14-14.jpg)
+更进一步是用自然语言「讲故事」。约 2014 年（距 AlexNet 仅两年），思路是 CNN 加语言模型 LSTM；Andrej Karpathy 的博士论文是最早展示 image captioning／storytelling 的团队之一，dense captioning 出自 Justin Johnson（本课 co-instructor）；2015–2018 大量工作涌现，如今多模态 LLM 又把解法推高一档。讲者以世纪之初入行的 CV 学者身份坦言，很惊讶领域一旦有了数据与神经网络算法，解决速度如此之快。课件按难度递进排三层：Image Captioning（Karpathy, Johnson & Fei-Fei, NeurIPS 2014）、Dense Captioning（Johnson, Karpathy & Fei-Fei, CVPR 2016）、Paragraph Captioning（Krause, Johnson, Karpathy & Fei-Fei, CVPR 2017）。
 
-## 从物体到关系：场景图与零样本组合 [14:58 - 18:39]
+![自动图像描述与故事讲述的三种层级对比：Image、Dense、Paragraph Captioning](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0007_00-19-35.jpg)
 
-能给物体贴标签并不等于理解场景。同样是“羊驼”和“人”，两张图的物体标签一样，但物体之间的关系不同，故事就完全不同。认知科学家又一次走在前面：J. Wolfe 在 1998 年写道，物体本身或许足以给场景归类，但物体之间的关系必须被编码进表征。
+### 3.3 动态场景、任务爆发与认知科学的双向关系 [20:30 - 23:27]
 
-计算机视觉的回应是 **scene graph**：物体是节点，关系是边，属性挂在节点上。Ranjay Krishna 的博士论文用场景图表示物体关系，并参与构建了 **Visual Genome** 数据集，把物体、关系与区域描述放在一起。
+更难的是 dynamic scenes：关系、运动更复杂，相机与场景里的 actors 都能做各种动作。与 Ehsan 及实验室学生合作的 multi-object multi-actor activity understanding（几年前发表）在她看来仍未解决；若梦想日常机器人与人类共处，就必须理解场景多复杂、谁在做什么、下一步是什么。本课未展开的还有 3D computer vision、human pose、生成式 AI／生成模型，课件列出 NeRF（Mildenhall et al., ECCV 2020）、Teed & Deng（NeurIPS 2021）、Cao et al.（CVPR 2017）、He et al.（ICCV 2017）与 OpenAI 的 DALL-E。
 
-![场景图模型对新颖组合的零样本泛化示意图：person-riding-horse与person-wearing-hat组合出horse-wearing-hat](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0010_00-17-27.jpg)
+![计算机视觉三大应用示例：3D Vision、Pose Estimation 和 DALL-E 生成](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0008_00-22-14.jpg)
 
-场景图真正的价值在组合泛化。训练集里“人骑马”（578 例）和“人戴帽子”（1023 例）都很常见，但“马戴帽子”在训练集中没有样本；模型可以在这两种关系的表示上做组合，零样本识别出从未见过的关系。同理，“人坐椅子”加“消防栓在草地上”可以推出“人坐在消防栓上”。
+第一部分 take-home 两点：data、compute 与神经网络算法约 10–13 年前汇合才有深度学习革命；而我们长期研究的问题，灵感真正来自 cognitive science、psychology、neuroscience，这种双向关系还会延续——继续受大脑如何做事启发，也继续用 AI 反过来帮助脑研究。
 
-## 从关系到叙事，再到动态场景 [18:39 - 23:30]
+## 4. 构建「看见人类未见」的 AI：细粒度识别与超人感知 [23:38 - 27:20]
 
-关系之上是叙事。2014 年，距离 AlexNet 只有两年，领域开始用 **CNN + LSTM** 做图像描述：Karpathy 的博士论文展示了 image captioning，随后有 Justin Johnson 的 **dense captioning**（对图中多个区域分别描述）和 2017 年的 paragraph captioning。今天多模态大模型把这条线推得更远。
+这一部分把 AI 推到人类能力之外，讲者称 superhuman。多数人叫不出太多恐龙，更别说上千上万种鸟、数万种汽车类别——她称 fine-grained object categorization，人类本就不擅长，且认为至今未完全解决；在多模态 LLM 主流时代它被忽视、不算主流，但相信会回来扮演重要角色。早期细粒度鸟类识别用了 4,000 只鸟的数据集：沿物种树向上、名字越泛化误差越小，反之落到 fine-grained 层算法仍犯很多错、尚未 ready。另一项是实验室学生训练的细粒度汽车分类器，按 make／model／year 区分——1970 年代后累计数千车型。取 Google Street View 中约 100–200 个主要城市图像，用 car detector 检测街上的车，再把 CV 当「透镜」研究社会模式：车型与教育、收入高度相关，论文里还与投票、环境模式高度相关。没有任何单个人、甚至一群人能轻易做到，AI 在此真正拓展了人类能看见的边界。
 
-![图像描述与故事生成任务对比图，展示Image Captioning、Dense Captioning和Paragraph Captioning三种任务对同一张马车图片的不同描述输出](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0011_00-18-41.jpg)
+## 5. 人类看不见：注意力局限、错觉与算法偏见 [27:24 - 33:26]
 
-更难的是动态场景。视频里有多个主体、复杂交互、相机运动，每个主体还在做不同的事。她与 Ehsan Adeli 等人提出的 **MOMA**（multi-object multi-actor activity understanding）用时空图表示这类场景：节点是人和物体，边是关系，时间轴上标注“发球”“对打”“没接住”等状态。这项工作 2021 至 2022 年才发表，至今仍未解决。它的意义很实际：如果真想要日常环境中的机器人，就必须回答“场景里发生了什么、谁在做什么、接下来会怎样”。
+为讲透「人类也有局限」，讲者做了几个测试。Stroop test：字都能读，但要求尽快说出「字的颜色」而非读词（颜色词与字体颜色不一致的 12 词矩阵），会感到「它在跟你打架」，是视觉注意力与自动阅读的冲突。
 
-![多对象多主体（MOMA）活动理解框架图，展示乒乓球场景的时空图表示及对应的时间轴标注](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0012_00-21-45.jpg)
+![Stroop测试幻灯片，展示颜色词与字体颜色不一致的12个单词矩阵](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0009_00-27-34.jpg)
 
-第一段的结论是：数据、算力与神经网络算法在 2012 年前后汇合；而这条路上的问题几乎都来自认知科学，未来两者仍会互相启发——AI 从大脑获得灵感，也用 AI 帮助脑科学。
+change blindness：两张交替图片间有一处很大变化（引擎 engine），要点一会儿才看出，也是著名心理学实验。这些好玩，但「注意力有限」并不好玩——在工作生活里后果可能极严重。医疗错误（medical errors）是美国医疗系统第三大死因；把剪刀留在病人体内是标志图像，实际更多是缝合针、一小块纱布，另有用药、流程、文书、诊断等错误。至今多靠手写 checklist 追踪：一发现少了东西手术就得暂停，平均接近一小时，带来细菌暴露、出血风险。实验室做过 demo（非部署系统，fidelity 不够）用 AI 帮外科医生计数纱布——看见人看不见。
 
-## 看见人类看不见的：细粒度识别 [23:38 - 27:20]
+![棋盘格错觉示意图，展示阴影对颜色感知的影响](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0010_00-30-56.jpg)
 
-第二段的主题是超越人类。大多数人叫不出几种恐龙，更不用说上万种鸟或成千上万种汽车型号。**Fine-grained categorization** 就是把 AI 推到人类不擅长的细粒度上。
+她最爱的错觉之一是 Ted Adelson 棋盘格：上方 A、B 两格实际灰度／亮度相同，即便看过下方揭示图仍难相信。原因是演化把「物体形状、光源、阴影如何形成」这类世界常见物理先验预置进视觉系统，深到无法换方式去看。由此引出严肃一点：人类视觉系统存在 bias，可能来自演化构造、社会经验或接触的数据；有些 bias 有害，一旦对某群体不公平就必须警觉。几年前人脸识别对某些肤色甚至性别识别更好，在自动驾驶、医疗等有后果。到 2025 并未解决，但讲者高兴看到 academia 与 industry 已有大量人关注 AI bias——几年前它还新到几乎无人留意。
 
-鸟类识别用了 4,224（+1）个物种的数据集。把错误率按分类层级拆开看，层级越粗错误越少，落到具体物种时错误率仍然很高——细粒度问题并没有真正解决，在大模型时代反而有些被忽视，但它迟早会回来。
+## 6. 该看不见时看不见：隐私保护与 AI 的放大效应 [33:26 - 38:20]
 
-![细粒度物体分类研究展示，包含鸟类分类数据集与汽车属性识别流程图](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0013_00-26-16.jpg)
+还有一类「看不见」很特别：有时「不看」恰是我们想要的，为尊重隐私。如何造一个既帮人看得更好、又看不到人不想被看的东西的 AI？这既深、既是技术问题也是人的问题。从技术角度 ML 隐私路径很多。实验室几年前一篇用 smart cameras 放在病房或患者家中帮医生看得更好的论文，也须处理 faces、full body、homes 的暴露；课件表格列出 dimensionality privacy（降维）、face blurring／blurring／masking、federated learning（不把数据全送服务器）、homomorphic encryption 等，并区分计算在边缘还是服务器。
 
-汽车的例子更能说明问题。研究者训练按品牌、型号、年份分类的细粒度分类器，再用全美主要城市的 Google Street View 图像统计街上的车，把车型分布当作尺子研究社会：它与教育、收入、投票倾向、环境指标都高度相关。没有任何一个人、甚至一群人，能靠肉眼完成这种规模的统计。
+![隐私保护技术方法对比表，涵盖降维、模糊化及加密等方案](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0011_00-34-34.jpg)
 
-## 人类也会“看不见”：注意力的代价 [27:20 - 32:20]
+讲者特别喜欢另一个非本组工作：拍视频识别动作同时保护隐私。单纯 blur／defocus 虽护隐私却丢太多信息，可能连人在做什么都不知道，而很多应用目标恰恰是知道动作。该工作由一组学生完成，软硬件结合：手工设计一枚以特定方式过滤视觉数据的 lens，顶行图像看不到脸、看不到身体；但因 lens 与软件联合设计，能反推出运动／人体活动信息却不反推人脸——想看见人来保护他们，又不想看太多以尊重隐私。
 
-但人类视觉也有硬限制。**Stroop test** 里，字义与字色冲突：让你读出字的颜色而不是字本身，速度立刻慢下来，因为阅读和颜色命名在争夺注意力。**Change blindness** 更直观：两张交替出现的图里有一个很大的变化（比如车的引擎），往往要看好几秒才发现。
+![李飞飞关于AI视觉能力的观点幻灯片，强调构建看见人类看不见之物的AI](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0012_00-37-03.jpg)
 
-![斯特鲁普测试（Stroop test）示例，展示颜色与文字含义冲突的认知挑战](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0014_00-27-34.jpg)
+第二部分 take-home 归结为三种情形：细粒度识别这类超人能力；人类有 bias、注意力问题，用 AI 帮忙；以及某些场合根本不想被看见，要在不违反隐私下继续让 AI 帮忙。AI 既能 help 也能 amplify——我们若有 bias、有问题，它会一并放大。故造 AI 不能只取技术视角，还须取 human perspective，承诺 study、forecast、guide 其影响并尊重人的价值；课件写成以 multidisciplinary approach 研究、预测并引导 AI 对人与社会的影响。
 
-现实里，这种注意力限制可能很致命。医疗失误是美国医疗体系里的第三大死因。手术器械遗留是标志性案例：真正被落下的通常不是剪刀，而是缝合针、纱布这类小物件。目前靠人工清点，数目对不上就要暂停手术近一小时，还带来细菌暴露、出血等风险。于是有了用视觉做清点的尝试：模型在手术画面里检测纱布，置信度 99%、98%、91%。讲者强调这只是演示，还不是可部署的系统。
+## 7. 构建「看见人类想见」的 AI：从取代到增强 [38:24 - 47:30]
 
-![医疗X光片中遗留手术剪刀的案例，强调现实世界中“看不见”的严重后果](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0015_00-29-00.jpg)
+这一部分要「超越看见」，把 seeing 与 doing 连起来。社会对 AI 最大焦虑之一是 labor：头条总说劳动力受威胁、机器人抢工作。真相更复杂：否认工作会变是错的，历史上每次技术转变都带来劳动力市场变化，有些极痛苦、甚至引发内战与战争，而变化有时不可避免。插叙：威胁论多想体力劳动，但过去两年 genAI 冲击最剧的其实是白领，尤其 software engineering 与办公室分析类工作。另一面须承认 AI 也能帮忙——很多场景存在根本性人力短缺，尤其 elderly care 与 health care。现代医学延长寿命、社会走向长寿（好事），可年轻人要工作，谁照顾老人与慢性病患者？美国医院医护尤其护士流失，没有足够 hands、ears、eyes。故与其想「replace」，不如想「augmenting」——手术室纱布计数即一瞥。讲者把手术室、病房、药房到家庭这些「缺眼睛」处称为 dark spaces of health care。
 
-![目标检测算法在手术场景中识别laparotomy_sponge的界面。](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0016_00-30-35.jpg)
+![劳动力短缺数据图：显示每年25.1万医疗错误死亡、8300万老龄人口及护士缺口](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0013_00-39-57.jpg)
 
-棋盘阴影错觉说明了更深的一层：A、B 两格灰度完全相同，但即使把证据摆在眼前，我们依然“看见”它们不同。因为演化把关于光源、形状、阴影的先验写进了视觉系统。人类视觉不是客观测量仪，它带着偏差。
+课件数据：251,000 deaths/year from medical error、到 2050 年 83M Americans 年满 65+、1M more nurses needed by 2023。
 
-## 偏差、公平与隐私：让 AI 少看一点 [32:20 - 38:14]
+### 7.1 Ambient intelligence for healthcare 的三个例子 [41:26 - 47:30]
 
-偏差可能来自演化，也可能来自社会经验与我们接触的数据。有些偏差会伤害人：几年前的人脸识别对某些肤色和性别明显更差，而它会进入自动驾驶、医疗等高风险场景。到 2025 年，学术界和工业界都开始重视这个问题；讲者谨慎地说，问题没有解决，但关注本身是进步。
+Ehsan Adeli 等主导 ambient intelligence for healthcare：把 smart sensors 与 ML 结合，从医疗场景 glean 出 health-critical insights，及时提醒患者、家属或医生，完整论文发表于几年前。三例：
 
-还有一种“看不见”是我们主动想要的，那就是隐私。视觉隐私有多种技术路线：模糊、遮挡、降维，以及联邦学习和加密。她特别欣赏的一个工作是硬件与软件协同：定制一枚镜头，让相机拍到的画面大幅降级，看不到脸和身体；但配合专门设计的软件，仍能还原出动作与活动类型，而不还原身份。这类“为了照护而看、但不该看的就不看”的设计，正是以人为中心的技术。
+**手卫生**：COVID 前就启动。院内感染（hospital acquired infection）是美国医院病人死亡主因之一，每年致死超全国车祸 3 倍，病菌在病房间传播、极难控制。human auditors 招不够且有疲劳；RFID 徽章靠近洗手液器就提示「大概在洗手」太不特异，病房走廊又小，站在旁边不等于在洗手。团队改用只采集 depth 深度信息的 smart sensors（蓝色画面天然护隐私）+ CV 分类「是否洗手」。结果算法比人更准更稳：几乎要把同一视频给 4 个人看才接近 AI，单人检测很稀疏。
 
-第二段的结论是：AI 会放大人类的能力，也会放大偏差与盲区；构建 AI 不能只有技术视角，还必须研究、预测并引导它的人类影响。
+**ICU**：病人与生死搏斗之地，花掉美国 GDP 的 $1\%$；目标是安全送病人出 ICU、转入 step-down unit 或回家。重要一课是帮病人做恰当活动（mobilization），对恢复关键却很微妙：要护士帮忙、医生下医嘱、指定时间正确移动并评估。团队与 Stanford 及犹他州 Intermountain Hospital 合作，在 ICU 布 sensors 监测 4 类动作：getting out of bed、getting in bed、getting out of chair、getting in chair。
 
-## 从看见到行动：医疗中的环境智能 [38:24 - 47:30]
+**Aging in place**：老人希望独立健康住家里；COVID 初期老年人高死亡很大程度因医院超负荷，让老人在家安全健康很关键。sensors 可用于早期感染检测（尤其 thermal cameras）、mobility、sleep patterns、dietary patterns。
 
-第三段把“看见”和“行动”连起来。社会对 AI 最大的焦虑之一是就业。讲者不回避：每一次技术变革都会改变劳动力市场，有些变化非常痛苦；而且过去两年的生成式 AI 主要冲击白领工作，与此前“抢体力活”的叙事不同。
+![家庭护理劳动力短缺的三个关键数据：2030年美国65岁以上人口占比、护理人员与老人比例及无偿护理时长](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0014_00-47-31.jpg)
 
-但另一面是真实的人力短缺。医学进步让人活得更久，照护需求上升，而护士流失、年轻人要工作，医院里根本没有足够的“手、耳朵和眼睛”。所以关键词不应是 replace，而应是 augment。她把手术室、病房、药房、家庭称为医疗的 **dark spaces**——不是没有价值，而是没有足够的眼睛盯着。
+课件另给家庭护理短缺数据：2030 年美国 65+ 人口占比 $7\%$ 上升、caregiver 与老人之比降 $42\%$（从 7:1 到 4:1）、无偿护理协助达 18.4 B（184 亿）小时。
 
-**Ambient intelligence for healthcare** 的思路，是用智能传感器加机器学习，从这些空间里提取关键健康信号，及时提醒病人、家属或医生。手卫生项目是一个例子：院内感染每年致死人数是全美车祸的三倍以上，细菌主要在病房之间传播；靠人工审计不现实，RFID 只能知道人站在洗手台旁边。用只采集深度信息的隐私友好传感器加动作分类，判断“是否在洗手”，结果比人工更稳定——大约要四个人的判断合起来，才能接近算法的水平。
+## 8. 具身 AI 与 VoxPoser：闭合感知—行动回路 [47:30 - 53:49]
 
-ICU 是另一个场景：美国 GDP 的约 1% 花在 ICU 上，让病人安全转出的关键之一是 **mobilization**。团队部署传感器识别下床、上床、离椅、回椅四类动作，帮助医生监测和预测。再往外是 **aging in place**：热成像可以辅助早期感染检测，也能观察活动能力、睡眠与饮食。
+smart sensors 只是信息采集系统，没法过去帮病人翻身、递水送药，引出最后技术主题 embodied AI（具身 AI），很大部分是 robotics。它令人兴奋在于闭合 perception 与 action 回路：回想寒武纪，眼睛一出现动物就开始移动。但机器人仍慢、笨拙、难泛化；当今多数研究受限于 constrained setup、是 pick and place 这类 short-horizon tasks、setup 偏 anecdotal，又缺标准 benchmark。
 
-## 机器人：闭合感知与行动的回路 [47:30 - 65:08]
+VoxPoser 要把机器人带到 the wild：预定义任务集令人不满，而 LLM 什么都能聊，Wenlong Huang 等学生想缩小差距——给任意 open instruction，不必在 closed world 预训练一切。目标 in-the-wild generalization：训练集只有「open a drawer」，野外却遇各式门；演示让机械臂规划路径打开顶层抽屉、同时不碰倒花瓶，这些指令都未预训练。做法借 LLM + VLM：LLM 把指令转成指令集乃至代码，VLM 识别理解环境，再转成 motion planning 让机械臂执行，因此摆脱封闭世界训练。
 
-传感器能“看见”，却不能替病人翻身、递水送药。这就需要 **embodied AI**，很大一部分是机器人。它把感知与行动闭合成环——回到寒武纪的比喻：眼睛出现之后，动物开始移动。
+![VoxPoser模型在开放世界指令下的机器人操作任务展示及特性列表](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0015_00-49-19.jpg)
 
-但机器人远没有准备好：慢、笨拙、难以泛化；研究大多局限在拾取放置这类短时任务，也缺少标准基准。
+细节：LLM 把「open top drawer」写成代码，把 drawer、handle 交给 VLM 在场景中检测，据此更新 motion map（heat map，标出该聚焦／不该聚焦处）；再给「watch out for the vase」，同样经 LLM 写代码、VLM 检测，这次更新负向 map，与前一张叠加得「哪里该去、哪里要避」的热图；对 motion planning map、rotation、gripper velocity 都照此处理。课件的 LLM 生成 affordance_map 代码如下，逻辑是在 $100\times100\times100$ 的 3D 体素图中按 z 轴排序找出最上面的把手并标记为 1：
 
-一个方向是用大模型打开“开放世界”。给机械臂一句“打开最上面的抽屉”，**LLM** 把指令拆成步骤并写成代码，**VLM** 在画面里找到抽屉和把手，据此更新运动规划图（热力图表示该关注与该避开的区域）；再说一句“小心花瓶”，VLM 检出花瓶，生成一张负向图，与之前的图叠加，得到完整的避让热力图。同类流程也用于夹爪旋转与速度，覆盖开抽屉、擦桌子、扫地、摆餐具与在线扰动。
+![LLM生成的affordance_map代码片段，用于定位抽屉把手并标记3D体素图](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0016_00-52-12.jpg)
 
-另一条线是基准。真实世界不确定、多变、需要交互与社交；自然语言和视觉都靠大规模数据集起飞，机器人也需要。**BEHAVIOR** 因此从“人希望机器人做什么”出发：从美欧的劳工调查里汇总数千项日常活动，请 1,400 人评价愿意让机器人代劳的程度。结果清洁类（刷马桶、拖地）排在最前，而打壁球、买婚戒、冲婴儿麦片这类带有情感或社会意义的事，人们不愿意交给机器人。这个调查给出了筛选约一千项任务的依据。
+```python
+def affordance_map():
+    msize = (100,100,100)
+    map = np.zeros(msize)
+    handles = detect('handle')
+    k = lambda x: x.pos[2]
+    handles.sort(key=k)
+    top_handle = handles[-1]
+    x,y,z = top_handle.pos
+    map[x,y,z] = 1
+```
 
-环境侧，团队扫描了 50 个真实场所，积累了一万多个带关节、可形变等属性的物体资产，并与 NVIDIA Omniverse 合作搭建物理、感知、交互都尽量真实的仿真环境——热传导、透明、布料、液体都要考虑。
+相较「skill-level tasks、short-horizon goals、closed world instructions」的主流，VoxPoser 具备 Open-set of language、Open-set of objects、Zero-shot 三个特性；论文 *VoxPoser: Composable 3D Value Maps for Robotic Manipulation with Language Models*（Wenlong Huang, Chen Wang, Ruohan Zhang, Yunzhu Li, Jiajun Wu, Li Fei-Fei，CoRL Oral 2023）。可完成 articulated object manipulation、摆餐巾、扫地、取吐司、摆餐桌、应对 online disturbances 等。
 
-基准结果并不好看：机器人被直接丢进环境、不给特权信息时，今天最好的算法在三项 BEHAVIOR 任务上得分是零；只有加入“完美运动”“完美记忆”之类的假设，分数才上来。讲者的解读是：只看第一行会沮丧，但对研究生来说空间很大。团队还在做仿真与真实世界的数字孪生来测试 sim-to-real，也把环境用于视觉障碍患者的研究。
+## 9. BEHAVIOR 基准：以人的需求定义任务与未来方向 [53:49 - 65:08]
 
-最后一项工作带点科幻色彩：受试者戴非侵入式脑电帽，机械臂按“想”的信号做出一顿日式料理。前提是先把“抬起”“放下”等念头与指令做过预训练；这件事发生在 2024 年，目标是帮助重度瘫痪病人。
+机器人研究整体仍缺好 benchmark；实验室设置与真实世界差距大——真实世界复杂得多、不确定、变化大、交互且社会性强、多任务。NLP 与 CV 都从大规模数据集／基准获益，于是团队构建 ecological robotic learning environment 配大而多样活动集合，即 BEHAVIOR：Benchmark for Everyday Household Activities in Virtual, Interactive, and Ecological EnviRonments（CoRL 2022）。
 
-全讲的收束是：AI 应当增强人，而不是替代人。
+![BEHAVIOR机器人学习基准测试环境介绍及任务示例](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0017_00-55-28.jpg)
 
-## 2026 课件更新
+本讲处处关乎 human values，绕不开的问题是：谁决定机器人该做哪些任务？讲者调侃每个做机器人的研究生只想要 laundry 和 dishwasher。与其自己列清单，团队做 human-centered survey：汇总美国与欧洲 labor office 等政府调查，整理数千项日常活动任务，上网找 1,400 位尽量多样的人回答「希望机器人帮哪些忙」并排序。现场小测也印证差异：clean kitchen floor 几乎人人愿意，shoveling snow、folding laundry 也愿意，cooking breakfast 开始混合，opening Christmas gift、buying wedding rings 则不想要——有些事在情感或社会层面对人有意义，不想让机器人代劳。结论：人们大量想要清洁类（toilet／floor cleaning），却不想机器人替你打壁球、买婚戒、甚至冲婴儿麦片。
 
-- 2026 课表未提供 L18 的 slides。
-- 2025 课表链接的 2024 版 `lecture_18.pdf` 实际是 3D Vision，不是 Human-Centered AI，因此未用作参考。
+![活动偏好分数随排名变化的衰减曲线图及典型高偏好活动列表](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0018_00-57-35.jpg)
+
+课件给出偏好分数随活动排名衰减曲线，强调任务「源于人的需求（serves human needs, goals, values）」，高偏好前列依次：Clean after wild party、Clean a shower、Clean grease、Scrub bathroom floor、Shovel snow、Wash outside window、Clean walls、Clean up water damage。由此有了一条有原则的路径，决定该训练机器人做哪上千个任务。为支撑它，扫描／获取 50 个真实场景 3D（餐厅、公寓、杂货店、办公室），采集逾 10,000 个带 articulation、deformability 属性的 3D 资产；仿真与 Nvidia Omniverse 合作，追求物理、感知、交互高保真，考虑 thermal、transparency、deformability，用 human user study 对比 perceptual realism，含布料、液体交互。团队也做真实环境 digital twin 测试 real-to-sim transfer（仍未解）；不加加速地看，机器人清理房间很慢，还会捡不起瓶子、走错方向、放错位置。
+
+![BEHAVIOR基准测试中不同特权信息假设下算法表现对比，无特权信息时成功率均为0.0](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0019_01-00-25.jpg)
+
+最关键的实验结论：今天算法仍做不了 BEHAVIOR。表格顶行是真正期望的设定——不给任何特权信息、直接把机器人丢进环境做任务；用 Soft Actor-Critic RL 测 3 个 BEHAVIOR 任务，性能 $0.0 \pm 0.0$。一旦给更多 privileged information，或做 magic motion、perfect memory 等简化假设，成绩才变好。Takeaway #1 很直白：无任何特权信息（含 action primitives）的模型完全无法学习也无从泛化。讲者说只盯顶行会沮丧，但研究生反而该受鼓舞——还有巨大成长空间。这套环境也被用来在安全条件下研究视障患者。
+
+![斯坦福 CoRL 2023 论文展示：左侧为轮椅老人厨房场景，右侧为机械臂烹饪实验及脑机接口受试者特写](/coursenotes/cs231n-deep-learning-for-cv-sp25/l18-human-centered-ai/kf_0020_01-03-08.jpg)
+
+最后一个技术工作（R. Zhang 等，CoRL 2023）她觉得「超级酷」：与心理学家、医生合作研究用脑电波控制机器人。演示里一位研究生戴 EEG cap，仅凭电信号发指令，让机械臂纯靠「想法」做出一顿日式料理——无侵入式脑控，来自脑电信号；前提是先用 lift／place／drop 等动作预训练机械臂的「想法」，之后整顿饭基于脑波完成，发生在去年（2024）。把 vision、perception、robotics 结合、在临床帮助人，尤其帮助 severely paralyzed 患者，正是这方向的未来。结语 take-home：BEHAVIOR 始终瞄准 augmenting people——一个大规模、多样、物理与感知真实生态的基准；我们不只想要造 AI 去做事去看，更想让它帮助人，把 AI 做成 augmentation／enhancing tool for humanity，而非取代我们的工具。
 
 ## 要点回顾
 
-- 本讲用“人”的视角重看视觉智能：让 AI 看见人类看见的、看不见的、以及希望看见的。
-- 人类视觉又快又专精，150 毫秒就能完成动物/非动物分类；1966 年的 Summer Vision Project 则暴露了 AI 对时间估计的长期乐观。
-- 前深度学习的三轮尝试：手工部件模型不 work，统计机器学习需要数据，Biederman 的类别估计催生 ImageNet。
-- 2012 年数据、算力、CNN 汇合，ImageNet 错误率从 0.26 降到 0.16，2017 年降至 0.023。
-- 标签不够还要关系：scene graph 与 Visual Genome 让组合表征支持“马戴帽子”这类零样本关系。
-- captioning 从 CNN + LSTM 起步；MOMA 用时空图理解多主体活动，至今仍未解决。
-- 细粒度识别超越人类，也能当研究社会的透镜；人类自身则有注意力限制与视觉偏差。
-- 医疗环境智能监测手卫生、ICU 活动与居家养老；机器人用 LLM + VLM 执行开放指令。
-- BEHAVIOR 用人类偏好筛选任务、以高保真仿真做基准，无特权信息时成绩仍是零。
-- 结论：AI 应当增强人而非替代人，技术视角必须与人本视角并存。
+- 本讲是收官 talk，不教新算法，主线是三大主题 see what humans see / don't see / want to see，落点是把 AI 做成增强而非取代人的工具。
+- 第一部分：人类 $10$ Hz／$100$ ms 检测目标、$150$ ms 脑电分类、专门物体脑区，确立物体识别为核心；深度学习前经历「部件组合」与「统计机器学习」两波；Biederman number（6–7 岁约 30,000–100,000 类）催生 ImageNet（约 22,000 类、1500 万图），2012 年数据 + CNN + 两块 GPU 汇合使错误率从 $0.28$ 降到 $0.023$。
+- 视觉理解不止命名：Wolfe 提出关系须被编码 → scene graph／Visual Genome／罕见组合 zero-shot；约 2014 起 CNN + LSTM 做 image／dense／paragraph captioning；dynamic scenes 与多 actor 活动理解仍未解，AI 与认知／神经科学双向启发。
+- 第二部分「看见人类未见」：fine-grained categorization（4,000 只鸟、make/model/year 车型 + Street View 反推教育／收入／投票／环境模式）是超人能力；Stroop、change blindness、棋盘格错觉揭示注意力局限与视觉 bias，医疗错误为美国第三大死因，AI 可帮手术室计数纱布；人脸识别肤色／性别偏差警示算法偏见。
+- 隐私维度：blurring／降维／federated learning／homomorphic encryption，及软硬件联合设计的过滤 lens「看见动作却不看见脸」；AI 既 help 也 amplify，须以多学科方式 study、forecast、guide 其社会影响。
+- 第三部分从 replace 转向 augmenting：长寿社会与护士流失致人力短缺，dark spaces of health care；ambient intelligence 三例——手卫生（深度传感器 + CV，院内感染致死超车祸 3 倍）、ICU mobilization（占美国 GDP $1\%$、监测 4 类动作）、aging in place（热成像、睡眠／饮食模式）。
+- 具身 AI 闭合感知—行动回路；VoxPoser（CoRL Oral 2023）用 LLM 写代码 + VLM 检测 + 3D value／affordance map 实现 open-set、zero-shot 的 in-the-wild 机器人操作。
+- BEHAVIOR（CoRL 2022）以 1,400 人调查、按人的偏好定义上千家庭任务，50 个真实 3D 场景、逾 10,000 资产、与 Nvidia Omniverse 共建高保真仿真；当前 Soft Actor-Critic RL 在无特权信息时成功率为 $0.0 \pm 0.0$。
+- 前沿与结语：EEG 脑电控制机械臂做饭（CoRL 2023，面向严重瘫痪患者）；BEHAVIOR 旨在 augmenting people，AI 应成为增强人类的工具而非取代。
 
 ## 视频来源
 

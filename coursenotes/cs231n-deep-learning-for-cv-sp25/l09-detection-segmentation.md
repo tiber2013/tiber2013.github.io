@@ -1,245 +1,197 @@
 ---
 title: "第 9 讲 · 目标检测、图像分割与可视化理解"
-description: "CS231n Spring 2025 L09 视频笔记；对照 2026 春季课件补充新增内容。"
+description: "Stanford CS231n Spring 2025 L09 中文视频笔记（2026-11 重写版）"
 ---
 
-# 第 9 讲 · 目标检测、图像分割与可视化理解
+# CS231n Spring 2025 · Lecture 9 检测、分割与可视化：从 ViT 到 Grad-CAM
 
-> **Stanford CS231n 计算机视觉 · L09** ｜ 讲者：Stanford CS231n 课程团队 ｜ 74 分钟 ｜ [原视频](https://www.youtube.com/watch?v=PTypu6GqEd4)
+**核心结论**：本讲先补齐上一讲 Transformer 在视觉上的落地与工程优化——ViT 把图像切成 patch 当 token、靠位置编码补回 2D 结构、用 class token 或 pooling 做分类，而 Pre-Norm、RMS Norm、门控 MLP 与 MoE 让训练更稳、容量更大；随后系统梳理四类核心视觉任务，重点讲语义分割（滑动窗口 → 全卷积网络 → 上下采样 → U-Net 跳跃连接）与目标检测（多任务损失 → Region Proposals / R-CNN / Fast R-CNN / RPN → 单阶段 YOLO → 基于 Transformer 的 DETR），并以 Mask R-CNN 补上实例分割；最后转向可视化与理解，从线性分类器模板、第一层卷积核、梯度显著性，到 CAM / Grad-CAM 的热力图，并指出 Transformer 自带的注意力图让可视化比 CNN 容易得多。讲者反复强调：这些虽多是十到十五年前的经典 pipeline、今天多被更大规模模型取代，但理解其设计动机，仍是自己设计新模型、以及医学等需要「知道在哪里、为什么」的场景的基础。
 
-> 课件版本：2026 春季 ｜ 视频版本：2025 春季。2026 课件新增或调整的内容集中在文末「2026 课件更新」一节。
+## 1. 回顾与落地：Transformer 与 Vision Transformer (ViT) [00:05 - 09:24]
 
-## 核心结论
+讲者先回顾上一讲：从 Seq2Seq / RNN 过渡到 transformer，编码器由多层 multi-head self-attention、layer norm 与 MLP 组成，负责编码序列；解码器以编码 token 为输入再生成输出。self-attention 比 RNN 与卷积建模更好、结果更佳，代价是更多计算与内存；此外也提过 cross attention。
 
-这一讲把视觉任务从“一张图一个标签”推进到“每个像素、每个物体都要有输出”：语义分割给每个像素分类，目标检测给每个物体框和类别，实例分割再给每个实例一张 mask。方法主线是同一个矛盾：既要扩大感受野、又要保住空间分辨率，还要控制一次前向的成本。FCN 用下采样加可学习上采样换效率，R-CNN 系列用区域提案换精度，YOLO/SSD 与 DETR 用单阶段、集合预测换速度。后半段转向可解释性：saliency map 看输入梯度，CAM 看最后卷积特征的加权和，Grad-CAM 把权重换成梯度，ViT 则天然提供注意力图。这些任务今天大多一行代码就能调用，但理解它们的结构，仍然是设计和排查视觉系统的前提。
+![Transformer模型整体架构图，包含编码器与解码器详细结构](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0001_00-01-14.jpg)
+这一页是上一讲 Transformer 的整体架构图，标注了 Encoder / Decoder、Multi-head self-attention、MLP、Layer norm、Positional encoding、Masked Multi-head self-attention，并展示「person wearing hat」这类输入输出序列的流向与残差连接位置。
 
-## 回顾：ViT 如何把图像读成 token 序列 [00:05 - 08:30]
+接着进入 **Vision Transformer (ViT)**（Dosovitskiy et al., "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale", ICLR 2021）：用 transformer 处理图像时，先把图切成 patches，每个 patch 重塑成向量再做线性投影，得到一个 D 维 token，相当于把图像变成一串「序列」。
 
-上一讲把序列模型从 RNN 推到 transformer：编码器由多层 multi-head self-attention、layer norm 和 MLP 堆成，解码器结构类似。三种处理序列的方式各有代价：RNN 对长度 $N$ 的序列是 $O(N)$ 计算，但不能并行，长程依赖要靠堆层；卷积在 $N$ 维网格上可并行，感受野随层数增长；self-attention 的每个输出直接依赖所有输入，主体只是四次矩阵乘法，高度并行，代价是 $O(N^2)$ 计算。视频的判断很直接：更贵，但在多数任务上效果更好。
+![Vision Transformers (ViT) 章节标题页，展示输入图像示例及尺寸参数](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0002_00-03-00.jpg)
+ViT 章节标题页，标注输入图像尺寸例如 224×224×3，并给出 ICLR 2021 的原始论文出处。
 
-![RNN、卷积与自注意力处理序列的三种方式对比图](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0002_00-01-50.jpg)
+![Vision Transformers (ViT) 将图像切分为 patch 并线性投影后输入 Transformer 的流程图](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0003_00-07-22.jpg)
+流程图给出具体数值：输入 224×224×3 → 切成 16×16×3 的 patch → flatten 后做线性变换 768 ⇒ D，每个 patch 得到一个 D 维向量，作为 Transformer 的输入。
 
-ViT 的做法是把图像切成 patch 当作 token。以 224x224x3 的输入、16x16 的 patch 为例，得到 N 个 3x16x16 的块，拉平成长度 768 的向量，再线性投影到 D 维；因为切块打散了二维位置，每个位置还要加一个可学习的 **positional embedding**，可以是一维序号，也可以是 x、y 两个坐标。之后就是标准的 transformer encoder，输出每个 patch 对应一个 D 维向量。
+把图像切成 patch 后，我们**丢失了像素的 2D 位置**，因此必须补 **positional embedding**：可以是简单的序号 1、2、3…，也可以是 2D 的 X / Y 坐标，二者相加形成送进 transformer 的新 token。由于图像是整幅同时可见，这里**不需要像语言那样做 masking**（语言是真正的序列，不能用未来信息）。
 
-![Transformer编码器架构及单层结构分解图](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0001_00-00-34.jpg)
+分类有两种做法：① 额外加入一个与其它 token 同维、可学习的 **class token**，它在输出空间被转成 C 维类别概率向量；② 不加 class token，直接把全部输出向量做 pooling 再投影成 C 类概率。两者都用反向传播 + softmax / cross-entropy 损失监督。讲者特别澄清：class token 不是 bias，而是独立的可训练参数；多层 self-attention 会在所有 patch token 与 class token 之间反复融合信息，因此从这一端施加损失就能让它代表类别概率。ViT 不只用于分类，还可用于本讲后面的许多任务；现代架构大多沿用这套组件。
 
-![Vision Transformers (ViT) 架构流程图，展示图像分块、线性投影及分类 token 的输入过程](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0004_00-06-09.jpg)
+## 2. Transformer 的现代改进：Pre-Norm 与其它 tweaks [09:24 - 16:02]
 
-分类头有两种写法。第一种是在输入序列里额外加一个可学习的 **class token**，它和其他 token 一起过注意力层，最后把它的输出线性投影成 C 维类别分数；第二种是不加 token，把所有 patch 的输出做 average pooling 得到 1xD，再过一个 D 到 C 的线性层。视频特别说明：class token 是一个独立训练的参数，不是 bias；它能代表整张图，是因为每一层 self-attention 都在 patch 与它之间交换信息。图像不需要 causal mask，因为整张图本来就全部可见。训练仍然是最朴素的一套：定义 softmax 交叉熵损失，反向传播。
+这些年 ViT / Transformer 的主干基本没变，但有不少提升性能、稳定训练的 tweaks。第一个是**残差连接与 Layer Norm 的位置**：原设计把 Layer Norm 放在残差连接**外部**——残差分支加回来之后立刻被归一化，特征值被改动，网络再也无法复现 **identity function（恒等函数）**，而这恰是 ResNet 当初想保留的性质。
 
-## Transformer 的四项工程改动 [08:30 - 16:00]
+![Pre-Norm Transformer架构图，展示Layer Normalization位于残差连接外部的结构](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0005_00-15-37.jpg)
+这张 Pre-Norm 前的架构图点出问题：「Layer normalization is outside the residual connections. Kind of weird, the model can't actually learn the identity function」。
 
-上一讲的架构是 2017 年的原样，但现代模型普遍做了几处改动，目的都是让训练更稳、容量更大。
+解决办法是 **Pre-Norm**：把 Layer Norm 移到 self-attention 与 MLP **之前**、放进残差连接内部，归一化仍然保留，恒等路径也保住，训练更稳定（Baevski & Auli, arXiv 2018）。
 
-**Pre-Norm** 针对 layer norm 的位置。原始结构把 layer norm 放在残差相加之后，意味着残差输出立刻被重新标准化，网络永远无法原样传递 $x$，也就学不出恒等映射。解决办法是把 layer norm 移到 self-attention 和 MLP 之前、残差连接内部，归一化还在，但恒等路径保住了。
+![Pre-Norm Transformer 结构图，Layer Normalization 移至 Self-Attention 与 MLP 之前残差连接内部](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0004_00-09-56.jpg)
+Pre-Norm 结构图写明「Move layer normalization before the Self-Attention and MLP, inside the residual connections. Training is more stable.」。讲者再次答疑：为什么外部归一化学不到恒等——因为残差相加后紧跟归一化，特征值必然被改变，所以要把归一化挪进去。
 
-**RMSNorm** 换掉 layer norm 本身：不减均值，只除以均方根，
+其余 tweaks 一笔带过：**RMS Norm**（root mean square normalization）对每个特征不用均值来归一化，更基础，经验上让训练更稳；这些选择多是经验上更优。**门控 MLP**：不用简单 MLP 的两个权重矩阵 $W_1, W_2$，而是再加第三个形成 gated nonlinearity（门控非线性），即便把隐藏层维度设为 $8d/3$，参数量保持不变，却能学到更高维的非线性。**Mixture of Experts (MoE)**：不是一组 MLP 而是多组，每组是一个 expert，用 router 把 token 路由到不同 experts，只激活少数 active experts，于是在参数量增加、模型更鲁棒的同时不显著增加计算，各 MLP 又天然并行——现代 LLM 普遍采用这类 tweaks。专家数量是预定义的超参数；各专家因初始化不同，往往各自学到数据的某个方面或某个模式，有助于在需覆盖多峰分布时把它们分开。
 
-$$
-y_i=\frac{x_i}{\mathrm{RMS}(x)}\gamma_i,\qquad
-\mathrm{RMS}(x)=\sqrt{\varepsilon+\frac{1}{N}\sum_{i=1}^{N}x_i^2}
-$$
+## 3. 语义分割：从滑动窗口到全卷积与上采样 [16:02 - 29:14]
 
-省掉均值计算，训练略稳一些。
+讲者先交代今天要覆盖的核心任务（分类、语义分割、检测、实例分割）与可视化理解，并指出在医学场景里「可视化与理解往往比分类或检测肿瘤本身更重要——你要知道在哪里、为什么」。
 
-**SwiGLU** 换掉 MLP 的非线性。经典 MLP 是两个权重矩阵 $Y=\sigma(XW_1)W_2$，SwiGLU 用三个矩阵做门控：
+### 3.1 语义分割与滑动窗口 [17:15 - 20:16]
 
-$$
-Y=\big(\sigma(XW_1)\odot XW_2\big)W_3
-$$
+**语义分割**要给**每个像素**一个标签，测试时输入图像、输出同尺寸的标签图。逐像素单独判断几乎不可能——只看一个像素没有 context，无法知道它属于什么物体，必须看周围区域。
 
-一个分支做非线性、一个分支做门，逐元素相乘。把隐层宽度取 $H=8D/3$ 时总参数量与经典 MLP 持平，但表达的非线性更强。
+![语义分割的滑动窗口方法示意图，展示从全图提取Patch并用CNN分类中心像素的过程及其低效问题](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0006_00-19-39.jpg)
+滑动窗口示意图：Full image → Extract patch → Classify center pixel with CNN，输出 Cow / Cow / Grass；画面直接点出「Problem: Very inefficient! Not reusing shared features between overlapping patches」。
 
-**Mixture of Experts（MoE）** 把每个 block 的 MLP 复制成 E 份，每份是一个 expert，再由 router 把每个 token 只送给其中 A 个（$A<E$）。参数量按 E 增长，计算量只按 A 增长，于是能在不显著增加 FLOPs 的前提下扩大容量。视频里同学问 expert 是否有可解释的分工，讲者说它们并行训练、初始化不同，往往会各自偏向某类模式，但并没有强制的语义划分；E 和 A 都是超参数，通常预先设定，而不是靠微调去搜。
+做法是以该像素为中心取一个 patch，用 CNN / ResNet / ViT 等任意分类网络给中心像素定标签；但每个像素都要跑一整个网络，极慢，且重叠 patch 之间的共享特征完全没复用，非常低效。
 
-![Pre-Norm Transformer 架构图，展示 Layer Normalization 位于残差连接外部](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0005_00-15-34.jpg)
+### 3.2 全卷积网络与逐像素损失 [20:16 - 25:12]
 
-## 从分类到分割：四种视觉任务 [16:00 - 18:30]
+另一条路是让网络直接输入整图、输出整张分割图（标签矩阵）。这要求输入层与输出层都与图像同尺寸，中间不能用全连接层把特征「压扁」，网络要全程保持「膨胀」（inflated）——即 **Fully Convolutional Network（FCN）**。问题是图大、层大、参数多，早年没有强 GPU 时是训练瓶颈，于是架构演化为「从全尺寸下采样 → 中间低分辨率但通道很厚 → 再上采样回原尺寸输出」。
 
-幻灯片用一张图区分四个任务：分类只输出标签，没有空间范围；语义分割给每个像素一个类别，不区分实例；目标检测给每个物体一个框和类别；实例分割再给每个实例一张 mask。讲者提醒，这些任务是过去十几年逐步搭起来的基础，理解结构才知道新问题该从哪里改。可视化在医疗等场景甚至比分类本身更重要——医生要知道“在哪里、为什么”。
+![全卷积语义分割网络结构图，展示下采样与上采样过程及特征图尺寸变化](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0007_00-24-37.jpg)
+全卷积分割网络结构图：Downsampling 用 Pooling / strided convolution，Upsampling 尚标着「???」；尺寸依次为 Input 3×H×W → High-res D1×H/2×W/2 → Med-res D2×H/4×W/4 → Low-res D3×H/4×W/4 → Predictions H×W，并引用 FCN (CVPR 2015) 与 Deconvolution Network (ICCV 2015)。
 
-## 语义分割：逐像素分类与它的代价 [18:30 - 25:10]
+训练损失很直接：每个像素都在做一次分类，把**所有像素的 softmax 损失求和**再反传即可。这类算法是**全监督**的，需要 ground truth 标签图，早年靠人工逐像素标注得来。
 
-最直接的想法是逐像素分类：取以该像素为中心的 patch，送进一个 CNN 输出中心像素的类别。问题有两个。单个像素没有上下文，只看一个像素根本无法判断它属于什么；而且为每个像素跑一次网络，相邻 patch 的特征完全不复用，慢到不可用。
+### 3.3 上采样：从 unpooling 到转置卷积 [25:12 - 29:14]
 
-**Fully convolutional network（FCN）** 的思路是一次输出整张标签图：输入 3xHxW，经过若干卷积得到 DxHxW 特征，再得到 CxHxW 的分数，对每个位置取 argmax 得到 HxW 的预测。要这样做，网络里不能有全连接层，最初的设计也不做下采样。
+下采样早已熟悉（pooling、strided convolution），上采样却需要新操作来「逆转」它。无参数方式有三种：nearest neighbor（把低分辨率值复制到邻域）、bed of nails（只保留一个角、其余置 0，靠后续卷积逐步填满）、以及 **max unpooling**——编码端做 max pooling 时记下被选中的位置，解码时把值放回那些坐标。**可学习的上采样**则是**转置卷积（transposed convolution）**：用 1D 例子说明，输入两个值 A、B，学一个 filter 把每个值映射到高分辨率输出，重叠部分求和；等价地，对一个 3×3 矩阵不去卷积输入、而对输入的转置版本做卷积，从而产生更大的输出。它就是常规卷积的逆，且 filter 和其它卷积层一样是**可训练**的。
 
-![全卷积语义分割网络结构示意图，展示从输入图像到像素级预测的卷积流程](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0007_00-20-29.jpg)
+## 4. U-Net：跳跃连接保住空间细节 [29:14 - 32:45]
 
-但全分辨率卷积非常贵：HxW 那么大，通道一多，参数量和计算量都难以承受。实际结构改成先下采样再上采样：用 pooling 或 strided convolution 把分辨率降到 H/2、H/4，同时把通道做厚；最低分辨率处语义最强，然后一步步上采样回 HxW。
+![U-Net网络架构图，包含编码器、解码器及跳跃连接（copy and crop）细节](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0008_00-29-29.jpg)
+U-Net 架构图：input image tile → output segmentation map，标注 conv 3×3 ReLU、copy and crop、max pool 2×2、up-conv 2×2、conv 1×1（Ronneberger et al., 2015）。
 
-![全卷积语义分割网络结构图，展示下采样与上采样过程及分辨率变化](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0008_00-24-34.jpg)
+![U-Net网络架构图，展示编码器、解码器及跳跃连接结构](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0009_00-30-47.jpg)
+更细的 U-Net 图：输入 572×572 → 输出 388×388，逐层给出 64 / 128 / 256 / 512 / 1024 通道及具体尺寸与操作。
 
-训练目标很自然：每个像素都是一次分类，损失就是所有像素 softmax 交叉熵之和（或平均）：
+形状像 U：编码器一路下采样扩大感受野、同时丢失空间分辨率，解码器再上采样回到图像分辨率。它与 FCN 唯一但关键的区别是——下采样会丢分辨率，直接上采样容易让**边界模糊**，于是把编码器侧的**特征图 copy and crop 跳跃连接**到对应的解码器层，把结构信息保留下来，输出因此更锐利。讲者强调：直到今天，在不使用任何 foundation model 的前提下，U-Net 及其变体在医学图像分割等场景仍能达到 SOTA，是应用最广的分割网络之一。语义分割小结再点一次：转置卷积是常规卷积的逆，对输入的转置版本做卷积得到更大输出，filter 可训练。
 
-$$
-L=\frac{1}{HW}\sum_{h=1}^{H}\sum_{w=1}^{W}
--\log\frac{e^{s_{y_{h,w}}}}{\sum_{c}e^{s_c}}
-$$
+## 5. 四类视觉任务与检测的多任务损失 [32:45 - 36:23]
 
-监督需要逐像素的 ground-truth 标签图。视频里同学回答“对每个像素取平均分类损失”，讲者确认这就是全部；早期这些 mask 是人工标注的，现在有工具辅助。
+语义分割只给像素标签，若图中有两个同类实例（两只狗），它分不清谁是谁 → 需要**实例分割** → 而要理解多目标，就得先做**目标检测**。
 
-## 上采样：从 unpooling 到转置卷积 [25:10 - 28:55]
+![分类、语义分割、目标检测与实例分割四种任务的对比示意图](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0010_00-33-08.jpg)
+四种任务对比：Classification（整图一个 CAT，No spatial extent）、Semantic Segmentation（逐像素 GRASS / TREE / SKY，No objects just pixels）、Object Detection（Multiple Object）、Instance Segmentation（区分 DOG, DOG, CAT 等实例）。
 
-下采样有现成算子，上采样没有，需要新发明。
+单目标检测既要输出类别分数，又要输出边界框坐标 $(x, y, h, w)$。做法是多任务损失：分类用 **softmax loss**，框坐标用 **L2 / 回归损失**，两者相加成 compound loss：
 
-- **Nearest neighbor unpooling**：把 2x2 的每个值复制成 2x2 块，得到 4x4。
-- **Bed of nails**：只在对应位置放原值，其余填零；后续卷积会把空洞逐渐填起来。
-- **Max unpooling**：下采样用 max pooling 时记下每个最大值的位置，上采样时把值放回这些位置，其余为零。它要求网络里下采样和上采样层成对出现。
+```python
+loss = softmax_loss(class_scores, label) + L2_loss(box_pred, box_gt)  # 单目标检测：分类 + 框回归，box=(x,y,h,w)
+loss_seg = sum(softmax_loss(pred[u, v], gt[u, v]) for (u, v) in all_pixels)  # 语义分割：逐像素 softmax 求和
+```
 
-![网络内部上采样机制：Max Unpooling（最大池化逆运算）原理图解](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0009_00-26-37.jpg)
+但多目标时这套「把分类扩展成检测」不可扩展：三个物体就要输出 12 个数，物体一多数字爆炸，必须另寻思路。
 
-这些操作都没有参数。**Transposed convolution** 则是可学习的上采样：把输入看成给 filter 的权重，输入的一个值乘上整个 filter 写进输出的一块区域；stride 决定 filter 在输出上每次移动几格，所以 stride=2 时输出是输入的两倍。多个输入写出的区域会重叠，重叠处相加。1D 例子最清楚：输入只有 a、b 两个值，学一个 filter，把 a、b 分别乘以 filter 放到输出上，重叠的位置把两份贡献加起来。反过来看，strided convolution 就是可学习的下采样，转置卷积是它的反向操作，filter 同样由训练得到。
+## 6. Region Proposals、R-CNN 与 Faster 化 [36:23 - 44:33]
 
-![转置卷积（Transposed Convolution）原理示意图，展示上采样过程](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0012_00-31-30.jpg)
+穷举滑动窗口（从 (0,0) 遍历所有 x, y, h, w 组合）因框的组合数太多而不可扩展。**Region Proposals（候选区域）**是 2014 年前后大量研究的成果：先找出「很可能含物体」的区域（约 2k 个），问题于是变简单。
 
-## U-Net：把编码器的细节接到解码器 [28:55 - 31:20]
+![R-CNN算法介绍页，展示从输入图像提取感兴趣区域(ROI)的过程](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0011_00-38-17.jpg)
+R-CNN 介绍页：Regions of Interest (RoI) from a proposal method (~2k)，出处 Girshick et al., "Rich feature hierarchies for accurate object detection and semantic segmentation", CVPR 2014。
 
-把下采样—上采样结构画成对称的 U 形，就是 **U-Net**。它在每个分辨率上都有编码器和解码器，并且把编码器对应层的特征图 copy and crop 到解码器，与上采样后的特征拼接。原因是下采样会丢掉空间细节，只靠上采样恢复，物体边界容易发糊；**skip connection** 把高分辨率的结构信息直接送到解码端，输出边界更锐利。视频强调，在不想用 foundation model 的医学分割里，U-Net 及其变体至今仍是很强的方案。
+**R-CNN**：对每个候选区域裁出 patch，跑 CNN 分类（猫 / 狗 / background），并**修正框坐标**——预测 4 个数 $(dx, dy, dw, dh)$ 作为对 RoI 的 corrections。
 
-![U-Net网络架构图，展示编码器、解码器及跳跃连接结构](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0010_00-30-47.jpg)
+![Slow R-CNN 架构流程图，展示每个 RoI 独立通过 ConvNet 的低效性及改进思路](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0012_00-39-34.jpg)
+Slow R-CNN 流程图点出「Problem: Very slow! Need to do ~2k independent forward passes for each image!」，并给出改进「Idea: Pass the image through convnet before cropping! Crop the conv feature instead!」。
 
-## 从语义分割到实例分割 [32:45 - 33:45]
+R-CNN 极慢：每张图约 2k 个区域各跑一次完整 CNN 前向。改进依据是卷积操作保留空间信息、能追踪像素位置，于是**先对整图跑一次大卷积**得到特征图，再在特征图上裁对应区域、跑一个小 CNN 输出「框偏移」与「物体类别」——即 Fast 版本。**RPN（Region Proposal Network）**则补上「候选区域从哪来」：用一个网络从随机初始位置出发，经多层卷积逐步 refine 出高概率含物体的区域、同时 refine 框坐标，用物体标签与位置监督，实际取 **top-k** 高概率框作为该图的 proposals。R-CNN / Mask R-CNN 如今已不再使用，因为太重：至少要两个网络（RPN + 分类 / 框修正网络），每张图至少两次前向；但理解「怎么走到这一步」仍然重要。
 
-语义分割只输出像素类别，同一类别的两个个体无法区分：图里有两只狗，模型只知道“这是狗”，不知道哪些像素属于哪一只。要回答这个问题，必须先找到“有哪几个物体”，也就是目标检测。
+## 7. 单阶段 YOLO 与基于 Transformer 的 DETR [44:33 - 57:46]
 
-![语义分割定义幻灯片，展示猫和牛图像及其像素级类别标注结果](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0013_00-32-51.jpg)
+### 7.1 单阶段检测：YOLO [44:33 - 48:52]
 
-## 单目标检测：分类加定位 [33:45 - 36:25]
+两阶段之后出现**单阶段检测器**（SSD，以及最流行的 **YOLO**）。YOLO（Redmon et al., "You Only Look Once: Unified, Real-Time Object Detection", 2015）至今仍是工业界检测的基础，快、效果好，早期版本是卷积重的网络。
 
-如果图中只有一个物体，检测就退化成“分类 + 定位”：网络主干输出一个 4096 维向量，接两个头，一个全连接层输出 C 类分数，另一个输出 4 个框坐标 $(x,y,w,h)$。损失是两项相加：
+![YOLO实时目标检测的整体流程示意图，展示SxS网格输入、边界框置信度与类别概率图到最终检测结果的转换](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0013_00-45-15.jpg)
+YOLO 流程图：把输入分成 S×S grid → 输出 Bounding boxes + confidence → Class probability map → Final detections，标注 Redmon et al. 2015。
 
-$$
-L=L_{\text{cls}}(s,y)+\lambda L_{\text{box}}\big((x,y,w,h),(\hat x,\hat y,\hat w,\hat h)\big)
-$$
+核心是 "You Only Look Once"：对图像**一次前向**就生成全部框。把图像分成 $S \times S$ 网格（例子 7×7），每个格子用一个全卷积网络同时输出：该位置有物体的概率、$B$ 个（超参数）边界框及其框修正、以及类别概率向量（$B=2$ 时每格给两个带不同概率的框）。所有格子并行计算、每个框带一个概率（图中用边的粗细表示）；再经**阈值化 + 非极大值抑制（non-maximal suppression, NMS）**挑出概率最高的框，得到最终检测。YOLO 有大量新版本，广泛用于医学、机器人与工业应用。
 
-分类用 softmax，框用 L2 回归。这是一个 **multitask loss**，两个任务共享特征、各自监督。
+### 7.2 DETR：用 Transformer 直接出框 [48:52 - 57:46]
 
-![单目标检测网络结构图，展示CNN特征提取后通过全连接层输出类别分数和边界框坐标](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0014_00-34-37.jpg)
+较新的思路是 **DETR**（Carion et al., "End-to-End Object Detection with Transformers", ECCV 2020）：纯 transformer 做检测，虽已近乎不在真实应用中使用，却是「如何把上一讲的 self / cross attention 用到检测」的极佳例子。
 
-问题在物体数量不固定：一个物体输出 4 个数，三个物体 12 个，输出维度会随图像变化，网络无法这样定义。所以检测必须换一种参数化方式。
+![DETR目标检测模型架构图，展示backbone、encoder、decoder及预测头结构](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0014_00-54-37.jpg)
+DETR 架构图：backbone、encoder、decoder、prediction heads，画面标注了 bipartite matching loss。
 
-## 滑窗、区域提案与 R-CNN [36:25 - 39:25]
+流程：图像切 patches → 过 CNN 生成 token → 加位置编码 → 送入 transformer encoder（多层 self-attention + 归一化 + MLP）得到输出 tokens。关键在 decoder：除接收 encoder 输出，还定义一组**可训练的 object queries**（learnable parameters）；放几个 query（5、10、20）就表示「最多检测几个物体」，decoder 内先 self-attention、再与 encoder 输出做 cross-attention，为每个 query 生成输出，经 **FFN** 产生类别标签 + 边界框，或直接输出「no object」。
 
-一个自然的补救是滑窗：在图上滑动各种位置、大小、长宽比的框，把每个 crop 送进 CNN 判断“是物体还是背景、是哪一类”。这样输出维度固定了，但候选框的组合数量爆炸，计算上不可行。
+![DETR目标检测模型架构图，展示CNN骨干、Transformer编解码器及二部图匹配损失机制](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0015_00-57-32.jpg)
+DETR 完整数据流图：CNN backbone → Transformer encoder / decoder → prediction heads，FFN 预测头，以及 bipartite matching loss。
 
-于是有了 **region proposal**：先用便宜的方法找出“像物体”的区域。候选框的数量是预先设定的超参数，后面按分数取 top-k。
+输入的**不是**任何候选框，queries 只是可训练参数；监督来自预定义的类别概率向量与 ground truth 框的 L2 loss，并不告诉 query 去哪找什么，全靠反向传播自学，课件把这一机制标为 **bipartite matching loss（二部图匹配损失）**。讲者的几处答疑：多层 self / cross attention 让各 query 相互交互、不会都输出同样的东西；算法**不需要**像素级分割标注，只用类别标签与框即可（若有像素级分割也能转成框）；全监督网络通常无法泛化到训练集中没见过的新类（zero-shot 属另一类工作）；若场景中物体数超过 query 数，它只会给出置信度最高的那些，因此通常要多放一些 query。
 
-R-CNN 的流程是：对每个候选框，把图像区域 warp 成 224x224，送进 ImageNet 预训练的 ConvNet 提特征，用 SVM 分类，再回归 4 个修正量 $(dx,dy,dw,dh)$ 把框调准。它在 2014 年是很强的结果，但每个候选框都要完整跑一次网络，非常慢。
+## 8. 实例分割：Mask R-CNN 与任务收尾 [57:46 - 61:42]
 
-![R-CNN 章节标题页，展示输入图像示例及 Girshick 2014 论文引用](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0015_00-38-14.jpg)
+回到开篇的问题：如何用这些检测算法做实例分割？在 R-CNN 这套「图像 → region proposals → CNN → 类别标签 + 框坐标」架构上**再加一个输出分支**即可：多一层卷积为每个物体生成**像素级 mask**，使其变成更多任务的多任务学习——这就是 **Mask R-CNN**。mask 与输入图像同尺寸，用 FCN 得到；对每个候选小框都能给出对应 mask（椅子、床、婴儿等不同实例各有各的掩码）。讲者说 Mask R-CNN 在检测各类已知物体上结果非常好，且有大量 API 与开源实现。
 
-## Fast R-CNN 与区域提案网络 [39:25 - 43:45]
+工业意义上，例如流水线质量控制中把烂番茄与好番茄分开，需要先检测物体再分类；所以即便今天计算机视觉已远超这些任务、有了更大规模模型，理解这些 pipeline 与「如何实时做」依然重要。
 
-卷积有一个好处：它是空间一致的，特征图上的位置能对应回原图。所以没必要对每个 crop 单独跑网络，只要对整张图跑一次卷积得到特征图，再把候选框映射到特征图上，对每个 RoI 取特征、过一个小网络，同时输出类别和框修正。这就是 **Fast R-CNN**：主干（AlexNet、VGG、ResNet 等）只跑一次，候选区域共享特征。
+## 9. 可视化与理解：从滤波器到 CAM / Grad-CAM [61:42 - 73:31]
 
-剩下的问题是候选框仍来自外部算法。**Region proposal network（RPN）** 把提案也学出来：在特征图的每个位置放 K 个不同大小、长宽比的 **anchor box**，对每个 anchor 预测“有没有物体”的二分类分数和 4 个框修正；把所有位置的 anchor 按 objectness 排序，取 top-k 作为提案。RPN 与分类头可以共享卷积特征，这就是 Faster R-CNN 的两阶段结构。
+讲者指出，可视化神经网络学到什么是 2010 年代到 2020 年代的热门课题，能帮我们理解网络内部；在医学等应用里「知道肿瘤在图像的哪里、为什么」往往比「有没有肿瘤」更关键。
 
-两阶段方法精度好，但代价是要跑两个网络：先提案，再分类回归，每张图至少两遍。R-CNN 系列今天在真实系统里已经很少用，视频的建议仍是把细节弄懂，因为后面的方法都是在修它的毛病。
+### 9.1 线性分类器模板与第一层卷积核 [61:42 - 64:19]
 
-## 单阶段检测：YOLO 与 SSD [43:45 - 49:00]
+回到最初的线性分类器：学出来的权重可看作每个类别的 **template**（如正面朝前的汽车模板）。
 
-单阶段检测器把两步压成一步。**YOLO** 把图像划成 SxS 的网格（例子里是 7x7），每个格子给出 B 个 base box，每个 box 输出 4 个偏移加 1 个 confidence，再输出 C 个类别分数。整张图的输出就是一个 $7\times7\times(5B+C)$ 的张量，一次前向同时得到所有框和类别，因此每个格子都必须学会“自己负责哪个物体”。
+![线性分类器的视觉解释：左侧为ImageNet类别样本网格，右侧展示输入图像经权重矩阵W和偏置b计算得分的流程图](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0016_01-02-40.jpg)
+线性分类器的视觉解释：左侧 ImageNet 十类样本网格（airplane … truck），右侧输入图像经权重 W、偏置 b 算得分（Score −96.8 / 437.9 / 61.95）。
 
-推理时会有大量重叠框，先用阈值过滤低置信度，再用 **non-maximum suppression（NMS）** 去掉同一物体的重复框。视频没有展开 NMS 细节，只提到用阈值和它挑出高分框。YOLO 系列速度快，在工业检测、机器人、医学等场景里被广泛用作基础检测器。
+同理可把网络第一层 **filters 的权重**可视化：能看到学到的基本形状、朝向、边缘等模式。但这种直接可视化只适用于通道少的早期层（如 3 通道可拼成 RGB 图），CNN 中间层通道太多难以直接看；更深层学到的模式更整体、更大，也可用 **guided backpropagation** 可视化但没这么简单。
 
-## DETR：把检测写成集合预测 [49:00 - 57:50]
+![第一层卷积核可视化：左侧展示AlexNet的64个11x11滤波器图案，右侧为网络结构图并高亮显示第一层](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0017_01-03-06.jpg)
+AlexNet 第一层 64×3×11×11 滤波器图案与网络结构高亮，引用 Krizhevsky et al. (arXiv 2014)、ResNet (He et al., CVPR 2016)、DenseNet (Huang et al., CVPR 2017)。
 
-**DETR** 用 transformer 重写了检测流程：CNN 主干把图像变成一组特征 token，加上 positional encoding 送进 transformer encoder；decoder 的输入不是图像 patch，而是一组可学习的 **object query**。每个 query 通过 self-attention 相互交互、通过 cross-attention 读取 encoder 输出，最后经 FFN 输出一个类别和一个框，或者输出“没有物体”。query 的数量就是模型能检测的最大物体数，想检测更多物体就加 query。
+### 9.2 梯度显著性 Saliency [64:19 - 67:13]
 
-它没有 anchor，也没有手工设计的候选框和框变换，输出直接是一个集合。视频里同学追问了几个关键点：query 是训练出来的参数，不是某个图像区域；模型不保证第几个 query 对应哪个物体，但多层 self/cross-attention 会让 query 之间互相协调、各自认领不同目标；训练只需要类别标签和框，不需要像素级分割（有 mask 也可以转成框）；监督仍然来自类别分数和框的回归。因为是完全监督，遇到训练集里没有的新类别无法检测，零样本检测是另一类问题。讲者对 DETR 的评价很直接：2020 年的论文，今天真实应用里已经很少用，但它是理解 transformer 检测的干净例子。
+**Saliency（显著性）**回答「哪个像素重要」。训练时我们对 loss / class score 关于**网络权重**求导来更新权重；现在改为关于**像素值**求导并可视化这些梯度，得到的就是「改动哪些像素会显著改变 dog 分数」的像素集合——正是梯度定义的直接运用。对不同类别分别做，就能得到各自的显著图。
 
-## Mask R-CNN：给每个实例一张 mask [58:00 - 61:40]
+### 9.3 CAM：把类别得分反推回特征图 [67:13 - 70:18]
 
-实例分割在检测的基础上再加一个分支。**Mask R-CNN** 沿用 Faster R-CNN 的两阶段结构：RPN 给候选框，Fast R-CNN 的头输出类别和框修正，另有一个小卷积分支对每个 RoI 输出该实例的像素级 mask。mask 与输入区域对应，同一类别的两只狗会得到两张不同的 mask，这正是语义分割做不到的。视频展示的椅子、床、婴儿等例子说明，mask 分支能在每个框内给出贴合物体形状的结果。代价是又多了一个任务、多了一组计算，这也是 R-CNN 系列偏重的原因。检测部分收尾时，视频还提到，检测与分类在工业质检（如分拣好坏番茄）中仍必需，也有大量开源实现可直接调用。
+有时不只关心逐像素梯度，还想看**每个类别的 activations** 如何作用，于是有 **CAM（Class Activation Mapping）**。
 
-## 可视化：从模板到第一层 filter [61:40 - 64:20]
+![Class Activation Mapping (CAM) 的流程图，展示从 CNN 特征到全局平均池化再到全连接层权重计算类别得分的过程](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0018_01-07-16.jpg)
+CAM 流程图：CNN 特征 → Global Average Pooling → 全连接层权重 → 类别得分，维度标注 $f \in \mathbb{R}^{H\times W\times K}$、$F \in \mathbb{R}^K$、$w \in \mathbb{R}^{K\times C}$、$S \in \mathbb{R}^C$。
 
-线性分类器那一讲有一个“视觉视角”：W 的每一行是一个类别模板，把行向量还原成图像，可以看到车的模板像一辆正面的车。神经网络也可以这样看，但通常只能看第一层：第一层卷积的 filter 是 3 通道，可以直接当 RGB 图显示，能看出网络学到了边缘、方向、颜色块等基本模式。中间层通道太多，无法直接可视化，需要梯度类方法；视频顺带提到 guided backprop 是其中一种。
+思路：卷积层经 pooling 得到 feature maps，feature maps 再经学到的权重变成各类得分；把类别得分写成特征图的加权和，就能沿卷积一直保留的图像空间对应关系，把预测反推回具体空间位置，用「权重 × 特征值」得到 class activations，生成每个类别的热图。
 
-## Saliency map：哪些像素影响分数 [64:20 - 67:10]
+![CAM 热力图可视化示例，左侧展示不同类别预测的激活区域，右侧展示同一物体（杠铃）在不同场景下的定位效果](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0019_01-09-30.jpg)
+CAM 热力图示例：dome、palace、church、altar、monastery 各自的激活区域，以及同一物体（barbell）在不同场景下的定位。
 
-**Saliency map** 回答“改哪个像素会改变类别分数”。训练时求损失对权重的梯度，这里反过来，求类别分数对输入像素的梯度；2026 课件把它写成取绝对值、再对 RGB 通道取 max：
+**局限**：这套计算只能用在**最后一个卷积层**，而多数 CNN 在末端还有全连接等操作，中间隔着东西就无法这样回推。
 
-$$
-\text{saliency}(h,w)=\max_{ch}\left|\frac{\partial S_c}{\partial x_{h,w,ch}}\right|
-$$
+### 9.4 Grad-CAM 与 Transformer 自带的注意力 [70:18 - 73:31]
 
-梯度绝对值越大，说明该像素的微小变化越能影响分数。把热图叠加在原图上，就能看到模型“看”的是狗还是背景。医疗场景最能说明它的价值：分类器说“有肿瘤”没有意义，医生要知道肿瘤在图像的哪个位置。视频也承认这类方法不完美，热图可能高亮无关区域，所以还有 CAM、Grad-CAM 等更强的方法。
+**Grad-CAM**（Gradient-weighted Class Activation Mapping, Selvaraju et al., "Grad-CAM: Visual Explanations from Deep Networks via Gradient-based Localization", CVPR 2017）解决上述局限：算法基本相同，但改用**梯度**来算权重——把梯度一路回传到目标层，将权重与梯度聚合起来替代原来那个 W 权重，再加权 feature maps，并用 **ReLU** 只保留正值，从而在图像空间生成热力图，可作用于任意卷积层，比 Guided Backprop 定位更平滑、更准确。
 
-## CAM：把分类权重投回特征图 [67:10 - 70:20]
+![Grad-CAM 与其他可视化方法（Guided Backprop, Occlusion map）在猫狗图像上的对比热力图](/coursenotes/cs231n-deep-learning-for-cv-sp25/l09-detection-segmentation/kf_0020_01-12-22.jpg)
+Grad-CAM 与 Guided Backprop、Occlusion map 在猫狗图像上的对比热力图，出自 Selvaraju et al., CVPR 2017。
 
-**Class activation mapping（CAM）** 要求网络在最后卷积层之后接 global average pooling，再接一个线性分类层。设最后卷积特征为 $f\in\mathbb{R}^{H\times W\times K}$，GAP 得到
-
-$$
-F_k=\frac{1}{HW}\sum_{h,w}f_{h,w,k}
-$$
-
-分类权重为 $w\in\mathbb{R}^{K\times C}$，类别 c 的分数是
-
-$$
-S_c=\sum_k w_{k,c}F_k
-=\frac{1}{HW}\sum_{h,w}\sum_k w_{k,c}f_{h,w,k}
-$$
-
-把求和顺序换一下，就得到每个空间位置的贡献：
-
-$$
-M_{c,h,w}=\sum_k w_{k,c}f_{h,w,k}
-$$
-
-这就是类别 c 的 CAM：第 k 个通道的特征图，用类别 c 在该通道上的权重加权求和。把它上采样回原图大小，就得到一张热图，高亮“哪些区域把分数推高”。视频展示的宫殿、圆顶、教堂、祭坛等类别，热图分别落在建筑的不同部位，说明模型确实学到了类别相关的区域。
-
-CAM 的限制是结构性的：它依赖 GAP 加单个线性层，而且只能作用在最后一层卷积上；真实网络最后往往还有全连接、softmax 等操作，无法直接把分类权重乘回特征图。
-
-## Grad-CAM：用梯度代替分类权重 [70:20 - 72:25]
-
-**Grad-CAM** 把权重从“分类层参数”换成“梯度”。任取一层，激活为 $A\in\mathbb{R}^{H\times W\times K}$，先求类别分数对该层激活的梯度，再对空间维度做 global average pooling 得到每个通道的权重：
-
-$$
-\alpha_k=\frac{1}{HW}\sum_{h,w}\frac{\partial S_c}{\partial A_{h,w,k}}
-$$
-
-然后用它加权求和，并过 ReLU 只保留对类别有正贡献的区域：
-
-$$
-M^c_{h,w}=\mathrm{ReLU}\left(\sum_k\alpha_k A_{h,w,k}\right)
-$$
-
-这样任何一层都能生成热图，也不再要求网络以 GAP 结尾；代价是要多一次反向传播。视频把 CAM 与 Grad-CAM 的关系讲得很直白：CAM 是“权重 × 特征”，Grad-CAM 是“梯度 × 特征”，后者用梯度补上了前者拿不到的那些权重。幻灯片还把原始图、guided backprop、Grad-CAM、guided Grad-CAM、occlusion map 并排比较：guided backprop 更细但噪声多，Grad-CAM 更集中但分辨率粗。
-
-## ViT 的注意力图 [72:25 - 73:30]
-
-CNN 需要 CAM、Grad-CAM 这类事后方法，transformer 则自带可视化：上一讲的语言注意力矩阵，对每个输出 token 给出它在所有输入 token 上的权重；把输入 token 换回 patch，就得到像素空间的热图。想知道模型分类时看哪里，直接看 class token 或某个 patch 的注意力即可，不需要额外求梯度。这也是 transformer 在可解释性上的一个实际优势。
-
-## 2026 课件更新
-
-以上正文以 2025 春季视频为准。对照 2026 春季课件，主要有这些差异：
-
-- **讲义标题与开场**：2026 课件题为 “Lecture 9: Detection, Segmentation, Visualization, and Understanding”，开头是 Assignment 2 notebook 修复通知、期中与项目里程碑截止提醒，以及 Student Spotlights；视频从上一讲回顾直接开始。
-- **ViT 分类头的第二种写法被单列**：2026 用一整页展示“average pool NxD 到 1xD，再线性层 D=>C”，并写明 patch 拉平后是 768=>D、图像不做 masking；视频口述了两种分类头，没有给出这些尺寸。
-- **MoE 落到具体模型**：2026 课件点名 GPT-4o、GPT-4.5、Claude 3.7、Gemini 2.5 Pro 等“几乎肯定使用 MoE、参数量超过 1T”；视频只说现代 LLM 都在用这类改动。
-- **区域提案与 RPN 的具体数字**：2026 写明 selective search 一张图约 2000 个提案、CPU 上几秒，RPN 在 512x20x15 的特征图上每个点放 K 个 anchor、按 objectness 取 top ~300；视频只讲“预设数量、取分数最高的 top-k”。2026 也把 R-CNN 直接标成 “Slow R-CNN”。
-- **单阶段检测扩为三家**：2026 的标题是 YOLO / SSD / RetinaNet，并写出输出张量 $7\times7\times(5B+C)$、示例 B=3；视频的例子是 B=2，只提到 YOLO 与 SSD。
-- **DETR 的监督方式写得更明确**：2026 写 “no anchors, no regression of box transforms”，用 **bipartite matching** 把预测框与 GT 框匹配后再回归；视频只说明 query 加 FFN 输出，并用 GT 框的 L2 监督。
-- **Mask R-CNN 细节与姿态分支**：2026 给出每个 RoI 预测 28x28 二值 mask、输出 Cx28x28，并新增 “Mask R-CNN also does pose”；视频只说加一个卷积分支生成像素级 mask。
-- **Saliency 的后处理**：2026 明确“取绝对值并对 RGB 通道取 max”；视频只讲对像素求梯度。
-- **ViT 可视化的文献**：2026 增加了 Chen et al. (ICLR 2022)、Paul & Chen (AAAI 2022) 的引用和带置信度的示例；视频只用一句话说 transformer 自带注意力图。
+讲者最后点回 transformer：CNN 才需要 Grad-CAM 这类方法，而 **ViT / Transformer 天生自带激活图**——上一讲那个「每个输出词对输入有一组注意力权重」的矩阵，对像素同样成立，每个输出都能在像素空间画出 attention map、用于可视化 ViT 特征，因此 transformer 的可视化容易得多。下一讲进入视频理解（video understanding）。
 
 ## 要点回顾
 
-- **四种任务**：分类无空间范围；语义分割逐像素分类、不区分实例；目标检测给框和类别；实例分割给每个实例一张 mask。
-- **ViT** 把图像切成 patch 当 token，加 positional embedding 后过标准 transformer；分类头用 class token 或 average pooling。
-- **Pre-Norm、RMSNorm、SwiGLU、MoE** 是现代 transformer 的四项常见改动，分别解决恒等路径、归一化开销、MLP 表达力和容量/计算比。
-- **语义分割** 的朴素做法是逐像素滑窗，既缺上下文又极慢；FCN 一次输出整张标签图，但全分辨率卷积太贵。
-- **编码器—解码器** 用下采样降低分辨率、增厚通道，再上采样回原尺寸；损失是逐像素 softmax 交叉熵之和。
-- **上采样** 可以无参数（nearest、bed of nails、max unpooling），也可以可学习（转置卷积，重叠处相加）。
-- **U-Net** 用 skip connection 把编码器的高分辨率特征接到解码器，缓解边界模糊，至今仍是医学分割的强基线。
-- **单目标检测** 是分类加框回归的多任务损失；物体数量不固定使这种参数化无法扩展。
-- **R-CNN → Fast R-CNN → Faster R-CNN** 的主线是共享卷积、把候选框映射到特征图，再用 RPN 把提案也学出来。
-- **YOLO/SSD** 用网格加 base box 一次前向输出所有框，配合阈值与 NMS；**DETR** 用 object query 和 transformer 直接回归一个集合。
-- **Mask R-CNN** 在检测头上并行加 mask 分支，实现实例分割。
-- **可解释性**：saliency 看输入梯度，CAM 看最后卷积特征的加权和，Grad-CAM 用梯度做权重、可作用于任意层，ViT 直接看注意力图。
+- 回顾：Transformer 由编码器 / 解码器的 multi-head self-attention + Layer Norm + MLP 组成，self-attention 建模优于 RNN / 卷积但更耗算力与内存；ViT 把图像切成 patch 当 token。
+- ViT（Dosovitskiy et al., ICLR 2021）：224×224×3 输入切成 16×16×3 patch，flatten 后线性投影 768 ⇒ D；因丢失 2D 位置需加 positional embedding（序号或 X/Y 坐标），图像可全见故无需 masking；分类可用可学习 class token 或对输出做 pooling + 投影，交叉熵 + 反传监督。
+- 现代 tweaks：Layer Norm 在残差连接外部会破坏恒等函数 → **Pre-Norm** 把它移到 self-attention / MLP 之前、残差内部（Baevski & Auli 2018）使训练更稳；另有 RMS Norm、门控 MLP（三个权重矩阵、隐藏维度 8d/3）、Mixture of Experts（router 路由、稀疏激活、参数增而计算不增、专家数为超参数）。
+- 语义分割给每个像素标签：滑动窗口逐像素取 patch 分类极慢且不复用重叠特征；FCN 让网络输入输出同尺寸、全程保持膨胀，逐像素 softmax 损失求和 + 全监督 ground truth（早年人工标注）。
+- 上采样：nearest neighbor、bed of nails、max unpooling（复用编码端记录的 max 位置），以及可训练的**转置卷积**（对输入转置版本做卷积、重叠求和，是常规卷积的逆）。
+- U-Net（Ronneberger et al., 2015）：编码器下采样、解码器上采样，靠 **copy and crop 跳跃连接**把编码器特征图送回解码器以保住边界锐度；572×572 → 388×388、64~1024 通道，至今医学分割仍常用。
+- 四类任务：Classification、Semantic Segmentation、Object Detection、Instance Segmentation；单目标检测用 softmax 分类损失 + L2 框回归 $(x,y,h,w)$ 组成多任务损失，多目标则需其它思路。
+- 检测演进：Region Proposals (~2k) → R-CNN（逐 RoI 跑 CNN + 预测 $(dx,dy,dw,dh)$ 框修正，CVPR 2014）→ Fast R-CNN（先整图卷积再在特征图上裁剪）→ RPN（学出候选区域、取 top-k）→ 因两阶段太重转向单阶段 YOLO（S×S 网格、B 个框 + 类别概率、NMS，Redmon et al. 2015）。
+- DETR（Carion et al., ECCV 2020）：CNN backbone → transformer encoder → 带可训练 object queries 的 decoder（self + cross attention）→ FFN 出类别与框，用类别概率 + 框 L2 loss 与 bipartite matching loss 监督，query 数即最多检测物体数，无需像素级标注。
+- Mask R-CNN 在检测架构上加一条卷积分支输出每实例像素级 mask，完成实例分割；可视化方面从线性分类器模板、第一层卷积核（AlexNet 64×3×11×11）、梯度 Saliency，到 CAM（全局平均池化 + 类别权重加权，仅能用于最后一个卷积层）与 Grad-CAM（用梯度聚合权重 + ReLU，可作用任意层，Selvaraju et al. CVPR 2017），而 Transformer 自带注意力图、可视化远比 CNN 容易。
 
 ## 视频来源
 

@@ -1,215 +1,182 @@
 ---
 title: "第 8 讲 · 注意力机制与 Transformer"
-description: "CS231n Spring 2025 L08 视频笔记；对照 2026 春季课件补充新增内容。"
+description: "Stanford CS231n Spring 2025 L08 中文视频笔记（2026-11 重写版）"
 ---
 
-# 第 8 讲 · 注意力机制与 Transformer
+# CS231n Spring 2025 · Lecture 8 注意力与 Transformer：从 RNN 瓶颈到「Attention is All You Need」
 
-> **Stanford CS231n 计算机视觉 · L08** ｜ 讲者：Stanford CS231n 课程团队 ｜ 67 分钟 ｜ [原视频](https://www.youtube.com/watch?v=RQowiOF_FvQ)
+**核心结论**：本讲从 RNN 的 Seq2Seq 机器翻译讲起，指出把整个输入序列压进单个固定长度的 context vector 会成为信息瓶颈；注意力机制让解码器在每一步都能回看全部输入、按相似度做加权汇总，且全程可微、无需对齐标注、端到端可学。把这套机制从 RNN 中剥离出来，就得到一个以 Query、Key、Value 为核心、本质只是几次矩阵乘的通用算子——它操作的是无序向量集合（置换等变），需靠位置编码补充顺序，也可用掩码和多头加以约束与增强。以 self-attention 为核心，配上残差连接、Layer Norm 与逐向量 MLP 便组成 Transformer Block；相比 RNN 与卷积，它高度并行、天然适配长序列，代价是 $O(N^2)$ 计算。如今 Transformer 已是几乎所有大规模深度学习应用的默认架构（Vaswani et al., NeurIPS 2017），本讲正是沿着「修 RNN 的瓶颈」这条历史线索把它一步步推演出来。
 
-> 课件版本：2026 春季 ｜ 视频版本：2025 春季。2026 课件新增或调整的内容集中在文末「2026 课件更新」一节。
+## 1. 开篇定位：从 RNN 到注意力与 Transformer [00:04 - 02:55]
 
-## 核心结论
+上一讲的循环神经网络（RNN）是一类专为**处理序列**而生的架构，它让网络跳出以往「one-to-one」的范式（输入一张图、输出一个分类），得以处理 one-to-many（如图像描述：输入图像、输出一串词）、many-to-one（输入若干帧、输出一个分类）等新问题。本讲要在此基础上再引入两样东西：其一是 **attention（注意力）**，一种 fundamentally 操作**向量集合（sets of vectors）**的全新神经网络原语；其二是 **transformer**，一种把 self-attention 放在核心位置的神经网络架构。
 
-这一讲回答一个问题：怎样让序列模型不必把所有输入压进一个定长向量。讲者从 RNN 的 seq2seq 翻译讲起，指出 **context vector** 是输入与输出之间唯一的通道，也是瓶颈；然后用 attention 让解码器每一步都回看整个输入。接着把 attention 从 RNN 中剥离，连续做三次泛化——点积相似度、多 query 并行、key/value 分离——得到一个只由矩阵乘法组成的 **self-attention** 层。Transformer 用 self-attention 负责向量之间的通信，用 MLP 负责逐向量的计算，再配上残差与 LayerNorm。代价是 $O(N^2)$ 的计算与显存，回报是极强的并行性和一层之内的长程依赖；今天几乎所有大规模模型都是 transformer。
+![注意力机制与Transformer架构的对比及定义幻灯片](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0001_00-02-13.jpg)
+这一页开宗明义：Attention 是「作用于向量集合的新原语」，Transformer 是「处处使用注意力的架构」，并提示「Transformers are used everywhere today」，但「they developed as an offshoot of RNNs」，所以要从 RNN 讲起。
 
-## 回顾：从 RNN 到 seq2seq [00:04 - 07:15]
+讲者先给出结论：transformer 如今几乎是所有问题的架构——无论是图像分类、图像生成、文本生成、文本分类还是音频，凡是规模大、达到 SOTA、用大量数据训练、由大公司部署的模型，今天几乎都是 transformer。但它并非一夜之间降临的剧变：self-attention、attention 这些想法在领域里已存在数年，而且恰恰是从 RNN 里长出来的分支。因此本讲刻意**复现历史发展顺序**，从上一讲的 RNN 出发来引出注意力。
 
-上一讲把神经网络从“一张图进、一个标签出”的一对一问题扩展到序列：一对多（图像描述）、多对一（视频分类）、多对多（等长或不等长的翻译）。这一讲在此基础上引入两样东西：**attention** 这个作用于向量集合的新原语，以及以 self-attention 为核心的 **transformer** 架构。讲者先给了一个判断：今天在图像分类、图像生成、文本生成、语音等方向上，所有大规模、在大量数据上训练过的模型，基本都是 transformer。
+## 2. Seq2Seq：RNN 编码器-解码器与固定瓶颈 [02:55 - 09:23]
 
-机器翻译是贯穿全讲的例子。输入英文词序列，输出意大利文词序列，两种语言的词数和词序都没有对应关系，正是序列到序列的典型场景。编码器是一个 RNN，按 $h_t = f_W(x_t, h_{t-1})$ 逐词推进，把整句话编码进隐状态；解码器是另一个参数不同的 RNN，按
+作为动机问题，考虑**序列到序列（Seq2Seq）机器翻译**：输入一串英文词，输出另一串意大利语词。这里不能假设两种语言的词有任何对应——词数可能不同、语序可能完全不同，正是序列处理架构的用武之地。用 RNN 做 Seq2Seq 可追溯到 2014 年（Sutskever et al., NeurIPS 2014），而用 RNN 处理序列的历史还要再早十几年。
 
-$$
-s_t = g_U(y_{t-1}, s_{t-1}, c)
-$$
+基本架构是「编码器 + 解码器」两个 RNN。编码器把输入序列递归地吞进去：
 
-逐词生成。$c$ 是 **context vector**，通常取编码器最后一个隐状态 $h_T$，因为它经由循环结构已经“看过”整句话；$s_0$ 通常也由编码器最后一个隐状态得到。视频里的句子是 “we see the sky”，输出 “vediamo il cielo [STOP]”。
+![RNN编码器结构图，展示输入序列到隐藏状态的映射及机器翻译示例](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0002_00-02-57.jpg)
+图中给出编码器的递推式 $h_t = f_W(x_t, h_{t-1})$：每个时间步把当前输入 $x_t$ 与上一隐藏状态 $h_{t-1}$ 送进同一个 RNN 单元，产出新隐藏状态 $h_t$，沿时间展开即可处理任意长度序列。
 
-![循环神经网络五种输入输出结构示意图（一对一、一对多、多对一、多对多）](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0001_00-00-49.jpg)
+以短句「we see the sky」为例，每个词占一个 tick，处理完全部词后，用最后一个隐藏状态把整句内容概括成一个向量——**context vector（上下文向量）$c$**。由于循环结构，这个末状态被认为「编码」了整个输入序列的信息。随后用架构相同、但权重 $U$ 不同的第二个 RNN 作解码器，逐词生成输出：
 
-![完整的RNN编码器-解码器架构图，展示编码器生成上下文向量c并传递给解码器初始状态s0的过程](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0003_00-05-58.jpg)
+![Seq2Seq完整模型图，包含编码器、上下文向量及解码器生成过程](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0003_00-08-28.jpg)
+图中给出解码器递推式 $s_t = g_U(y_{t-1}, s_{t-1}, c)$：每一步接收三个输入——上一时刻的输出 token $y_{t-1}$、解码器上一隐藏状态 $s_{t-1}$、以及概括全句的上下文向量 $c$，再输出新隐藏状态与一个新词（课件上的意大利语词，讲者未拼读）。
 
-## 瓶颈：所有信息压进一个定长向量 [07:15 - 08:25]
+关键在于一个**通信瓶颈**：输入序列与输出序列之间唯一的通道就是那个 context vector $c$。它是**固定长度**的（比如 128 或 1024 个浮点数），其大小在我们设定 RNN 规模时就定死了，不随输入／输出序列变长而增长。翻译「we see the sky」这种短句，把所需信息塞进 1024 维向量还算合理；可一旦要翻译一整段、一整本书、乃至整个语料，再要求网络把全部输入压进单一固定向量就不合情理了。
 
-$c$ 的长度在设定网络规模时就固定了，比如 128 或 1024 个浮点数。四个词的短句压进去也许没问题，但如果要翻译一整段、一整本书，甚至整个语料库，要求网络把全部信息塞进同一个向量就不合理了。问题不在编码器不够强，而在于输入与输出之间只有这一条通道。视频用一句话点出症结：input sequence bottlenecks through fixed sized $c$，并追问如果 $T=1000$ 会怎样。
+于是解决方案的直觉很直接：**不再把网络逼进单一固定长度向量的瓶颈**，而是在解码的每一步都让模型回看整个输入序列，即时地为这一步重新生成一个上下文向量。这样没有瓶颈、能扩展到长得多的序列——讲者说，一个版本的故事里，注意力与 transformer 这一整套东西，正是从「试图解决 RNN 的这个瓶颈」开始的。
 
-![完整的RNN编码器-解码器架构图，展示解码器逐步生成完整输出序列，并标注了固定大小上下文向量的瓶颈问题](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0004_00-07-23.jpg)
+## 3. 带注意力的 Seq2Seq：对齐分数、Softmax 与端到端学习 [09:23 - 17:57]
 
-## 注意力：让解码器每一步回看输入 [08:25 - 15:19]
+编码器保持不变，解码器仍需要一个初始状态 $s_0$。改变发生在「怎么算 context」：拿到 $s_0$ 后，先让它回看输入序列，为每个输入位置计算一个**对齐分数（alignment score）**，衡量「这个解码状态与该输入词有多匹配」。输入有四个词，就算出四个标量。最简单的实现是一个线性层 $f_{att}$：把解码隐藏状态与某个编码器隐藏状态**拼接**成一个向量，再用线性变换压成一个标量——它只是个线性算子，可以放进计算图、随其它参数一起用梯度下降学出来。
 
-解决思路很直接：不再让输入序列经过单个向量，而是在解码器每一个时间步都允许它回看整个输入序列，并当场生成一个新的 context vector。
+![RNN与注意力机制的Seq2Seq模型架构图，展示对齐分数计算、Softmax归一化及上下文向量生成过程](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0004_00-14-25.jpg)
+这一页把带注意力的 Seq2Seq 写成三条式子：$e_{t,i} = f_{att}(s_{t-1}, h_i)$（对齐分数）、$c_t = \sum_i a_{t,i}h_i$（上下文向量）、$s_t = g_U(y_{t-1}, s_{t-1}, c_t)$（解码），并标注出处为 Bahdanau et al., ICLR 2015。
 
-第一步，计算 **alignment score**。用一个线性层 $f_{att}$ 把上一个解码器状态 $s_{t-1}$ 与第 $i$ 个编码器状态 $h_i$ 拼接后压成标量：
+这些对齐分数是 $(-\infty, +\infty)$ 的无界实数，为避免数值爆炸，要过一次 **softmax**：把任意实数向量变成「每项在 0~1 之间、且总和为 1」的离散概率分布。于是可以理解为「给定当前解码状态，在输入各词上的一个分布」。再用这些注意力权重 $a_{t,i}$ 对编码器隐藏状态 $h_i$ 做**线性组合**，得到新的上下文向量 $c_t = \sum_i a_{t,i}h_i$。此后解码器结构完全没变，只是 $c$ 换了一种算法：把 $c_t$ 与输出序列首 token $y_0$ 一起送进 RNN 单元，得到下一隐藏状态与第一个输出词。
 
-$$
-e_{t,i} = f_{att}(s_{t-1}, h_i)
-$$
+![RNN与注意力机制的Seq2Seq架构示意图，展示编码器状态、Softmax权重计算及解码器上下文向量生成过程](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0006_00-19-57.jpg)
+画面用一组具体权重演示这种分布：例如 $a_{21}=a_{22}=0.05$、$a_{24}=0.1$、$a_{23}=0.8$，即网络把绝大部分注意力压在某一个输入词上。直觉上，要产出对应「we see」的意大利语词时，网络应给这两个词高权重、而几乎不管「sky」，因为后者对当前要预测的词无关紧要。
 
-它衡量“当前要生成的东西”与“输入第 $i$ 个词”有多匹配。$f_{att}$ 就是普通的线性层，和其他参数一起用梯度下降学习。
+![注意力机制架构图的更新版本，右下角增加了关于全微分性和反向传播的关键说明](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0005_00-17-09.jpg)
+更新版架构图右下角特意加了一句关键说明：「All differentiable! No supervision on attention weights. Backprop through everything」——全流程可微。
 
-第二步，对这些无界标量做 **softmax**，得到注意力权重 $a_{t,i}$，满足 $0<a_{t,i}<1$ 且 $\sum_i a_{t,i}=1$。它相当于“给定当前解码状态，在输入词上的一个概率分布”。
+这一点最为要紧：我们**不监督**注意力权重，不必告诉网络「哪个输入词对应哪个输出词」。整个系统是一张由可微运算拼成的计算图，只在输出端施加「预测输出序列 token」的交叉熵 softmax 损失，网络在努力预测正确词的过程中，会自己学会该去看输入的哪些部分。若反过来要求人工标注对齐关系，这类训练数据几乎无法获得。讲者还顺带澄清「初始化」一词的两个含义：一是解码器**权重**通常随机初始化再靠梯度下降优化；二是处理序列时要设的**初始隐藏状态** $s_0$，可用编码器末隐藏状态、一个学到的线性投影、或干脆全零，只要训练时让网络适应即可。学生问到否定与异或（negations / xors）会不会带来问题，讲者承认这是难题，需要大量数据与算力才有望解开。
 
-第三步，用这组权重对编码器隐状态做加权求和：
+## 4. 迭代解码与注意力权重的可视化解释 [17:57 - 25:53]
 
-$$
-c_t=\sum_i a_{t,i}h_i
-$$
+上面只走了解码器的一个 tick，实际每个时间步都要**把整套流程重做一遍**：用新得到的 $s_1$ 再去和所有编码器隐藏状态算相似度（用同一个 $f_{att}$ 线性投影）、过 softmax 得到这一时刻的新分布、加权得到新的上下文向量 $c_2$、再跑一步解码器得到 $s_2$ 与下一个词（课件上是「il」），如此循环。至此瓶颈被真正解决：解码每一步都回看全部输入、即时重算上下文，这个「在输出的每一刻看向输入的不同部分」的机制就叫做 **attention**。
 
-再把它送进解码器，$s_t = g_U(y_{t-1}, s_{t-1}, c_t)$。解码器结构本身没有变，变的只是 $c$ 从固定向量换成了每个时间步现算的 $c_t$。
+注意力权重还附带一个好处：它能让我们**反推网络在看哪里**。把解码每一步对输入序列预测的概率分布画成二维网格，就能看到一张对齐热力图。
 
-最关键的性质是：整条链路都可微，注意力权重没有任何直接监督。没有人告诉网络“vediamo 对应 we see”，训练信号仍然只是输出序列上的 softmax 与交叉熵；网络在学会预测下一个词的过程中，顺带学会了该把注意力放到哪里。视频给的直觉是：生成 “vediamo” 时，权重可能集中在 “we” 和 “see”（例如各 0.45），而 “the” 和 “sky” 只有 0.05。
+![英法机器翻译实例及注意力权重热力图可视化，展示输入输出序列与对齐关系](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0007_00-22-10.jpg)
+例子是英译法，输入为「The agreement on the European Economic Area was signed in August 1992.」，顶部是输入的英文词、逐行是输出的法语词，格子里是注意力权重 $a_{t,i}$。
 
-![基于RNN的序列到序列模型架构图，展示了编码器、解码器以及上下文向量的传递过程](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0005_00-08-25.jpg)
+观察这张矩阵能读出不少结构：第一行（预测第一个法语词）几乎把全部概率质量压在英文「the」上，第二行压在「agreement」上，说明网络确实自己找到了输入词与输出词的对齐。**对角结构**意味着输入与输出词按顺序一一对应——句首前四个词、句尾的「August 1992」都呈对角。中段则出现**反向对角／非对角**结构，对应英语「European Economic Area」与法语词序不同；还有一处 2×2 小格，对应「两个法语词对应两个英语词、没完全一一拆解」的情形。
 
-![带有注意力机制的Seq2Seq模型架构图，展示了对齐分数的计算与归一化过程](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0006_00-11-05.jpg)
+值得强调的是：讲者从未教过网络任何语法，只是用大量「英文输入／法文输出」配对、加上一个设计者认为可能有用的机制，让网络通过梯度下降自己决定怎么用它。学生问「它怎么学会语法」，讲者笑称「那是深度学习的奥秘」。这也是注意力在机器学习中的最初用途——来自 Bahdanau et al. 2015 的《Neural Machine Translation by Jointly Learning to Align and Translate》，讲者提到这篇论文刚获得 **ICLR 2025 的 runner-up test of time award**，可见影响之深远。
 
-![带注意力机制的RNN序列到序列模型结构图，展示对齐分数计算、softmax归一化与上下文向量生成](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0007_00-14-47.jpg)
+## 5. 把注意力从 RNN 中抽离成独立算子 [25:53 - 31:36]
 
-## 逐步迭代、初始化与注意力可视化 [15:19 - 25:53]
+但这里其实藏着一个比「修 RNN」更一般的想法：我们为修补 RNN 而发明的这套机制，本身就是一个通用且强大的算子，值得把它与 RNN **剥离（divorce attention from RNN）**，成为可独立插进任意架构的计算原语。为此先把里面流动的东西重新命名、抽象成三类向量：
 
-第二步及以后完全重复同一套流程：用 $s_1$ 重新计算对齐分数 $e_{2,i}$ 与权重 $a_{2,i}$，得到 $c_2$，再生成下一个词。同一个 $f_{att}$ 在每个时间步复用，不同之处只在 query 换成了最新的解码状态。这样就彻底避开了固定长度瓶颈：输入不再被压成一个向量，而是在每个输出步被重新摘要一次。
+- **data vectors（数据向量）**：希望被总结的数据，即编码器隐藏状态序列；
+- **query vectors（查询向量）**：为产生某个输出而服务的向量，即解码器隐藏状态；
+- **output / context vectors（上下文向量）**：注意力算子的输出，原先喂给 RNN 下一步。
 
-课堂上有两个值得记下的问题。其一是“解码器怎么初始化”，讲者提醒这个词有歧义：一是指网络权重，按惯例随机初始化再训练；二是指处理序列时的初始隐状态 $s_0$，可以取编码器最后隐状态、用一个学出来的线性投影，或者直接置零——三种都行，前提是训练时始终使用同一种约定。其二是“语法是谁教的”，答案是没有谁教：我们只提供了“输出可以回看输入”的机制，语法结构是网络在大量平行语料上自己学出来的。
+![Seq2Seq完整流程图解，区分Query向量（解码器状态）与Data向量（编码器状态），展示上下文向量的生成](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0008_00-27-43.jpg)
+这张流程图刻意把 Query 向量（解码器状态，绿色）与 Data 向量（编码器状态）分开，强调每个 query 都会去关注所有 data vectors、并产出一个 output vector。
 
-把注意力权重画成矩阵就能看到这件事。横轴是英文输入，纵轴是法文输出，每一行是生成该词时在整个输入上的分布。前半段和后半段出现清晰的对角线，说明那些词一一对应且顺序一致；中间 “European Economic Area” 附近出现反向对角线和 2×2 小块，说明那里语序被打乱，并且存在两个词对两个词的合并。最初把这套机制用于机器翻译的是 Bahdanau 等人的 *Neural Machine Translation by Jointly Learning to Align and Translate*（ICLR 2015），讲者提到它刚在 ICLR 2025 获得 test of time 的 runner-up 奖。
+![注意力层基础结构图，展示查询向量与数据向量的交互流程](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0009_00-29-56.jpg)
+注意力层的基础结构图标出输入为「Query vector: $q$ $[D_Q]$」，展示从输入算相似度、softmax、加权到输出 $c_1$ 的完整路径。
 
-![注意力机制解码过程示意图，展示如何用前一步状态计算新的对齐分数与上下文向量](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0008_00-18-01.jpg)
+站在算子本身的角度：先对某个 query 与所有 data vectors 计算相似度，再用 softmax 把相似度压成针对该 query 的注意力分布，最后用这组权重对 data vectors 做线性组合得到输出向量；下一时刻换一个新 query（它从哪来，算子并不关心），重复同样三步即可。这就是 attention 算子的全部核心。相似度函数 $f_{att}$ 原则上可以是任意「输入两向量、输出一个标量」的函数，但接下来反而要把它**简化**。
 
-![英法翻译示例及注意力权重热力图可视化](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0009_00-22-10.jpg)
+## 6. 缩放点积注意力与矩阵化计算 [31:36 - 38:15]
 
-## 把 attention 从 RNN 里剥出来 [25:53 - 31:37]
+第一个泛化是把相似度函数简化到极简：输入两向量、输出标量，最简单的函数就是**点积（dot product）**，而实践证明点积已足够好用。但点积与 softmax 之间有个微妙的相互作用：当向量维度变大时（讲者用「10 维全 1 向量」对比「100 维全 1 向量」），点积之和随之变大，softmax 里被更大的数值相除，概率分布被压得极尖，进而导致**梯度消失**、使整个网络学不动。
 
-到这里 attention 还长在 RNN 上，但它其实是一个更一般的算子。把角色重新命名：编码器隐状态是 **data vectors**，即“要被总结的数据”；解码器隐状态是 **query vectors**，即“要为它产出结果的问题”；算子的输出是 context vector。对每一个 query，都回到全部 data vectors 上，按相似度做一次定制化的摘要，得到一个输出向量。
+![引入缩放点积注意力的推导过程及公式定义](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0010_00-34-22.jpg)
+公式为 $e_i = q \cdot X_i / \sqrt{D_Q}$，画面解释了为何要除以 $\sqrt{D_Q}$：防止 softmax 饱和、避免梯度消失。
 
-“query 从哪来”对 attention 层并不重要：在 RNN 里它来自上一个隐状态，但算子本身只要求输入一组 query 和一组 data。这正是把 attention 单独拿出来当积木用的起点。
+解决办法是把点积按向量维度的平方根缩小，即 **scaled dot-product（缩放点积）** $e_i = q \cdot X_i / \sqrt{D_Q}$。这既让梯度在不同维度下都能顺畅回传，也让架构能随向量维度放大而扩展——因为网络越做越大时我们总想要更高维的向量（更多算力、更大容量），架构必须能随之 scale，这一点非常关键。
 
-![带注意力机制的Seq2Seq模型完整架构图，包含编码器、解码器及注意力计算流程](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0010_00-25-58.jpg)
+第二个泛化是**一次处理一组 query vectors**，而不必一个一个来。设 $Q$ 为 $N_Q \times D_Q$（$N_Q$ 个查询、每个 $D_Q$ 维），data 矩阵 $X$ 为 $N_X \times D_Q$（点积要求维度匹配，这一限制后面会被解除）。要算「所有 query 与所有 data 之间」的全部成对相似度，最自然的方式就是一次矩阵乘——因为矩阵乘的每个元素恰好是一行与一列的内积：
 
-![注意力机制中Query、Data、Output向量的抽象关系示意图](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0011_00-27-07.jpg)
+![多头注意力的矩阵化计算公式及维度变化说明](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0011_00-35-01.jpg)
+矩阵化公式为 $E = QX^T / \sqrt{D_Q}$，相似度矩阵形状为 $[N_Q \times N_X]$，把单向量计算推广到批量。
 
-## Attention Layer 的形式化 [31:37 - 34:36]
+得到 $N_Q \times N_X$ 的相似度矩阵 $E$ 后，沿其中一个轴（dim=1）逐行做 softmax，得到每个 query 对 data 的注意力权重矩阵 $A$；输出则再用一次矩阵乘 $Y = AV$ 完成——这里用到矩阵乘的第二种解读：「以另一矩阵的值为权重，对若干列做线性组合」。于是原本要反复循环的计算，被压缩成几次矩阵乘就全部并行算完。
 
-写成层的形式：输入一个 query $q\in\mathbb{R}^{D_Q}$ 和 $N_X$ 个 data vectors $X\in\mathbb{R}^{N_X\times D_X}$，计算
+## 7. 分离 Key/Value：Cross-Attention 与 Self-Attention 层 [38:15 - 50:41]
 
-$$
-e_i=f_{att}(q,X_i),\qquad a=\mathrm{softmax}(e),\qquad y=\sum_i a_i X_i
-$$
+第三个泛化注意到：data 矩阵 $X$ 在计算里出现了两次——一次用来与 query 算相似度、一次用来做线性组合算输出。同一份数据被复用在两种语境下有点别扭，于是把这两种用途**拆开**，让网络自己学出两种投影。为每个 data 向量投影出两个向量：
 
-输出维度是 $D_X$。
+$$K = XW_K,\quad V = XW_V$$
 
-第一处泛化是把 $f_{att}$ 换成最简单的相似度：**点积** $e_i=q\cdot X_i$。代价是两个向量维度必须一致，也就是此后 $D_Q=D_X$（后面的 key/value 投影会解除这个限制）。第二处是缩放：点积的量级随维度增长。若 $q$ 与 $X_i$ 都是全 1 向量，模长是 $\sqrt{D}$，内积就是 $D$；维度一大，softmax 的输入被拉得很开，输出接近 one-hot，梯度趋近于零。所以实际使用的是 **scaled dot-product**：
+- **key（键）**：$W_K$ 把 $D_X$ 维投影到 $D_Q$ 维，专门用来与 query 比对、算对齐分数（维度必须与 query 一致）；
+- **value（值）**：$W_V$ 把 $D_X$ 投影到 $D_V$ 维，专门用来做线性组合、生成层输出（$D_V$ 原则上可与 $D_Q$ 不同）。
 
-$$
-e_i=\frac{q\cdot X_i}{\sqrt{D_X}}
-$$
+$W_K$、$W_V$ 都是可学习参数，与其余部分一起由梯度下降学出，我们并不告诉它该怎么拆；可以把它理解为对数据向量做两种不同的「过滤」。讲者用**搜索引擎**打比方：你在 Google / ChatGPT 输入「什么是世界上最好的学校」，这是 query，需要去和后端大量字符串（keys）匹配；而你真正想取回的 value 是「Stanford」——你要找的东西与拿回的东西并不相同，正对应 key 与 value 的分离。
 
-这不是数学上的必需，而是为了让不同维度的模型都有正常的梯度流；随着模型变大、向量维度变高，这一点会越来越重要。
+![Attention Layer 结构图，展示输入、计算步骤及缩放点积注意力的变化](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0012_00-39-13.jpg)
+这一页汇总了 Attention Layer 的全部改动（缩放点积、多个 query、分离 key/value），并给出完整公式 $K = XW_K,\ V = XW_V,\ E = QK^T/\sqrt{D_Q},\ A = \text{softmax}(E,\ \text{dim}=1),\ Y = AV$。
 
-![注意力层（Attention Layer）的计算流程图，展示查询向量与数据向量生成注意力权重并加权求和得到输出](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0012_00-31-47.jpg)
+到这里 RNN 被彻底扔掉：这是一个能独立站立的神经网络层，接收两组输入（query vectors 与 data vectors）、带两组可学习权重、输出一组向量，可插进架构里的任意位置。因为两组输入可能来自不同来源、数量也不同，它叫 **cross-attention layer（交叉注意力）**——在两组不同的东西之间「交叉」读取信息。
 
-![注意力层流程图，重点标注相似度计算改为点积 e_i = q · X_i](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0013_00-32-13.jpg)
+![Cross-Attention Layer 结构图，展示 Query、Key、Value 矩阵运算生成输出的过程](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0013_00-45-18.jpg)
+Cross-Attention Layer 结构图标出 Softmax（沿列）与 Product / Sum（沿行）的维度方向，以及「每个 query 产出一个 output」的机制。
 
-## 从单个 query 到矩阵、再到 key/value [34:36 - 44:47]
+而更常用的变体是 **self-attention layer（自注意力）**：只有一组输入向量 $X$，输出同数量的 $Y$，不再区分 data 与 query，而是把每个输入向量分别投影成 query、key、value 三份：
 
-实际中我们总是有多个 query。把 $q$ 换成矩阵 $Q\in\mathbb{R}^{N_Q\times D_Q}$，一次算出所有 query 与所有 data 的相似度：
+![Self-Attention Layer 完整计算流程与矩阵维度定义图](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0014_00-45-49.jpg)
+Self-Attention Layer 完整计算图给出 $Q = XW_Q,\ K = XW_K,\ V = XW_V,\ E = QK^T/\sqrt{D_Q},\ A = \text{softmax}(E,\ \text{dim}=1),\ Y = AV$，数据流维度为 $[N \times D_{in}] \to [N \times D_{out}]$。
 
-$$
-E=\frac{QX^{\top}}{\sqrt{D_X}}\in\mathbb{R}^{N_Q\times N_X},\qquad
-A=\mathrm{softmax}(E,\dim=1),\qquad
-Y=AX
-$$
+三个可学习权重矩阵 $W_Q, W_K, W_V$ 各司其职，后续计算与 cross-attention 完全相同。$D_{in}$、$D_{out}$ 是这一层的架构超参数（如同普通线性层的输入／输出维度），理论上可以不同，但讲者说实践中几乎总设为相同。工程上还有个常见 trick：硬件做「少而大的矩阵乘」比「多而小的」更高效，因此常把三个权重矩阵沿维度拼接，用**一次大矩阵乘**同时算出所有输入的 Q/K/V；这也就是当下最常使用的 decoder-only attention。至于用哪种：机器翻译、图像描述这类天然存在「两组不同东西要比较」的问题用 cross-attention；图像分类只有一幅图、需要让图像各部分互相比，则用 self-attention。把上述公式写成代码，形态大致是：
 
-softmax 只在 data 这一维上做，所以 $A$ 的每一行是一个 query 在全部 data 上的分布。两次矩阵乘法就完成了整批计算——矩阵乘法的两种读法正好对应“算所有点积”和“按权重做线性组合”。
+```python
+def attention(Q, X, W_K, W_V, d_q):
+    K = X @ W_K                       # 投影出 key
+    V = X @ W_V                       # 投影出 value
+    E = Q @ K.T / (d_q ** 0.5)        # 缩放点积相似度
+    A = softmax(E, dim=1)             # 每个 query 上的分布
+    Y = A @ V                         # 加权求和得到输出
+    return Y
+```
 
-再往下走一步：$X$ 在这套计算里出现了两次，一次用来和 query 比相似度，一次用来被加权求和。这两种用途其实不一样，于是引入两组可学习投影，把每个 data vector 变成 **key** 和 **value**：
+## 8. Self-Attention 的三个重要性质：置换等变、掩码与多头 [50:41 - 58:21]
 
-$$
-K=XW_K,\qquad V=XW_V
-$$
+**置换等变性（permutation equivariance）**。设想把输入顺序打乱（如 $X_3, X_1, X_2$）：Q/K/V 都是输入的线性投影，因此还是那批向量、只是被同样重排；点积相似度、softmax（它本就不关心输入次序）、线性组合也都只相应重排；最终输出 $Y$ 仍是同一批向量、按同样方式重排。
 
-key 用来和 query 算相似度（$W_K$ 把 $D_X$ 投到 $D_Q$），value 用来做加权和（$W_V$ 把 $D_X$ 投到 $D_V$，$D_V$ 可以和 $D_Q$ 不同）。最终
+![演示输入序列置换（Permuting inputs）对 Self-Attention 结构影响的示意图](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0015_00-50-56.jpg)
+图中把底部输入改成 $X_3, X_1, X_2$ 来演示这种置换不变／等变的结构。
 
-$$
-E=\frac{QK^{\top}}{\sqrt{D_Q}},\qquad
-A=\mathrm{softmax}(E,\dim=1),\qquad
-Y=AV
-$$
+前几讲卷积具有平移等变性，这里 self-attention 则具有置换等变性。它的深层含义是：**这一层根本不关心输入顺序**，本质上操作的是**无序的向量集合（set）**而非序列——向量只是被打包进一个有序矩阵而已。若任务确实需要顺序信息，补救办法是给每个输入向量再拼接一段 **positional embedding（位置编码）**，告诉网络「这是第 1 个、第 2 个、第 3 个……」，实现方式有很多种。讲者特别澄清：这里讨论的是固定权重、只看前向计算的性质，并非训练收敛后的结果。
 
-讲者用搜索引擎打比方：你输入的 query 是“世界上最好的学校”，后端拿它去匹配网页的 key，而你真正想拿回的 value 是“Stanford”——要找的东西和要得到的东西本来就是两回事。key/value 的投影矩阵也不由人指定，同样由梯度下降学出来；可以把它们理解成对原始 data vector 的两种“过滤”。
+**masked self-attention（掩码自注意力）**。默认每个输入可以看全部输入；但有时想规定「谁能看谁」。做法是在对齐分数 $E$ 的屏蔽位置填入 $-\infty$，经 softmax 后这些位置变成 0，对应输出便不再依赖那些位置的 value。典型用途是**语言建模**：输入「attention is very」、输出「is very cool」，必须让第 1 个输出只依赖第 1 个词、第 2 个只依赖前两个词，防止网络「偷看」后面的词作弊。有了它，就能彻底不用 RNN、纯靠 self-attention block 完成上一讲同款的语言建模任务。
 
-## Cross-attention 与 self-attention [44:47 - 50:40]
+**multi-head self-attention（多头自注意力）**。并行跑 $H$ 个独立的 self-attention 副本：架构与计算完全相同，唯一区别是权重不同、且随机初始化不同，于是各头会学到略有不同的处理方式；把各头的输出 $Y$ 沿维度堆叠，再接一个线性投影把它们融合。这带来更多参数、更多 FLOPs、更大容量，深度学习里「越大越好」——实践中见到的 self-attention 几乎都是这个多头版本，而且用 batched matrix multiplies 就能把 $H$ 个头全部并行算完，无需 for 循环。由此也可看出，整个 self-attention 算子看似公式繁多，其实只是**四次大矩阵乘**：① 把输入投影成 Q/K/V，② 算 $QK^T$ 相似度，③ 用 softmax 权重对 V 加权求和，④ 跨头做输出投影。矩阵乘高度可并行、易在 GPU 与分布式环境扩展，正是它 scalable 的根本原因。
 
-至此 attention 已经和 RNN 无关，是一个有两组输入、两组权重的独立层，通常叫 **cross-attention**：query 与 data 来自不同来源，数量也可以不同。翻译（源语言与目标语言）和图像描述（图像块与生成词）都属于这种情形。
+## 9. 三种序列处理方式对比与 Transformer Block [58:21 - 66:25]
 
-更常见的是 **self-attention**：只有一组输入向量，每个向量同时投影成 query、key、value 三个角色，
+到这里，本课已经见过三种处理序列的原语，讲者把它们并排比较（出自 Vaswani et al., NeurIPS 2017《Attention is All You Need》）：
 
-$$
-Q=XW_Q,\qquad K=XW_K,\qquad V=XW_V
-$$
+![序列处理的三种方式对比：RNN、卷积与自注意力机制的优缺点分析](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0016_01-01-02.jpg)
+这一页「Three Ways of Processing Sequences」对比 RNN、Convolution、Self-Attention：RNN「(-) Not parallelizable, need to compute hidden states sequentially」；Self-Attention「(+) Highly parallel, it's just 4 matmuls」「(-) Expensive: $O(N^2)$ compute, $O(N)$ memory for sequence of length N」。
 
-其余计算完全一样。$D_{in}$、$D_{out}$ 是层的超参数，原则上可以不同，实践中几乎总是相等。三个投影还可以拼成一个矩阵一次算完，因为硬件上“少数大矩阵乘”比“多个小矩阵乘”更高效。论文里的这种形式对应 decoder-only attention，也就是今天最常用的那种；它已经无法再放回开头那个 RNN 解码器里了。判断用哪种，只看问题里有没有“两类东西”：有就 cross，没有就让一组向量自己和自己比。
+- **RNN**：操作一维有序序列，功能强、曾被长期青睐，但因每个隐藏状态依赖前一个，本质是顺序算法、无法沿序列并行，因而很难做大、很难 scale。
+- **Convolution（卷积）**：操作多维网格（图像是 2D，也可 1D/3D/4D），靠在网格上滑动卷积核来局部混合信息，各位置可并行计算、并行度很高；但要建立大感受野，要么用很大的核、要么堆很多层，这又重新引入了顺序性。
+- **Self-Attention**：操作向量集合，天然适配长序列、没有 RNN 那样的瓶颈，而且**仅一层**之内每个向量就能看遍所有向量，高度并行（4 次矩阵乘）。唯一代价是对长度 $N$ 的序列需要 $O(N^2)$ 计算、$O(N)$ 内存，当 $N$ 到十万、百万、千万量级时非常昂贵——讲者调侃「解法就是多买 GPU」。
 
-## 置换等变、位置编码、mask 与多头 [50:50 - 58:21]
+为什么并行性如此值钱？因为让**单个处理器变快**已逼近硬件极限、越来越难，但拿到**大量处理器**却很容易；过去二十年算力的增长，靠的正是那些能同时调动 10 个、100 个、1000 个乃至百万个处理器协同工作的算法。讲者还给出反直觉的一点：$O(N^2)$ 未必是坏事——对神经网络而言，更多计算意味着网络「思考」得更多、处理能力更强，只是更贵而已。结论是「Attention is all you need」：三者中仅用 attention 就能走得很远。
 
-self-attention 有一个容易被忽略的性质。把输入向量的顺序打乱，$Q$、$K$、$V$ 只是跟着打乱，相似度、softmax、加权和也都只是跟着打乱，输出集合不变。这就是 **permutation equivariance**：
+![Transformer Block介绍页：定义输入为向量集合x](/coursenotes/cs231n-deep-learning-for-cv-sp25/l08-attention-transformers/kf_0017_01-02-44.jpg)
+「The Transformer / Transformer Block」页把输入定义为「Set of vectors x」，同样引 Vaswani et al., 2017。
 
-$$
-F(\sigma(X))=\sigma(F(X))
-$$
+**Transformer Block** 就是把 self-attention 放在核心、再包上几样标准件：输入是向量集合 $x$ → 过 self-attention（让所有向量互相交流、比较）→ 套**残差连接**（理由与 ResNet 相同）→ 过 **Layer Normalization**（与 CNN 中一样让训练更稳定）→ 接一个两层的 **MLP / FFN**，它对每个向量**独立**做计算 → 再套残差 + Layer Norm，框起来即一个 block。self-attention 负责向量之间、FFN 负责向量之内，二者互为补充；**Transformer 就是一串这样的 block**。
 
-换句话说，self-attention 本质上作用在**集合**上，而不是序列上；它把向量打包进矩阵时用到了顺序，但计算本身不依赖顺序。
-
-如果任务需要顺序，就往每个输入向量上拼一段 **positional embedding**，告诉网络“这是第 1 个、第 2 个……”。（2026 课件补充了更现代的 RoPE，见文末。）
-
-第二个变体是 **masked self-attention**：在相似度矩阵上把不允许看的格子改成 $-\infty$，softmax 之后这些位置正好是 0，输出就不会包含对应 value 的信息。语言建模必须这样做——预测 “attention is very” 的下一个词时，不能让它偷看 “cool”。
-
-第三个是 **multi-head self-attention**：并行跑 $H$ 份独立的 self-attention，每份有自己的权重（初始化不同，架构完全相同），输出拼起来再过一层线性投影融合。多头不改变计算形式，只是给模型更多容量和更多种“看的角度”。实现上不需要 for 循环，用 **batched matmul** 一次算完；整个 self-attention 说到底就是四次矩阵乘法（QKV 投影、QK 相似度、V 加权、输出投影），这正是它能被大规模分布式训练的原因。
-
-## 三种处理序列的原语 [58:21 - 62:40]
-
-课程到这里已经给出三种基本的序列处理方式，可以放在一起比较：
-
-- **RNN** 作用于有序一维序列，计算与显存都是 $O(N)$，但隐状态必须逐个计算，无法在序列方向上并行，很难做大。
-- **卷积** 作用于 $N$ 维网格，局部混合信息，每个位置可以并行；但要让一个输出看到很远的地方，只能堆很多层或使用很大的卷积核。
-- **self-attention** 作用于向量集合，一层之内每个向量都能看到所有向量，天然适合长序列，而且只是四次矩阵乘；代价是 $O(N^2)$ 的计算与显存。
-
-并行性为什么重要？因为单核频率已经接近物理极限，过去二十年算力的增长主要来自“把更多处理器一起用”。一个算法如果能轻松摊到成百上千个处理器上，就能随硬件规模一起变大。至于 $O(N^2)$，讲者的态度是“不一定坏”：更多计算也意味着网络在输入上做了更多处理，只要肯买更多 GPU 就可以换。
-
-## Transformer 与 ViT [62:40 - 66:25]
-
-**Transformer** 就是把 self-attention 放在核心的架构。一个 **transformer block** 的顺序是：输入一组向量 → multi-head self-attention（向量之间通信）→ 残差 → LayerNorm → MLP/FFN（对每个向量独立作用的两层网络）→ 残差 → LayerNorm。self-attention 负责“互相看”，MLP 负责“各自想”。整个 transformer 就是把同样的 block 堆很多层。
-
-这套结构从 2017 年提出后基本没变，只是规模变了：原始版本约 12 个 block、2 亿参数，今天则是数百个 block、万亿参数。它既能做语言，也能做图像：把图片切成 patch，每个 patch 投影成一个向量送进 transformer，每个 patch 得到一个输出向量；做分类时对所有输出做 pooling，再接一层线性分类器，这就是 **ViT** 的骨架。讲者最后留了一句：2017 年之后还有一些小改动，时间不够，留作课外阅读——这些改动在 2026 课件里已经补上。
-
-## 2026 课件更新
-
-以上正文以 2025 春季视频为准。对照 2026 春季课件，主要有这些差异：
-
-- **行政信息前置**：2026 课件以行政页开场——project proposal 当天截止、Assignment 2 发布（5/7 截止）、次日 4/24 有 PyTorch review session。2025 视频直接从上一讲回顾开始。
-- **位置编码从一句话变成一页**：视频只说“拼一个 positional embedding”；2026 课件单独讲 **RoPE**：把位置映射为角度并旋转 query 和 key，使内积只依赖相对位置，$(R(\theta_i)q_i)^{\top}(R(\phi_j)k_j)=q_i^{\top}R(\phi_j-\theta_i)k_j$，引用 RoFormer（2021）。
-- **缩放点积给出完整推导**：2026 课件用 $a\cdot b=|a||b|\cos\theta$ 与常量向量模长 $\sqrt{D}$ 说明“相似度量级随维度增长 → softmax 饱和 → 梯度消失”，与视频的口头解释一致，但写成了公式。
-- **复杂度单独成节**：2026 课件明确 self-attention 是四次矩阵乘，计算 $O(N^2)$、显存 $O(N^2)$；当 $N=100K$、$H=64$ 时注意力矩阵需要 1.192 TB，**FlashAttention** 通过不落地完整注意力矩阵把显存降到 $O(N)$。视频只提到 $O(N^2)$，没有展开显存优化。
-- **多头写法形式化**：2026 课件给出 $W_Q,W_K,W_V:[D\times HD_H]$、$W_O:[HD_H\times D]$、$D_H=D/H$，Q/K/V 形状为 $[H\times N\times D_H]$，softmax 在 $\dim=2$ 上做，并说明 H 个头用 batched matmul 并行计算。
-- **新增 LLM 一节**：2026 课件用三页讲 “Transformers for Language Modeling”：词表 $V$、模型维度 $D$ 的 embedding 查表 $[V\times D]$；每个 block 内用 masked attention；末端 $[D\times V]$ 投影到词表分数，用 softmax + 交叉熵预测下一个 token。视频只在 mask 部分提了一句语言建模。
-- **ViT 细节补齐**：2026 课件写明 224×224×3 图像切成 16×16×3 的 patch、flatten 后经 768→$D$ 线性变换，并指出这等价于 16×16、stride 16、输出通道 $D$ 的卷积；用二维位置编码，不做 mask，每个 patch 可看所有 patch；最后 average pool 成 1×$D$，再经 $D\to C$ 线性层输出类别分数。
-- **规模数字具体化**：2026 课件列出原始 transformer（12 blocks、D=1024、H=16、N=512、213M 参数）、GPT-2（48 blocks、D=1600、H=25、N=1024、1.5B）、GPT-3（96 blocks、D=12288、H=96、N=2048、175B）。视频只说“数百 block、万亿参数”。
-- **“小改动”整理成章**：视频说时间不够、留作课外阅读，2026 课件补成 “Tweaking Transformers” 一节：**Pre-Norm**（LayerNorm 移到残差内部，训练更稳）、**QK-Norm**（对 Q/K 做 RMSNorm，抑制梯度尖峰）、**SwiGLU**（$Y=(\sigma(XW_1)\odot XW_2)W_3$，$H=8D/3$ 保持参数量）、**MoE**（每 block 学 $E$ 组 MLP 权重，每 token 只路由到 $A<E$ 个专家，参数增 $E$ 倍、计算只增 $A$ 倍；例子是 Gemma4 26B-A4B（4/2/2026），1 个 shared expert + 128 个 routed experts，每 token 选 8/128，总参数 26B、激活 4B）。
-- **LayerNorm 与 block 计算量**：2026 课件插入 “Recall Layer Normalization”，给出 $\mu_i$、$\sigma_i$、$z_i=(h_i-\mu_i)/\sigma_i$、$y_i=\gamma z_i+\beta$（Ba et al. 2016）；并注明一个 block 的计算主要是 6 个 matmul（self-attention 4 个 + MLP 2 个），MLP 经典设置是 $D\to 4D\to D$。
+规模上，2017 年原始 transformer 约 12 个 block、2 亿参数；如今人们训练出上百个 block、万亿参数的模型，而架构八年来几乎没变。它既能做语言建模，也能直接用于图像：把图像切成若干 **patches**、每个 patch 单独投影成一个向量送入 transformer，每个 patch 得到一个输出向量；若要分类，就对全部输出向量做 pooling、再接一个线性层预测类别分数。讲者最后收束到开场的两个承诺：attention 是操作向量集合、高度并行／可扩展／灵活的新原语；transformer 以 self-attention 为主计算原语，是当今深度学习几乎每个应用都在用的架构，短期内看不到它退场。下一讲将转向检测、分割与可视化等新任务。
 
 ## 要点回顾
 
-- **seq2seq**：RNN 编码器把输入压成 context vector $c$（常取 $h_T$），解码器按 $s_t=g_U(y_{t-1},s_{t-1},c)$ 逐词生成。
-- 固定长度的 $c$ 是瓶颈，序列越长，信息越挤。
-- **attention** 在每个解码步计算 $e_{t,i}=f_{att}(s_{t-1},h_i)$，softmax 得权重，$c_t=\sum_i a_{t,i}h_i$；全程可微，对齐关系无需监督。
-- 注意力矩阵的对角线表示顺序对应，反向对角线与 2×2 小块表示语序变化和多对多对齐；机制源自 Bahdanau et al. 2015。
-- attention 可抽象为 query/data → output 的算子，与 RNN 解耦。
-- 点积是最简单的相似度，除以 $\sqrt{D}$ 是为了防止 softmax 饱和与梯度消失。
-- 多 query 用两次矩阵乘一次算完；把 data 投影为 **key** 与 **value**，分离“匹配”和“取值”。
-- **self-attention** 中 Q/K/V 都来自同一组输入，**cross-attention** 有两组来源；前者常用于单模态，后者用于跨模态。
-- self-attention 置换等变，作用在集合上，需要位置编码补顺序；mask 阻止偷看未来；多头增加容量。
-- 三种原语：RNN 顺序不可并行、卷积局部可并行、self-attention 全局但 $O(N^2)$。
-- **transformer block** = self-attention + 残差 + LayerNorm + MLP，堆叠成 transformer；ViT 把图像 patch 当作 token。
-- 2026 课件补充了 RoPE、FlashAttention、LLM 与 ViT 细节，以及 Pre-Norm / QK-Norm / SwiGLU / MoE 等常见改动。
+- 本讲沿历史线索展开：attention 与 transformer 并非凭空出现，而是从 RNN 的 Seq2Seq 机器翻译里为解决瓶颈而逐步长出来的分支。
+- 经典 Seq2Seq（Sutskever et al., NeurIPS 2014）用编码器 $h_t = f_W(x_t, h_{t-1})$ 把整句压成单个固定长度 context vector，解码器 $s_t = g_U(y_{t-1}, s_{t-1}, c)$ 逐词生成；固定向量（128/1024 floats）无法承载长段落／整本书，是核心瓶颈。
+- 注意力（Bahdanau et al., ICLR 2015，获 ICLR 2025 runner-up test of time award）让解码每步回看全部输入：对齐分数 $e_{t,i}=f_{att}(s_{t-1},h_i)$ → softmax 得分布 → $c_t=\sum_i a_{t,i}h_i$ → 解码 $s_t=g_U(y_{t-1},s_{t-1},c_t)$；全程可微、无需对齐监督、端到端由交叉熵损失驱动自学。
+- 注意力权重可画成二维热力图（英法翻译例子），对角结构=词序一一对应，非对角／2×2 小块=语序差异或非一一对应；网络未被教过语法却自己发现了对齐。
+- 把注意力从 RNN 剥离后得到独立算子：data vectors 被 query vectors 按相似度加权汇总成 output/context vectors；$f_{att}$ 可任意，实践中简化为点积。
+- 缩放点积 $e_i = q\cdot X_i/\sqrt{D_Q}$ 用 $\sqrt{D_Q}$ 防止高维下 softmax 饱和与梯度消失；多查询向量用 $E=QX^T/\sqrt{D_Q}\ [N_Q\times N_X]$ 一次矩阵乘算全部相似度，softmax 后 $Y=AV$ 再乘一次得输出。
+- 分离出 $K=XW_K$、$V=XW_V$（搜索引擎直觉：query「最好的学校」↔ value「Stanford」），得到输入两组向量的 cross-attention；把每个输入投影成 $Q=XW_Q,K=XW_K,V=XW_V$ 则是 self-attention，二者公式同为 $E=QK^T/\sqrt{D_Q},\ A=\text{softmax}(E,\text{dim}=1),\ Y=AV$。
+- Self-Attention 具有置换等变性，本质是操作无序向量集合，需靠 positional embedding 补顺序；masked self-attention 用 $-\infty$ 屏蔽实现因果语言建模；multi-head 并行 $H$ 个不同权重的头再线性融合。整个算子只有四次 batched 矩阵乘，高度并行可扩展。
+- 三种序列原语对比：RNN 顺序不可并行、卷积可并行但难建大感受野、self-attention 一层看遍全序列且高度并行，代价是 $O(N^2)$ 计算／$O(N)$ 内存；「Attention is All You Need」(Vaswani et al., NeurIPS 2017)。
+- Transformer Block = self-attention + 残差 + Layer Norm + 逐向量 MLP/FFN + 残差 + Layer Norm；Transformer 是其堆叠。规模从 2017 年 12 blocks／2 亿参数到如今数百 blocks／万亿参数，架构基本未变；图像上切 patches 投影后送入，分类时 pooling + 线性层。
 
 ## 视频来源
 

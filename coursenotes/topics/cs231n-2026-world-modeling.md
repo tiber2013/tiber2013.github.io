@@ -7,7 +7,7 @@ description: "Spring 2026 相对 2025 新增的课节、官方资料缺口、同
 
 > 资料核查日期：2026-11-09 ｜ 本文只做资料索引与事实核对，不猜测未公开课程讲了什么
 
-**核心结论**：两版课表都是 18 讲，讲次数量没有变化；真正「多出来」的是一个全新主题——2026 年的 Lecture 17「World Modeling」由 Gordon Wetzstein 客座，替换了 2025 年同号的「Robot Learning」（Yunzhu Li）。这一讲和 L18 都**没有公开 slides**（官方 PDF 实测返回 404），2026 年的录影也只在 Stanford Canvas 校内开放。校外读者能拿到的最接近材料，是同一位讲者 2026 年秋季在 Stanford EE292R 的公开讲座《From World Models to World Agents》（54 分钟），以及第三方按 L17 主题整理的世界模型论文清单；此外 2026 的 L1–L16 课件全部公开，相对 2025 每讲都有内容改动，本文一并给出逐讲增量核对。
+**核心结论**：两版课表都是 18 讲，讲次数量没有变化；真正「多出来」的是一个全新主题——2026 年的 Lecture 17「World Modeling」由 Gordon Wetzstein 客座，替换了 2025 年同号的「Robot Learning」（Yunzhu Li）。这一讲和 L18 都**没有公开 slides**（官方 PDF 实测返回 404），2026 年的录影也只在 Stanford Canvas 校内开放。校外读者能拿到的最接近材料，是同一位讲者 2026 年秋季在 Stanford EE292R 的公开讲座《From World Models to World Agents》（54 分钟），以及第三方按 L17 主题整理的世界模型论文清单；此外 2026 的 L1–L16 课件全部公开，相对 2025 每讲都有内容改动，本文一并给出逐讲增量核对；其中 L16 的 VLM / Foundation Models 改动最集中（换讲者、换框架、更新到 2026 SOTA），单独展开成第 8 节。
 
 ## 1. 「多出来的课节」到底是什么
 
@@ -164,7 +164,63 @@ description: "Spring 2026 相对 2025 新增的课节、官方资料缺口、同
 - L13：Autoregressive、Diffusion
 - L01：Gemini、Multimodal、GAN、Diffusion
 
-## 8. 资料缺口与获取路径
+## 8. 专题：L16 VLM / Foundation Models 的 2026 增量
+
+上一节按讲次统计增量，这里单独展开 **L16**，因为 2026 在这一讲上的改动最集中：两版课表都叫 Vision and Language，但 2025 课件是客座讲者的「多模态基础模型」综述，2026 换成课程组自己重写的一版，模型清单、讲法与收尾都换了。**这是同一讲次的内容重写，不是新增课节。**
+
+### 8.1 版本信息
+
+| 项 | Spring 2025 | Spring 2026 |
+| --- | --- | --- |
+| 课件标题 | Multi-Modal Foundation Models | Lecture 16: Vision + Language (and Foundation Models) |
+| 讲者 | Ranjay Krishna（客座） | 课程组：Fei-Fei Li、Ehsan Adeli、Zane Durante、Justin Johnson、Tiange Xiang（课件页脚署名 Fei-Fei, Adeli, Durante, Johnson, Xiang） |
+| 日期 | 2025-05-27 | 2026-05-26 |
+| 官方 slides | [2025 L16 PDF](https://cs231n.stanford.edu/slides/2025/lecture_16.pdf)（200） | [2026 L16 PDF](https://cs231n.stanford.edu/slides/2026/lecture_16.pdf)（200） |
+| 本站对应笔记 | [L16 · 视觉与语言：从 CLIP 到多模态基础模型](/coursenotes/cs231n-deep-learning-for-cv-sp25/l16-vision-language)（基于 2025 录影） | 暂无 2026 课堂笔记，本页只做资料索引 |
+
+### 8.2 2026 新增或重写的主题
+
+按 2026 课件的章节标题整理：
+
+1. **基础模型范式开场重写**（Another paradigm: Foundation Models）：从「每个任务训一个专用模型」对照到「预训练一个模型支撑多任务」，并讨论怎样才算 foundation——通用、鲁棒是必备，大参数、大数据、自监督预训练目标是常见特征。2025 已有同主题页面，属改写而非全新。
+2. **CLIP 训练被拆成可复现的步骤**：先回顾 SimCLR 自监督目标与「表征能否泛化到新样本」，再问「表征空间能否也嵌入句子」；随后是 Step #1 收集约 4 亿图文对、Step #2 训练与损失函数选择。zero-shot 分类器被类比为「用文本向量当训练数据的 1-NN」，并解释多 prompt 取平均、linear probe 与 zero-shot 的差异、以及 CLIP 为何表现好。
+3. **新增 CLIP 变体与局限**：`Common Variant: SigLIP uses Sigmoid Instead of Softmax`；CoCa 增加生成目标与 captioning loss；`Disadvantages of CLIP-style models` 指出过度依赖 batch size；并给出「classifier foundation models 现在在 ImageNet 上压过其他模型」的结论。
+4. **新增「2026 年 SOTA」视角**（What is SOTA in 2026 (so far)?）：Gemini 被视为最强闭源视觉语言模型；明确区分 Open Weight（可下载本地运行）与 Fully Open Source（可复现训练），并指出开放权重模型大多是从 GPT 类模型蒸馏而来。
+5. **开源 VLM 的技术细节**（What's different from LLaVA?）：改用 SigLIP-2 视觉编码器替代 CLIP、原生图像分辨率带来更多 token、视频帧时间以文本写入、取 SigLIP-2 第 8/16/24 层嵌入、四阶段训练；Molmo / PixMo 部分讨论数据质量与数量的取舍——让标注者对图像讲 60–90 秒，再把语音自动转成文字做预训练。
+6. **新增收尾主题**：`Final Note: Omni Models (Beyond Vision + Language)`，把视野从视觉加语言扩到全模态。
+7. **直接预告下一讲**：最后一页标题是 `Next time: World Models`，把 L16 与新增的 L17 World Modeling 串起来，这是两版衔接最直接的证据。
+
+### 8.3 只在 2025 出现、2026 移除的内容
+
+- **GPT-4V**：2025 课件全文出现 8 次，2026 版 0 次，在模型清单与示例中被换掉。
+- 客座讲者 Ranjay Krishna 的署名，以及「Language models are out of scope for this class」「We will focus on multimodal (vision) foundation models」这类范围框定句。
+- 标题「Multi-Modal Foundation Models」。
+
+### 8.4 两版共有的主干
+
+CLIP、CoCa、LLaVA（CLIP 编码器接 LLM 自回归）、Flamingo（Perceiver sampler、in-context learning）、Segment Anything、CuPL、VisProg、Molmo / PixMo、DALL·E、Imagen、Whisper、BERT / ELMo 等模型清单仍在，CuPL 与 VisProg 的「把模型串起来完成视觉任务」讲法也延续。所以 2026 换的是**框架、2026 新模型与 SOTA 视角**，不是把整章换掉。
+
+### 8.5 词频对照
+
+下表是课件**全文**的词频，不是课堂讲解次数：
+
+| 词 | 2025 课件 | 2026 课件 | 读法 |
+| --- | --- | --- | --- |
+| GPT-4V | 8 | 0 | 2026 移除 |
+| SigLIP | 0 | 3 | 2026 新增 |
+| Omni Models | 0 | 1 | 2026 新增 |
+| World Model | 0 | 1 | 2026 新增（结尾预告） |
+| Qwen | 1 | 11 | 2026 显著加重 |
+| Gemini | 9 | 8 | 两版都有，2026 放进「SOTA」语境 |
+| CLIP | 两版共有 | 两版共有 | 主干未变 |
+
+### 口径与限制
+
+- 依据：2025 课件的纯文本抽取、2026 课件的 MinerU 解析全文与逐行集合差分；「新增」指只在 2026 课件出现的章节标题或术语，**可能包含表述改写**，不等于全新知识点。
+- 课件不等于课堂实际讲授；2026 录影未公开，无法核对课堂上讲了哪些、跳过了哪些。
+- 本页只列链接，不转载课件文件。
+
+## 9. 资料缺口与获取路径
 
 | 想要的资料 | 现状 | 可行路径 |
 | --- | --- | --- |
@@ -192,5 +248,6 @@ description: "Spring 2026 相对 2025 新增的课节、官方资料缺口、同
 - 2025 L17 的 Robot Learning 课件与录影齐全，其中「Foundation Policy → Foundation World Models」一页是两版主题衔接的线索。
 - 世界模型论文清单（World Models、PlaNet、Dreamer 系列、MuZero、JEPA、Sora、Genie、PredNet）来自第三方主题汇编，非官方指定阅读。
 - 2026 L1–L16 课件全部公开，逐讲文本差分显示 L10、L11、L15、L16 改动最大；L16 新增 Foundation Models、Qwen、Gemini、SigLIP 等关键词。
+- L16 是同一讲次的内容重写而非新增课节：2026 新增 SigLIP / SigLIP-2、2026 SOTA 与开放权重之辨、Omni Models，移除 GPT-4V，并用「Next time: World Models」接到 L17；详见第 8 节。
 - 站内 18 讲中文笔记对应的是 Spring 2025 录影，不要与 2026 课表条目混用。
 - 所有课件与录影只列链接，不转载文件。

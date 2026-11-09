@@ -138,6 +138,7 @@ export const courseNotesSidebar = [
       { text: "NLP 简史：规则、统计、机器学习与 Transformer", link: '/coursenotes/topics/history-of-nlp' },
       { text: "从 LLM 到 Agent Skill：一条链路打通大模型底层概念", link: '/coursenotes/topics/from-llm-to-agent-skill' },
       { text: "RLHF 讲透：用人类偏好训练奖励模型", link: '/coursenotes/topics/rlhf-explained' },
+      { text: "CS231n 2026 新增课节资料汇编：L17 World Modeling", link: '/coursenotes/topics/cs231n-2026-world-modeling' },
     ],
   },
 ]
